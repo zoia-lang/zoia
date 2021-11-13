@@ -19,20 +19,3 @@
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # =============================================================================
-"""This module implements the classes from which the Zoia AST is built.
-
-All imports should come directly from here - *never* import from the actual
-files that define the classes. That way they can be moved around easily."""
-from .alias import *
-from .argument import *
-from .base import *
-from .command import *
-from .header import *
-from .kwd_argument import *
-from .line import *
-from .line_element import *
-from .std_argument import *
-from .text_fragment import *
-from .zoia_file import *
-
-# TODO str -> WordNode? Or is that overkill?
