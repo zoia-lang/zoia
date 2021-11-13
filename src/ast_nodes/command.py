@@ -39,6 +39,7 @@ class CommandNode(LineElementNode):
         if self.arguments:
             s.write('[\n')
             for a in self.arguments:
+                s.write('    ')
                 s.write(a.canonical())
                 s.write(',\n')
             s.write(']')

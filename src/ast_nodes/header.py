@@ -35,6 +35,7 @@ class HeaderNode(ASTNode):
         s = StringIO()
         s.write('\\header[\n')
         for a in self.arguments:
+            s.write('    ')
             s.write(a.canonical())
             s.write(',\n')
         s.write(']')

@@ -21,10 +21,11 @@
 # =============================================================================
 """This module houses the parse tree visitor that generates an AST from the
 ANTLR parse tree."""
+from antlr4 import TerminalNode
 from io import StringIO
 
 from ast_nodes import AliasNode, CommandNode, HeaderNode, KwdArgumentNode,\
-    LineNode, StdArgumentNode, ZoiaFileNode
+    LineNode, StdArgumentNode, TextFragmentNode, ZoiaFileNode
 from exception import ASTConversionError
 from grammar import zoiaParser, zoiaVisitor
 
@@ -64,11 +65,14 @@ class ASTConverter(zoiaVisitor):
         for tf_child in ctx.children:
             if isinstance(tf_child, zoiaParser.WordContext):
                 s.write(self.visitWord(tf_child))
-            elif isinstance(tf_child, zoiaParser.Space):
+            elif (hasattr(tf_child, 'symbol') and
+                  tf_child.symbol.type == zoiaParser.Space):
+                # This whole branch is ugly, but TerminalNodeImpl (which has
+                # 'symbol' is not exposed by the ANTLR runtime)
                 s.write(tf_child.getText())
             else:
                 raise ASTConversionError(f"Unknown text fragment '{ctx}'")
-        return s.getvalue()
+        return TextFragmentNode(s.getvalue())
 
     def visitWord(self, ctx: zoiaParser.WordContext):
         return ctx.getText()
@@ -82,6 +86,8 @@ class ASTConverter(zoiaVisitor):
         return CommandNode(cmd_name, arguments)
 
     def visitArguments(self, ctx: zoiaParser.ArgumentsContext):
+        if ctx is None:
+            return [] # command has an optional arguments param
         return [self.visitArgument(a) for a in ctx.argument()]
 
     def visitArgument(self, ctx: zoiaParser.ArgumentContext):

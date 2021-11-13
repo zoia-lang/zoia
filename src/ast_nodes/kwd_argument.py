@@ -30,4 +30,7 @@ class KwdArgumentNode(ArgumentNode):
     kwd_name: str
 
     def canonical(self) -> str:
-        return f'{self.kwd_name} = {super().canonical()}'
+        # This is necessary because @dataclass with slots=True creates a new
+        # class. That breaks argument-less super().
+        args_canonical = super(KwdArgumentNode, self).canonical()
+        return f'{self.kwd_name} = {args_canonical}'

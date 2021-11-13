@@ -27,7 +27,7 @@ from grammar import zoiaLexer, zoiaParser
 from ast_converter import ASTConverter
 
 def main(args):
-    ins = FileStream('tmp_test/test.zoia')
+    ins = FileStream('tmp_test/test.zoia', encoding='utf-8')
     lexer = zoiaLexer(ins)
     tokens = CommonTokenStream(lexer)
     parser = zoiaParser(tokens)
