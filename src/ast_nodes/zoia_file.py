@@ -28,5 +28,6 @@ from .line import LineNode
 
 @dataclass(slots=True)
 class ZoiaFileNode(ASTNode):
+    """AST node for Zoia files."""
     header: HeaderNode
     lines: list[LineNode]

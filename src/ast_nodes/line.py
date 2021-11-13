@@ -27,4 +27,5 @@ from .line_element import LineElementNode
 
 @dataclass(slots=True)
 class LineNode(ASTNode):
+    """AST node for lines."""
     elements: list[LineElementNode]

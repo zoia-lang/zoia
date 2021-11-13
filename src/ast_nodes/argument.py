@@ -28,4 +28,5 @@ from .line_element import LineElementNode
 
 @dataclass(slots=True)
 class ArgumentNode(ASTNode):
+    """Base AST node for arguments. See KwdArgumentNode and StdArgumentNode."""
     arg_value: list[LineElementNode]

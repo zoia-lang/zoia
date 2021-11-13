@@ -26,4 +26,5 @@ from .line_element import LineElementNode
 
 @dataclass(slots=True)
 class AliasNode(LineElementNode):
+    """AST node for aliases."""
     alias_key: str

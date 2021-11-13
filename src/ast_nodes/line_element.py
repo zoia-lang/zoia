@@ -27,4 +27,6 @@ from .base import ASTNode
 
 @dataclass(slots=True)
 class LineElementNode(ASTNode):
+    """Base AST node for line elements. See AliasNode, CommandNode and
+    TextFragmentNode."""
     pass

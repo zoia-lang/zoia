@@ -27,5 +27,6 @@ from .line_element import LineElementNode
 
 @dataclass(slots=True)
 class CommandNode(LineElementNode):
+    """AST node for commands."""
     cmd_name: str
     arguments: list[ArgumentNode]

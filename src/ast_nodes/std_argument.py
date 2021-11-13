@@ -26,4 +26,5 @@ from .argument import ArgumentNode
 
 @dataclass(slots=True)
 class StdArgumentNode(ArgumentNode):
+    """AST node for standard arguments."""
     pass

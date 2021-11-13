@@ -32,6 +32,7 @@ from .grammar import zoiaParser, zoiaVisitor
 
 # Ignore the non-PEP8 names, inherited from the generated code
 class ASTConverter(zoiaVisitor):
+    """Converts an ANTLR parse tree into a Zoia AST."""
     # Sorted by the order in which they are defined in the grammar
     def visitZoiaFile(self, ctx: zoiaParser.ZoiaFileContext):
         header = self.visitHeader(ctx.header())

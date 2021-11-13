@@ -26,4 +26,5 @@ from .line_element import LineElementNode
 
 @dataclass(slots=True)
 class TextFragmentNode(LineElementNode):
+    """AST node for text fragments."""
     text_val: str

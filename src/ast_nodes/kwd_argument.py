@@ -26,4 +26,5 @@ from .argument import ArgumentNode
 
 @dataclass(slots=True)
 class KwdArgumentNode(ArgumentNode):
+    """AST node for keyword arguments."""
     kwd_name: str

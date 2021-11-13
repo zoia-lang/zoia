@@ -27,4 +27,5 @@ from .base import ASTNode
 
 @dataclass(slots=True)
 class HeaderNode(ASTNode):
+    """AST node for file headers."""
     arguments: list[ArgumentNode]

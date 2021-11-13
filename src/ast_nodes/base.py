@@ -21,6 +21,11 @@
 # =============================================================================
 from dataclasses import dataclass
 
+from ..exception import AbstractError
+
 @dataclass(slots=True)
 class ASTNode:
-    pass
+    """Base class for all Zoia AST nodes."""
+    def canonical(self) -> str:
+        """Returns a canonical string representation of this node."""
+        raise AbstractError(self.canonical)
