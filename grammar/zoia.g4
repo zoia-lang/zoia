@@ -22,8 +22,9 @@ zoiaFile: header line* EOF;
 // and comments).
 header: '\\header' arguments;
 
-// An arbitrary combination of text fragments and commands.
-line: (textFragment | command)+;
+// An arbitrary combination of text fragments and commands. Must be
+// ended by a newline.
+line: (textFragment | command)* Newline;
 
 // Anything but a command.
 textFragment: 'foo'; // TODO
@@ -48,9 +49,10 @@ identifier: 'qux'; // TODO
 COMMENT: '#' ~[\r\n]* -> skip;
 
 // Tokens
+Newline: ('\r\n'|'\r'|'\n');
 // Asterisk: '*';
 // At: '@';
 // Equals: '=';
 
 // Ignore whitespace.
-WHITESPACE: [ \t\n\r]+ -> skip;
+WHITESPACE: [ \t]+ -> skip;
