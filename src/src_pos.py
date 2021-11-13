@@ -32,4 +32,4 @@ class SourcePos:
 
     def __repr__(self):
         return (f"File '{self.src_file}', on line "
-                f"{self.src_line}:{self.src_char}")
+                f"{self.src_line} at offset {self.src_char}")

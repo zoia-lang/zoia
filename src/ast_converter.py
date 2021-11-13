@@ -27,24 +27,37 @@ from ast_nodes import AliasNode, CommandNode, HeaderNode, KwdArgumentNode,\
     LineNode, StdArgumentNode, TextFragmentNode, ZoiaFileNode
 from exception import ASTConversionError
 from grammar import zoiaParser, zoiaVisitor
+from src_pos import SourcePos
 
-# FIXME Add token source locations -> edits to ast_nodes too
+# Currently, PyCharm seems to have a problem with kw_only fields in
+# dataclasses. It reports all the src_pos arguments as 'Unexpected argument'
+# warnings. Until that's fixed:
+# noinspection PyArgumentList
 
 # Ignore the non-PEP8 names, inherited from the generated code
 class ASTConverter(zoiaVisitor):
     """Converts an ANTLR parse tree into a Zoia AST."""
+    def __init__(self, parsed_file: str):
+        self.parsed_file = parsed_file
+
+    def make_pos(self, ctx):
+        """Creates a source position from the specified context object."""
+        return SourcePos(src_file=self.parsed_file, src_line=ctx.start.line,
+                         src_char=ctx.start.column)
+
     # Sorted by the order in which they are defined in the grammar
     def visitZoiaFile(self, ctx: zoiaParser.ZoiaFileContext):
         header = self.visitHeader(ctx.header())
         lines = [self.visitLine(l) for l in ctx.line()]
-        return ZoiaFileNode(header, lines)
+        return ZoiaFileNode(header, lines, src_pos=self.make_pos(ctx))
 
     def visitHeader(self, ctx: zoiaParser.HeaderContext):
-        return HeaderNode(self.visitArguments(ctx.arguments()))
+        return HeaderNode(self.visitArguments(ctx.arguments()),
+                          src_pos=self.make_pos(ctx))
 
     def visitLine(self, ctx: zoiaParser.LineContext):
         elements = [self.visitLineElement(e) for e in ctx.lineElement()]
-        return LineNode(elements)
+        return LineNode(elements, src_pos=self.make_pos(ctx))
 
     def visitLineElement(self, ctx: zoiaParser.LineElementContext):
         text_fragment = ctx.textFragment()
@@ -71,18 +84,19 @@ class ASTConverter(zoiaVisitor):
                 s.write(tf_child.getText())
             else:
                 raise ASTConversionError(f"Unknown text fragment '{ctx}'")
-        return TextFragmentNode(s.getvalue())
+        return TextFragmentNode(s.getvalue(), src_pos=self.make_pos(ctx))
 
     def visitWord(self, ctx: zoiaParser.WordContext):
         return ctx.getText()
 
     def visitAlias(self, ctx: zoiaParser.AliasContext):
-        return AliasNode(self.visitWord(ctx.word()))
+        return AliasNode(self.visitWord(ctx.word()),
+                         src_pos=self.make_pos(ctx))
 
     def visitCommand(self, ctx: zoiaParser.CommandContext):
         cmd_name = self.visitWord(ctx.word())
         arguments = self.visitArguments(ctx.arguments())
-        return CommandNode(cmd_name, arguments)
+        return CommandNode(cmd_name, arguments, src_pos=self.make_pos(ctx))
 
     def visitArguments(self, ctx: zoiaParser.ArgumentsContext):
         if ctx is None:
@@ -103,8 +117,9 @@ class ASTConverter(zoiaVisitor):
         kwd_name = self.visitWord(ctx.word())
         arg_value = [self.visitLineElement(e) for e in ctx.lineElement()]
         # Reverse order due to dataclass inheritance
-        return KwdArgumentNode(arg_value, kwd_name)
+        return KwdArgumentNode(arg_value, kwd_name, src_pos=self.make_pos(ctx))
 
     def visitStdArgument(self, ctx: zoiaParser.StdArgumentContext):
         return StdArgumentNode([self.visitLineElement(e)
-                                for e in ctx.lineElement()])
+                                for e in ctx.lineElement()],
+                               src_pos=self.make_pos(ctx))

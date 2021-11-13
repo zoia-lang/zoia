@@ -32,7 +32,7 @@ def main(args):
     tokens = CommonTokenStream(lexer)
     parser = zoiaParser(tokens)
     tree = parser.zoiaFile()
-    ast = ASTConverter().visit(tree)
+    ast = ASTConverter(ins.fileName).visit(tree)
     print(ast.canonical())
 
 if __name__ == '__main__':
