@@ -22,5 +22,10 @@
 """This module contains all custom exceptions for Zoia."""
 # NO LOCAL IMPORTS! This has to be importable from any module/package.
 
+class AbstractError(Exception):
+    """Abstract section of code called."""
+    def __init__(self, abs_method):
+        super().__init__(f"Abstract method '{abs_method.__name__}' was called")
+
 class ASTConversionError(Exception):
     """An error that occurred during AST conversion."""

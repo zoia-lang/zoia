@@ -22,8 +22,10 @@
 """Implements the AST node for commands."""
 from dataclasses import dataclass
 
+from .argument import ArgumentNode
 from .line_element import LineElementNode
 
 @dataclass(slots=True)
 class CommandNode(LineElementNode):
     cmd_name: str
+    arguments: list[ArgumentNode]

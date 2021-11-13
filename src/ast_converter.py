@@ -21,7 +21,10 @@
 # =============================================================================
 """Houses the parse tree visitor that generates an AST from the ANTLR parse
 tree."""
-from .ast_nodes import HeaderNode, LineNode, ZoiaFileNode
+from io import StringIO
+
+from .ast_nodes import AliasNode, CommandNode, HeaderNode, LineNode, \
+    ZoiaFileNode
 from .exception import ASTConversionError
 from .grammar import zoiaParser, zoiaVisitor
 
@@ -54,3 +57,25 @@ class ASTConverter(zoiaVisitor):
             return self.visitCommand(command)
         else:
             raise ASTConversionError(f"Unknown line element '{ctx}'")
+
+    def visitTextFragment(self, ctx: zoiaParser.TextFragmentContext):
+        s = StringIO()
+        for tf_child in ctx.children:
+            if isinstance(tf_child, zoiaParser.WordContext):
+                s.write(self.visitWord(tf_child))
+            elif isinstance(tf_child, zoiaParser.Space):
+                s.write(tf_child.getText())
+            else:
+                raise ASTConversionError(f"Unknown text fragment '{ctx}'")
+        return s.getvalue()
+
+    def visitWord(self, ctx: zoiaParser.WordContext):
+        return ctx.getText()
+
+    def visitAlias(self, ctx: zoiaParser.AliasContext):
+        return AliasNode(self.visitWord(ctx.word()))
+
+    def visitCommand(self, ctx: zoiaParser.CommandContext):
+        cmd_name = self.visitWord(ctx.word())
+        arguments = self.visitArguments(ctx.arguments())
+        return CommandNode(cmd_name, arguments)
