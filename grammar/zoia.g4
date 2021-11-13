@@ -20,13 +20,13 @@ zoiaFile: header line* EOF;
 // and comments).
 header: '\\header' arguments Newline;
 
-// An arbitrary combination of text fragments and commands.
+// An arbitrary combination of text fragments, aliases and commands.
 // Must be ended by a newline.
 line: lineElement* Newline;
-lineElement: textFragment | command;
+lineElement: textFragment | alias | command;
 
-// An arbitrary combination of words, aliases and spaces.
-textFragment: (word | alias | Space)+;
+// An arbitrary combination of words and spaces.
+textFragment: (word | Space)+;
 
 // One or more characters.
 word: Char+;

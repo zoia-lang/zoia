@@ -16,7 +16,7 @@ def serializedATN():
         buf.write("\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t\13\4\f\t\f\4\r\t\r\4\16")
         buf.write("\t\16\3\2\3\2\7\2\37\n\2\f\2\16\2\"\13\2\3\2\3\2\3\3\3")
         buf.write("\3\3\3\3\3\3\4\7\4+\n\4\f\4\16\4.\13\4\3\4\3\4\3\5\3\5")
-        buf.write("\5\5\64\n\5\3\6\3\6\3\6\6\69\n\6\r\6\16\6:\3\7\6\7>\n")
+        buf.write("\3\5\5\5\65\n\5\3\6\3\6\6\69\n\6\r\6\16\6:\3\7\6\7>\n")
         buf.write("\7\r\7\16\7?\3\b\3\b\3\b\3\t\3\t\3\t\5\tH\n\t\3\t\5\t")
         buf.write("K\n\t\3\n\3\n\7\nO\n\n\f\n\16\nR\13\n\3\n\3\n\7\nV\n\n")
         buf.write("\f\n\16\nY\13\n\3\n\3\n\7\n]\n\n\f\n\16\n`\13\n\3\n\7")
@@ -27,45 +27,45 @@ def serializedATN():
         buf.write("\n\f\r\f\16\f\u008d\3\r\6\r\u0091\n\r\r\r\16\r\u0092\3")
         buf.write("\16\6\16\u0096\n\16\r\16\16\16\u0097\3\16\2\2\17\2\4\6")
         buf.write("\b\n\f\16\20\22\24\26\30\32\2\3\3\2\f\r\2\u00a2\2\34\3")
-        buf.write("\2\2\2\4%\3\2\2\2\6,\3\2\2\2\b\63\3\2\2\2\n8\3\2\2\2\f")
+        buf.write("\2\2\2\4%\3\2\2\2\6,\3\2\2\2\b\64\3\2\2\2\n8\3\2\2\2\f")
         buf.write("=\3\2\2\2\16A\3\2\2\2\20D\3\2\2\2\22L\3\2\2\2\24z\3\2")
         buf.write("\2\2\26|\3\2\2\2\30\u0090\3\2\2\2\32\u0095\3\2\2\2\34")
         buf.write(" \5\4\3\2\35\37\5\6\4\2\36\35\3\2\2\2\37\"\3\2\2\2 \36")
         buf.write("\3\2\2\2 !\3\2\2\2!#\3\2\2\2\" \3\2\2\2#$\7\2\2\3$\3\3")
         buf.write("\2\2\2%&\7\3\2\2&\'\5\22\n\2\'(\7\f\2\2(\5\3\2\2\2)+\5")
         buf.write("\b\5\2*)\3\2\2\2+.\3\2\2\2,*\3\2\2\2,-\3\2\2\2-/\3\2\2")
-        buf.write("\2.,\3\2\2\2/\60\7\f\2\2\60\7\3\2\2\2\61\64\5\n\6\2\62")
-        buf.write("\64\5\20\t\2\63\61\3\2\2\2\63\62\3\2\2\2\64\t\3\2\2\2")
-        buf.write("\659\5\f\7\2\669\5\16\b\2\679\7\r\2\28\65\3\2\2\28\66")
-        buf.write("\3\2\2\28\67\3\2\2\29:\3\2\2\2:8\3\2\2\2:;\3\2\2\2;\13")
-        buf.write("\3\2\2\2<>\7\16\2\2=<\3\2\2\2>?\3\2\2\2?=\3\2\2\2?@\3")
-        buf.write("\2\2\2@\r\3\2\2\2AB\7\4\2\2BC\5\f\7\2C\17\3\2\2\2DE\7")
-        buf.write("\5\2\2EG\5\f\7\2FH\5\22\n\2GF\3\2\2\2GH\3\2\2\2HJ\3\2")
-        buf.write("\2\2IK\7\6\2\2JI\3\2\2\2JK\3\2\2\2K\21\3\2\2\2LP\7\7\2")
-        buf.write("\2MO\5\32\16\2NM\3\2\2\2OR\3\2\2\2PN\3\2\2\2PQ\3\2\2\2")
-        buf.write("QS\3\2\2\2RP\3\2\2\2SW\5\24\13\2TV\7\r\2\2UT\3\2\2\2V")
-        buf.write("Y\3\2\2\2WU\3\2\2\2WX\3\2\2\2Xd\3\2\2\2YW\3\2\2\2Z^\7")
-        buf.write("\b\2\2[]\5\32\16\2\\[\3\2\2\2]`\3\2\2\2^\\\3\2\2\2^_\3")
-        buf.write("\2\2\2_a\3\2\2\2`^\3\2\2\2ac\5\24\13\2bZ\3\2\2\2cf\3\2")
-        buf.write("\2\2db\3\2\2\2de\3\2\2\2ej\3\2\2\2fd\3\2\2\2gi\7\r\2\2")
-        buf.write("hg\3\2\2\2il\3\2\2\2jh\3\2\2\2jk\3\2\2\2kn\3\2\2\2lj\3")
-        buf.write("\2\2\2mo\7\b\2\2nm\3\2\2\2no\3\2\2\2os\3\2\2\2pr\5\32")
-        buf.write("\16\2qp\3\2\2\2ru\3\2\2\2sq\3\2\2\2st\3\2\2\2tv\3\2\2")
-        buf.write("\2us\3\2\2\2vw\7\t\2\2w\23\3\2\2\2x{\5\26\f\2y{\5\30\r")
-        buf.write("\2zx\3\2\2\2zy\3\2\2\2{\25\3\2\2\2|\u0080\5\f\7\2}\177")
-        buf.write("\7\r\2\2~}\3\2\2\2\177\u0082\3\2\2\2\u0080~\3\2\2\2\u0080")
-        buf.write("\u0081\3\2\2\2\u0081\u0083\3\2\2\2\u0082\u0080\3\2\2\2")
-        buf.write("\u0083\u0087\7\n\2\2\u0084\u0086\7\r\2\2\u0085\u0084\3")
-        buf.write("\2\2\2\u0086\u0089\3\2\2\2\u0087\u0085\3\2\2\2\u0087\u0088")
-        buf.write("\3\2\2\2\u0088\u008b\3\2\2\2\u0089\u0087\3\2\2\2\u008a")
-        buf.write("\u008c\5\b\5\2\u008b\u008a\3\2\2\2\u008c\u008d\3\2\2\2")
-        buf.write("\u008d\u008b\3\2\2\2\u008d\u008e\3\2\2\2\u008e\27\3\2")
-        buf.write("\2\2\u008f\u0091\5\b\5\2\u0090\u008f\3\2\2\2\u0091\u0092")
-        buf.write("\3\2\2\2\u0092\u0090\3\2\2\2\u0092\u0093\3\2\2\2\u0093")
-        buf.write("\31\3\2\2\2\u0094\u0096\t\2\2\2\u0095\u0094\3\2\2\2\u0096")
-        buf.write("\u0097\3\2\2\2\u0097\u0095\3\2\2\2\u0097\u0098\3\2\2\2")
-        buf.write("\u0098\33\3\2\2\2\27 ,\638:?GJPW^djnsz\u0080\u0087\u008d")
-        buf.write("\u0092\u0097")
+        buf.write("\2.,\3\2\2\2/\60\7\f\2\2\60\7\3\2\2\2\61\65\5\n\6\2\62")
+        buf.write("\65\5\16\b\2\63\65\5\20\t\2\64\61\3\2\2\2\64\62\3\2\2")
+        buf.write("\2\64\63\3\2\2\2\65\t\3\2\2\2\669\5\f\7\2\679\7\r\2\2")
+        buf.write("8\66\3\2\2\28\67\3\2\2\29:\3\2\2\2:8\3\2\2\2:;\3\2\2\2")
+        buf.write(";\13\3\2\2\2<>\7\16\2\2=<\3\2\2\2>?\3\2\2\2?=\3\2\2\2")
+        buf.write("?@\3\2\2\2@\r\3\2\2\2AB\7\4\2\2BC\5\f\7\2C\17\3\2\2\2")
+        buf.write("DE\7\5\2\2EG\5\f\7\2FH\5\22\n\2GF\3\2\2\2GH\3\2\2\2HJ")
+        buf.write("\3\2\2\2IK\7\6\2\2JI\3\2\2\2JK\3\2\2\2K\21\3\2\2\2LP\7")
+        buf.write("\7\2\2MO\5\32\16\2NM\3\2\2\2OR\3\2\2\2PN\3\2\2\2PQ\3\2")
+        buf.write("\2\2QS\3\2\2\2RP\3\2\2\2SW\5\24\13\2TV\7\r\2\2UT\3\2\2")
+        buf.write("\2VY\3\2\2\2WU\3\2\2\2WX\3\2\2\2Xd\3\2\2\2YW\3\2\2\2Z")
+        buf.write("^\7\b\2\2[]\5\32\16\2\\[\3\2\2\2]`\3\2\2\2^\\\3\2\2\2")
+        buf.write("^_\3\2\2\2_a\3\2\2\2`^\3\2\2\2ac\5\24\13\2bZ\3\2\2\2c")
+        buf.write("f\3\2\2\2db\3\2\2\2de\3\2\2\2ej\3\2\2\2fd\3\2\2\2gi\7")
+        buf.write("\r\2\2hg\3\2\2\2il\3\2\2\2jh\3\2\2\2jk\3\2\2\2kn\3\2\2")
+        buf.write("\2lj\3\2\2\2mo\7\b\2\2nm\3\2\2\2no\3\2\2\2os\3\2\2\2p")
+        buf.write("r\5\32\16\2qp\3\2\2\2ru\3\2\2\2sq\3\2\2\2st\3\2\2\2tv")
+        buf.write("\3\2\2\2us\3\2\2\2vw\7\t\2\2w\23\3\2\2\2x{\5\26\f\2y{")
+        buf.write("\5\30\r\2zx\3\2\2\2zy\3\2\2\2{\25\3\2\2\2|\u0080\5\f\7")
+        buf.write("\2}\177\7\r\2\2~}\3\2\2\2\177\u0082\3\2\2\2\u0080~\3\2")
+        buf.write("\2\2\u0080\u0081\3\2\2\2\u0081\u0083\3\2\2\2\u0082\u0080")
+        buf.write("\3\2\2\2\u0083\u0087\7\n\2\2\u0084\u0086\7\r\2\2\u0085")
+        buf.write("\u0084\3\2\2\2\u0086\u0089\3\2\2\2\u0087\u0085\3\2\2\2")
+        buf.write("\u0087\u0088\3\2\2\2\u0088\u008b\3\2\2\2\u0089\u0087\3")
+        buf.write("\2\2\2\u008a\u008c\5\b\5\2\u008b\u008a\3\2\2\2\u008c\u008d")
+        buf.write("\3\2\2\2\u008d\u008b\3\2\2\2\u008d\u008e\3\2\2\2\u008e")
+        buf.write("\27\3\2\2\2\u008f\u0091\5\b\5\2\u0090\u008f\3\2\2\2\u0091")
+        buf.write("\u0092\3\2\2\2\u0092\u0090\3\2\2\2\u0092\u0093\3\2\2\2")
+        buf.write("\u0093\31\3\2\2\2\u0094\u0096\t\2\2\2\u0095\u0094\3\2")
+        buf.write("\2\2\u0096\u0097\3\2\2\2\u0097\u0095\3\2\2\2\u0097\u0098")
+        buf.write("\3\2\2\2\u0098\33\3\2\2\2\27 ,\648:?GJPW^djnsz\u0080\u0087")
+        buf.write("\u008d\u0092\u0097")
         return buf.getvalue()
 
 
@@ -305,6 +305,10 @@ class zoiaParser ( Parser ):
             return self.getTypedRuleContext(zoiaParser.TextFragmentContext,0)
 
 
+        def alias(self):
+            return self.getTypedRuleContext(zoiaParser.AliasContext,0)
+
+
         def command(self):
             return self.getTypedRuleContext(zoiaParser.CommandContext,0)
 
@@ -326,17 +330,22 @@ class zoiaParser ( Parser ):
         localctx = zoiaParser.LineElementContext(self, self._ctx, self.state)
         self.enterRule(localctx, 6, self.RULE_lineElement)
         try:
-            self.state = 49
+            self.state = 50
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [zoiaParser.T__1, zoiaParser.Space, zoiaParser.Char]:
+            if token in [zoiaParser.Space, zoiaParser.Char]:
                 self.enterOuterAlt(localctx, 1)
                 self.state = 47
                 self.textFragment()
                 pass
-            elif token in [zoiaParser.T__2]:
+            elif token in [zoiaParser.T__1]:
                 self.enterOuterAlt(localctx, 2)
                 self.state = 48
+                self.alias()
+                pass
+            elif token in [zoiaParser.T__2]:
+                self.enterOuterAlt(localctx, 3)
+                self.state = 49
                 self.command()
                 pass
             else:
@@ -363,13 +372,6 @@ class zoiaParser ( Parser ):
                 return self.getTypedRuleContexts(zoiaParser.WordContext)
             else:
                 return self.getTypedRuleContext(zoiaParser.WordContext,i)
-
-
-        def alias(self, i:int=None):
-            if i is None:
-                return self.getTypedRuleContexts(zoiaParser.AliasContext)
-            else:
-                return self.getTypedRuleContext(zoiaParser.AliasContext,i)
 
 
         def Space(self, i:int=None):
@@ -405,12 +407,8 @@ class zoiaParser ( Parser ):
                     self._errHandler.sync(self)
                     token = self._input.LA(1)
                     if token in [zoiaParser.Char]:
-                        self.state = 51
-                        self.word()
-                        pass
-                    elif token in [zoiaParser.T__1]:
                         self.state = 52
-                        self.alias()
+                        self.word()
                         pass
                     elif token in [zoiaParser.Space]:
                         self.state = 53

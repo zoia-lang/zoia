@@ -9,6 +9,7 @@
 *.class
 *.jar
 *.java
+*.pyc
 
 # Interp and tokens files do not seem to be necessary?
 *.interp
