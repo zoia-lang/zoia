@@ -34,5 +34,3 @@ from .line_element import *
 from .std_argument import *
 from .text_fragment import *
 from .zoia_file import *
-
-# TODO str -> WordNode? Or is that overkill?

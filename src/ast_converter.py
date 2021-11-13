@@ -23,8 +23,8 @@
 tree."""
 from io import StringIO
 
-from .ast_nodes import AliasNode, CommandNode, HeaderNode, LineNode, \
-    ZoiaFileNode
+from .ast_nodes import AliasNode, CommandNode, HeaderNode, KwdArgumentNode,\
+    LineNode, StdArgumentNode, ZoiaFileNode
 from .exception import ASTConversionError
 from .grammar import zoiaParser, zoiaVisitor
 
@@ -80,3 +80,26 @@ class ASTConverter(zoiaVisitor):
         cmd_name = self.visitWord(ctx.word())
         arguments = self.visitArguments(ctx.arguments())
         return CommandNode(cmd_name, arguments)
+
+    def visitArguments(self, ctx: zoiaParser.ArgumentsContext):
+        return [self.visitArgument(a) for a in ctx.argument()]
+
+    def visitArgument(self, ctx: zoiaParser.ArgumentContext):
+        std_argument = ctx.stdArgument()
+        if std_argument is not None:
+            return self.visitStdArgument(std_argument)
+        kwd_argument = ctx.kwdArgument()
+        if kwd_argument is not None:
+            return self.visitKwdArgument(kwd_argument)
+        else:
+            raise ASTConversionError(f"Unknown argument: '{ctx}'")
+
+    def visitKwdArgument(self, ctx: zoiaParser.KwdArgumentContext):
+        kwd_name = self.visitWord(ctx.word())
+        arg_value = [self.visitLineElement(e) for e in ctx.lineElement()]
+        # Reverse order due to dataclass inheritance
+        return KwdArgumentNode(arg_value, kwd_name)
+
+    def visitStdArgument(self, ctx: zoiaParser.StdArgumentContext):
+        return StdArgumentNode([self.visitLineElement(e)
+                                for e in ctx.lineElement()])
