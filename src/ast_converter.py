@@ -23,7 +23,7 @@
 ANTLR parse tree."""
 from io import StringIO
 
-from ast_nodes import AliasNode, CommandNode, HeaderNode, KwdArgumentNode,\
+from ast_nodes import AliasNode, CommandNode, HeaderNode, KwdArgumentNode, \
     LineNode, StdArgumentNode, TextFragmentNode, ZoiaFileNode
 from exception import ASTConversionError
 from grammar import zoiaParser, zoiaVisitor
