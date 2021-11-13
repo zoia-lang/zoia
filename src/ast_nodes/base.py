@@ -19,14 +19,8 @@
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # =============================================================================
-"""Implements the root AST node for entire Zoia files."""
 from dataclasses import dataclass
 
-from .base import ASTNode
-from .header import HeaderNode
-from .line import LineNode
-
-@dataclass
-class ZoiaFileNode(ASTNode):
-    header: HeaderNode
-    lines: list[LineNode]
+@dataclass(slots=True)
+class ASTNode:
+    pass

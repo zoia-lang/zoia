@@ -19,20 +19,13 @@
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # =============================================================================
-"""Implements the AST node for arguments (standard and keyword)."""
+"""Implements the AST node for headers."""
 from dataclasses import dataclass
 
+from .argument import ArgumentNode
 from .base import ASTNode
-from .line_element import LineElementNode
 
-@dataclass
-class ArgumentNode(ASTNode):
-    arg_value: list[LineElementNode]
-
-@dataclass
-class StdArgumentNode(ArgumentNode):
-    pass
-
-@dataclass
-class KwdArgumentNode(ArgumentNode):
-    kwd_name: str # TODO WordNode? Or is that overkill?
+# TODO it might make sense to inherit from CommandNode
+@dataclass(slots=True)
+class HeaderNode(ASTNode):
+    arguments: list[ArgumentNode]

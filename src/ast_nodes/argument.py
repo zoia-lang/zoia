@@ -19,8 +19,20 @@
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # =============================================================================
+"""Implements the AST node for arguments (standard and keyword)."""
 from dataclasses import dataclass
 
-@dataclass
-class ASTNode:
+from .base import ASTNode
+from .line_element import LineElementNode
+
+@dataclass(slots=True)
+class ArgumentNode(ASTNode):
+    arg_value: list[LineElementNode]
+
+@dataclass(slots=True)
+class StdArgumentNode(ArgumentNode):
     pass
+
+@dataclass(slots=True)
+class KwdArgumentNode(ArgumentNode):
+    kwd_name: str # TODO WordNode? Or is that overkill?

@@ -25,6 +25,6 @@ from dataclasses import dataclass
 from .base import ASTNode
 from .line_element import LineElementNode
 
-@dataclass
+@dataclass(slots=True)
 class LineNode(ASTNode):
     elements: list[LineElementNode]

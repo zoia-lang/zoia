@@ -19,12 +19,14 @@
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # =============================================================================
-"""Implements the AST node for line elements. Separate to avoid circular
-dependencies."""
+"""Implements the root AST node for entire Zoia files."""
 from dataclasses import dataclass
 
 from .base import ASTNode
+from .header import HeaderNode
+from .line import LineNode
 
-@dataclass
-class LineElementNode(ASTNode):
-    pass
+@dataclass(slots=True)
+class ZoiaFileNode(ASTNode):
+    header: HeaderNode
+    lines: list[LineNode]

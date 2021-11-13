@@ -19,13 +19,12 @@
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # =============================================================================
-"""Implements the AST node for headers."""
+"""Implements the AST node for line elements. Separate to avoid circular
+dependencies."""
 from dataclasses import dataclass
 
-from .argument import ArgumentNode
 from .base import ASTNode
 
-# TODO it might make sense to inherit from CommandNode
-@dataclass
-class HeaderNode(ASTNode):
-    arguments: list[ArgumentNode]
+@dataclass(slots=True)
+class LineElementNode(ASTNode):
+    pass
