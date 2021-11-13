@@ -20,3 +20,5 @@
 #
 # =============================================================================
 """This module implements the classes from which the Zoia AST is built."""
+
+# TODO str -> WordNode? Or is that overkill?

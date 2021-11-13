@@ -25,7 +25,6 @@ from dataclasses import dataclass
 from .argument import ArgumentNode
 from .base import ASTNode
 
-# TODO it might make sense to inherit from CommandNode
 @dataclass(slots=True)
 class HeaderNode(ASTNode):
     arguments: list[ArgumentNode]

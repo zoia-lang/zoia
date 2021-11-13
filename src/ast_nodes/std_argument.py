@@ -19,13 +19,11 @@
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # =============================================================================
-"""Implements the AST node for arguments. Separate to avoid circular
-dependencies."""
+"""Implements the AST node for standard arguments."""
 from dataclasses import dataclass
 
-from .base import ASTNode
-from .line_element import LineElementNode
+from .argument import ArgumentNode
 
 @dataclass(slots=True)
-class ArgumentNode(ASTNode):
-    arg_value: list[LineElementNode]
+class StdArgumentNode(ArgumentNode):
+    pass
