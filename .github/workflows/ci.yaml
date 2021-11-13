@@ -13,6 +13,7 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v2
         with:
+          distribution: 'temurin'
           java-version: 8 # ANTLR needs Java 8
       - name: Download ANTLR v4
         run: ./scripts/prereq.sh
