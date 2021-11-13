@@ -12,20 +12,45 @@
 
 grammar zoia;
 
-zoiaFile: EOF;
+/* ==== PARSER ==== */
+/* === BASICS === */
+// The main entry point.
+// A header, followed by any number of lines.
+zoiaFile: header line* EOF;
+
+// The special 'header' command. Must come first (barring whitespace
+// and comments).
+header: '\\header' arguments;
+
+// An arbitrary combination of text fragments and commands.
+line: (textFragment | command)+;
+
+// Anything but a command.
+textFragment: 'foo'; // TODO
+
+// A backslash, followed optionally by an argument list.
+// May optionally be ended by a vertical bar (this is necessary when
+// using an argumentless command that you don't want a space after.
+// For example, '\atmyHandle' would be parsed as a single command
+// named 'atMyHandle', which doesn't exist. '\at|myHandle' would be
+// parsed as a command named 'at' and a text fragment 'myHandle'.
+command: '\\' identifier arguments? '|'?;
+
+// One or more arguments. Multiple arguments must be separated by
+// commas. Trailing commas are allowed.
+arguments: '[' argument (',' argument)* ','? ']';
+argument: 'bar'; // TODO
+
+identifier: 'qux'; // TODO
 
 /* ==== LEXER ==== */
 // Skip all comments.
 COMMENT: '#' ~[\r\n]* -> skip;
 
 // Tokens
-Asterisk: '*';
-At: '@';
-Backslash: '\\';
-Comma: ',';
-Equals: '=';
-LeftBracket: '[';
-RightBracket: ']';
+// Asterisk: '*';
+// At: '@';
+// Equals: '=';
 
 // Ignore whitespace.
 WHITESPACE: [ \t\n\r]+ -> skip;
