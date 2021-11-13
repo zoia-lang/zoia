@@ -20,29 +20,37 @@ zoiaFile: header line* EOF;
 
 // The special 'header' command. Must come first (barring whitespace
 // and comments).
-header: '\\header' arguments;
+header: '\\header' arguments Newline;
 
 // An arbitrary combination of text fragments and commands. Must be
 // ended by a newline.
 line: (textFragment | command)* Newline;
 
-// Anything but a command.
-textFragment: 'foo'; // TODO
+// An arbitrary combination of words and aliases.
+textFragment: (Word | alias)+;
 
-// A backslash, followed optionally by an argument list.
+// An at sign followed by a word.
+alias: '@' Word;
+
+// A backslash and a word, followed optionally by an argument list.
 // May optionally be ended by a vertical bar (this is necessary when
 // using an argumentless command that you don't want a space after.
 // For example, '\atmyHandle' would be parsed as a single command
 // named 'atMyHandle', which doesn't exist. '\at|myHandle' would be
 // parsed as a command named 'at' and a text fragment 'myHandle'.
-command: '\\' identifier arguments? '|'?;
+command: '\\' Word arguments? '|'?;
 
 // One or more arguments. Multiple arguments must be separated by
 // commas. Trailing commas are allowed.
 arguments: '[' argument (',' argument)* ','? ']';
-argument: 'bar'; // TODO
 
-identifier: 'qux'; // TODO
+// Either a text fragment or a word, an equals sign and a text
+// fragment.
+argument: kwdArgument | stdArgument;
+kwdArgument: Word '=' textFragment;
+stdArgument: textFragment;
+
+whitespace: (Newline | Space)+;
 
 /* ==== LEXER ==== */
 // Skip all comments.
@@ -53,6 +61,5 @@ Newline: ('\r\n'|'\r'|'\n');
 // Asterisk: '*';
 // At: '@';
 // Equals: '=';
-
-// Ignore whitespace.
-WHITESPACE: [ \t]+ -> skip;
+Space: [ \t]+;
+Word: [A-Za-z0-9]+; // TODO unicode
