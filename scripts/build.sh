@@ -11,8 +11,9 @@ fi
 CLASSPATH=".:$(realpath scripts/antlr.jar):$CLASSPATH"
 export CLASSPATH
 
-# Generate the parser and compile it
-java org.antlr.v4.Tool -o tmp grammar/zoia.g4
-# We rely on none of the .java files having spaces, so ignore this
-# shellcheck disable=SC2046
-javac $(find tmp -type f -iname "*.java" -printf '%p ') # separates with spaces
+# Generate the parser
+java org.antlr.v4.Tool -Dlanguage=Python3 -o src grammar/zoia.g4
+
+# Delete the interp/tokens files, we don't need them
+find src -name "*.interp" -delete
+find src -name "*.tokens" -delete

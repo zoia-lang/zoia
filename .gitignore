@@ -3,5 +3,9 @@
 *.jar
 *.java
 
+# Interp and tokens files do not seem to be necessary?
+*.interp
+*.tokens
+
 # Folder I use for storing the generated ANTLR output
 tmp/
