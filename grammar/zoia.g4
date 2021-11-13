@@ -57,9 +57,9 @@ whitespace: (Newline | Space)+;
 COMMENT: '#' ~[\r\n]* -> skip;
 
 // Tokens
-Newline: ('\r\n'|'\r'|'\n');
+Newline: ('\r\n' | '\r' | '\n');
+Space: (' ' | '\t');
+Word: [A-Za-z0-9]+; // TODO unicode
 // Asterisk: '*';
 // At: '@';
 // Equals: '=';
-Space: [ \t]+;
-Word: [A-Za-z0-9]+; // TODO unicode
