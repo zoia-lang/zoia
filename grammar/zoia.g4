@@ -1,3 +1,5 @@
+// TODO Do we need line continuations?
+
 // Style guide:
 //  - Parser rules are camelCase
 //  - Lexer rules are PascalCase
@@ -10,7 +12,20 @@
 
 grammar zoia;
 
-parseFile: EOF;
+zoiaFile: EOF;
 
-// Ignore whitespace
+/* ==== LEXER ==== */
+// Skip all comments.
+COMMENT: '#' ~[\r\n]* -> skip;
+
+// Tokens
+Asterisk: '*';
+At: '@';
+Backslash: '\\';
+Comma: ',';
+Equals: '=';
+LeftBracket: '[';
+RightBracket: ']';
+
+// Ignore whitespace.
 WHITESPACE: [ \t\n\r]+ -> skip;

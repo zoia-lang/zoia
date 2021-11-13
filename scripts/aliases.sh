@@ -32,6 +32,6 @@ function parse_zoia() {
     fi
 
     cd "$ZOIA_TMP_DIR" || return
-    java org.antlr.v4.gui.TestRig zoia parseFile "$real_file" "${@:2}"
+    java org.antlr.v4.gui.TestRig zoia zoiaFile "$real_file" "${@:2}"
     cd "$cwd" || return
 }
