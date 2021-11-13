@@ -1,4 +1,8 @@
 # Zoia
+
+[![CI](https://github.com/Infernio/zoia/actions/workflows/ci.yaml/badge.svg)](https://github.com/Infernio/zoia/actions/workflows/ci.yaml)
+[![License: GPLv3](https://img.shields.io/badge/license-GPLv3-blue.svg)](LICENSE)
+
 A language for writing fiction.
 
 ## Name
