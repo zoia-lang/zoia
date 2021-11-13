@@ -1,0 +1,7 @@
+# Generated noise
+*.class
+*.jar
+*.java
+
+# Folder I use for storing the generated ANTLR output
+tmp/
