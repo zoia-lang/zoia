@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # GPL License and Copyright Notice ============================================
+#
 #   This file is part of Zoia, a language for writing fiction.
 #   Copyright (C) 2021 Infernio
 #
