@@ -11,6 +11,9 @@
 *.java
 *.pyc
 
+# Virtual environment
+.venv/
+
 # Interp and tokens files do not seem to be necessary?
 *.interp
 *.tokens
