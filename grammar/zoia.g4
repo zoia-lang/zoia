@@ -43,10 +43,10 @@ alias: '@' word;
 command: '\\' word arguments? '|'?;
 
 // One or more arguments. Multiple arguments must be separated by
-// commas. Trailing commas are allowed.
+// semicolons. Trailing semicolons are allowed.
 // The whitespace handling here is ugly grammar-wise, but should be
 // fairly intuitive when actually using the language.
-arguments: '[' whitespace* argument Space* (',' whitespace* argument)* Space* ','? whitespace* ']';
+arguments: '[' whitespace* argument Space* (';' whitespace* argument)* Space* ';'? whitespace* ']';
 
 // Either a text fragment or a word, an equals sign and a text
 // fragment.
