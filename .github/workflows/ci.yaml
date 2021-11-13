@@ -1,0 +1,20 @@
+name: CI
+
+on: push
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout commit
+        uses: actions/checkout@v2
+      - name: Run ShellCheck
+        uses: ludeeus/action-shellcheck@1.1.0
+      - name: Setup Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: 8 # ANTLR needs Java 8
+      - name: Download ANTLR v4
+        run: ./scripts/prereq.sh
+      - name: Build zoia
+        run: ./scripts/build.sh
