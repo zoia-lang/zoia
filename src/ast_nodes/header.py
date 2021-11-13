@@ -21,6 +21,7 @@
 # =============================================================================
 """Implements the AST node for headers."""
 from dataclasses import dataclass
+from io import StringIO
 
 from .argument import ArgumentNode
 from .base import ASTNode
@@ -29,3 +30,12 @@ from .base import ASTNode
 class HeaderNode(ASTNode):
     """AST node for file headers."""
     arguments: list[ArgumentNode]
+
+    def canonical(self) -> str:
+        s = StringIO()
+        s.write('\\header[\n')
+        for a in self.arguments:
+            s.write(a.canonical())
+            s.write(',\n')
+        s.write(']')
+        return s.getvalue()

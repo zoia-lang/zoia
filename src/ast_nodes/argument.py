@@ -30,3 +30,6 @@ from .line_element import LineElementNode
 class ArgumentNode(ASTNode):
     """Base AST node for arguments. See KwdArgumentNode and StdArgumentNode."""
     arg_value: list[LineElementNode]
+
+    def canonical(self) -> str:
+        return ''.join([a.canonical() for a in self.arg_value])

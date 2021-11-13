@@ -28,3 +28,6 @@ from .line_element import LineElementNode
 class TextFragmentNode(LineElementNode):
     """AST node for text fragments."""
     text_val: str
+
+    def canonical(self) -> str:
+        return self.text_val

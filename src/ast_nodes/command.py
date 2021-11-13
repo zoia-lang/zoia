@@ -21,6 +21,7 @@
 # =============================================================================
 """Implements the AST node for commands."""
 from dataclasses import dataclass
+from io import StringIO
 
 from .argument import ArgumentNode
 from .line_element import LineElementNode
@@ -30,3 +31,17 @@ class CommandNode(LineElementNode):
     """AST node for commands."""
     cmd_name: str
     arguments: list[ArgumentNode]
+
+    def canonical(self) -> str:
+        s = StringIO()
+        s.write('\\')
+        s.write(self.cmd_name)
+        if self.arguments:
+            s.write('[\n')
+            for a in self.arguments:
+                s.write(a.canonical())
+                s.write(',\n')
+            s.write(']')
+        else:
+            s.write('|')
+        return s.getvalue()

@@ -28,3 +28,6 @@ from .argument import ArgumentNode
 class KwdArgumentNode(ArgumentNode):
     """AST node for keyword arguments."""
     kwd_name: str
+
+    def canonical(self) -> str:
+        return f'{self.kwd_name} = {super().canonical()}'

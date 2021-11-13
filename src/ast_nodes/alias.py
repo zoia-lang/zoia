@@ -28,3 +28,6 @@ from .line_element import LineElementNode
 class AliasNode(LineElementNode):
     """AST node for aliases."""
     alias_key: str
+
+    def canonical(self) -> str:
+        return f'@{self.alias_key}'

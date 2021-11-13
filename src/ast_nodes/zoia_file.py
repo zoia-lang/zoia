@@ -21,6 +21,7 @@
 # =============================================================================
 """Implements the root AST node for entire Zoia files."""
 from dataclasses import dataclass
+from io import StringIO
 
 from .base import ASTNode
 from .header import HeaderNode
@@ -31,3 +32,11 @@ class ZoiaFileNode(ASTNode):
     """AST node for Zoia files."""
     header: HeaderNode
     lines: list[LineNode]
+
+    def canonical(self) -> str:
+        s = StringIO()
+        s.write(self.header.canonical())
+        s.write('\n\n')
+        for l in self.lines:
+            s.write(l.canonical())
+        return s.getvalue()

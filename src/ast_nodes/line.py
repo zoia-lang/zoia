@@ -29,3 +29,6 @@ from .line_element import LineElementNode
 class LineNode(ASTNode):
     """AST node for lines."""
     elements: list[LineElementNode]
+
+    def canonical(self) -> str:
+        return ''.join([e.canonical() for e in self.elements]) + '\n'
