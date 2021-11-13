@@ -1,5 +1,3 @@
-// TODO Do we need line continuations?
-
 // Style guide:
 //  - Parser rules are camelCase
 //  - Lexer rules are PascalCase
@@ -22,9 +20,9 @@ zoiaFile: header line* EOF;
 // and comments).
 header: '\\header' arguments Newline;
 
-// An arbitrary combination of text fragments and commands. Must be
-// ended by a newline.
-line: (textFragment | command)* Newline;
+// An arbitrary combination of text fragments, commands and
+// spaces. Must be ended by a newline.
+line: (textFragment | command | Space)* Newline;
 
 // An arbitrary combination of words and aliases.
 textFragment: (Word | alias)+;
@@ -42,13 +40,15 @@ command: '\\' Word arguments? '|'?;
 
 // One or more arguments. Multiple arguments must be separated by
 // commas. Trailing commas are allowed.
-arguments: '[' argument (',' argument)* ','? ']';
+// The whitespace handling here is ugly grammar-wise, but should be
+// fairly intuitive when actually using the language.
+arguments: '[' whitespace* argument Space* (',' whitespace* argument)* Space* ','? whitespace* ']';
 
 // Either a text fragment or a word, an equals sign and a text
 // fragment.
 argument: kwdArgument | stdArgument;
-kwdArgument: Word '=' textFragment;
-stdArgument: textFragment;
+kwdArgument: Word Space* '=' Space* textFragment;
+stdArgument: textFragment; // TODO unnecessary?
 
 whitespace: (Newline | Space)+;
 
@@ -61,5 +61,3 @@ Newline: ('\r\n' | '\r' | '\n');
 Space: (' ' | '\t');
 Word: [A-Za-z0-9]+; // TODO unicode
 // Asterisk: '*';
-// At: '@';
-// Equals: '=';
