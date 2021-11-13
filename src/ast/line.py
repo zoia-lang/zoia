@@ -20,8 +20,11 @@
 #
 # =============================================================================
 """Implements the AST node for lines."""
+from dataclasses import dataclass
 
 from .base import ASTNode
+from .line_element import LineElementNode
 
+@dataclass
 class LineNode(ASTNode):
-    pass
+    elements: list[LineElementNode]
