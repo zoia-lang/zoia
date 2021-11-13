@@ -23,9 +23,9 @@
 from dataclasses import dataclass
 from io import StringIO
 
-from .base import ASTNode
-from .header import HeaderNode
-from .line import LineNode
+from ast_nodes.base import ASTNode
+from ast_nodes.header import HeaderNode
+from ast_nodes.line import LineNode
 
 @dataclass(slots=True)
 class ZoiaFileNode(ASTNode):

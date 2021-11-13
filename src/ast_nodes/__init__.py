@@ -23,14 +23,14 @@
 
 All imports should come directly from here - *never* import from the actual
 files that define the classes. That way they can be moved around easily."""
-from .alias import *
-from .argument import *
-from .base import *
-from .command import *
-from .header import *
-from .kwd_argument import *
-from .line import *
-from .line_element import *
-from .std_argument import *
-from .text_fragment import *
-from .zoia_file import *
+from ast_nodes.alias import *
+from ast_nodes.argument import *
+from ast_nodes.base import *
+from ast_nodes.command import *
+from ast_nodes.header import *
+from ast_nodes.kwd_argument import *
+from ast_nodes.line import *
+from ast_nodes.line_element import *
+from ast_nodes.std_argument import *
+from ast_nodes.text_fragment import *
+from ast_nodes.zoia_file import *

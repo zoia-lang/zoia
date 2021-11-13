@@ -23,8 +23,8 @@
 dependencies."""
 from dataclasses import dataclass
 
-from .base import ASTNode
-from .line_element import LineElementNode
+from ast_nodes.base import ASTNode
+from ast_nodes.line_element import LineElementNode
 
 @dataclass(slots=True)
 class ArgumentNode(ASTNode):

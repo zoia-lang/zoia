@@ -22,7 +22,7 @@
 """Implements the AST node for aliases."""
 from dataclasses import dataclass
 
-from .line_element import LineElementNode
+from ast_nodes.line_element import LineElementNode
 
 @dataclass(slots=True)
 class AliasNode(LineElementNode):

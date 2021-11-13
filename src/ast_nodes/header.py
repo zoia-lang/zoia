@@ -23,8 +23,8 @@
 from dataclasses import dataclass
 from io import StringIO
 
-from .argument import ArgumentNode
-from .base import ASTNode
+from ast_nodes.argument import ArgumentNode
+from ast_nodes.base import ASTNode
 
 @dataclass(slots=True)
 class HeaderNode(ASTNode):

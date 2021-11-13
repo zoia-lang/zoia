@@ -23,10 +23,10 @@
 ANTLR parse tree."""
 from io import StringIO
 
-from .ast_nodes import AliasNode, CommandNode, HeaderNode, KwdArgumentNode,\
+from ast_nodes import AliasNode, CommandNode, HeaderNode, KwdArgumentNode,\
     LineNode, StdArgumentNode, ZoiaFileNode
-from .exception import ASTConversionError
-from .grammar import zoiaParser, zoiaVisitor
+from exception import ASTConversionError
+from grammar import zoiaParser, zoiaVisitor
 
 # FIXME Add token source locations -> edits to ast_nodes too
 

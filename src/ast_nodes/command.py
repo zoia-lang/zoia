@@ -23,8 +23,8 @@
 from dataclasses import dataclass
 from io import StringIO
 
-from .argument import ArgumentNode
-from .line_element import LineElementNode
+from ast_nodes.argument import ArgumentNode
+from ast_nodes.line_element import LineElementNode
 
 @dataclass(slots=True)
 class CommandNode(LineElementNode):

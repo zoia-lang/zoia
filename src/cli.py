@@ -23,11 +23,11 @@
 import sys
 from antlr4 import CommonTokenStream, FileStream
 
-from .grammar import zoiaLexer, zoiaParser
-from .ast_converter import ASTConverter
+from grammar import zoiaLexer, zoiaParser
+from ast_converter import ASTConverter
 
 def main(args):
-    ins = FileStream('')
+    ins = FileStream('tmp_test/test.zoia')
     lexer = zoiaLexer(ins)
     tokens = CommonTokenStream(lexer)
     parser = zoiaParser(tokens)

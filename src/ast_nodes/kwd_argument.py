@@ -22,7 +22,7 @@
 """Implements the AST node for keyword arguments."""
 from dataclasses import dataclass
 
-from .argument import ArgumentNode
+from ast_nodes.argument import ArgumentNode
 
 @dataclass(slots=True)
 class KwdArgumentNode(ArgumentNode):

@@ -21,7 +21,7 @@
 # =============================================================================
 from dataclasses import dataclass
 
-from ..exception import AbstractError
+from exception import AbstractError
 
 @dataclass(slots=True)
 class ASTNode:

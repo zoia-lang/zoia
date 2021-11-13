@@ -22,7 +22,7 @@
 """Implements the AST node for lines."""
 from dataclasses import dataclass
 
-from .line_element import LineElementNode
+from ast_nodes.line_element import LineElementNode
 
 @dataclass(slots=True)
 class TextFragmentNode(LineElementNode):
