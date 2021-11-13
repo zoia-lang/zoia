@@ -19,8 +19,8 @@
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # =============================================================================
-"""Houses the parse tree visitor that generates an AST from the ANTLR parse
-tree."""
+"""This module houses the parse tree visitor that generates an AST from the
+ANTLR parse tree."""
 from io import StringIO
 
 from .ast_nodes import AliasNode, CommandNode, HeaderNode, KwdArgumentNode,\
