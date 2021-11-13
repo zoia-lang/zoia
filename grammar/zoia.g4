@@ -26,10 +26,13 @@ line: lineElement* Newline;
 lineElement: textFragment | command;
 
 // An arbitrary combination of words, aliases and spaces.
-textFragment: (Word | alias | Space)+;
+textFragment: (word | alias | Space)+;
+
+// One or more characters.
+word: Char+;
 
 // An at sign followed by a word.
-alias: '@' Word;
+alias: '@' word;
 
 // A backslash and a word, followed optionally by an argument list.
 // May optionally be ended by a vertical bar (this is necessary when
@@ -37,7 +40,7 @@ alias: '@' Word;
 // For example, '\atmyHandle' would be parsed as a single command
 // named 'atMyHandle', which doesn't exist. '\at|myHandle' would be
 // parsed as a command named 'at' and a text fragment 'myHandle'.
-command: '\\' Word arguments? '|'?;
+command: '\\' word arguments? '|'?;
 
 // One or more arguments. Multiple arguments must be separated by
 // commas. Trailing commas are allowed.
@@ -48,7 +51,7 @@ arguments: '[' whitespace* argument Space* (',' whitespace* argument)* Space* ',
 // Either a text fragment or a word, an equals sign and a text
 // fragment.
 argument: kwdArgument | stdArgument;
-kwdArgument: Word Space* '=' Space* lineElement+;
+kwdArgument: word Space* '=' Space* lineElement+;
 stdArgument: lineElement+;
 
 // Any kind of whitespace: newlines, spaces, tabs, etc.
@@ -58,8 +61,13 @@ whitespace: (Newline | Space)+;
 // Skip all comments.
 COMMENT: '#' ~[\r\n]* -> skip;
 
+// TODO Asterisk: '*';
+
 // Tokens
 Newline: ('\r\n' | '\r' | '\n');
-Space: (' ' | '\t'); // TODO unicode
-Word: [A-Za-z0-9]+; // TODO unicode
-// Asterisk: '*';
+// See https://unicode.org/reports/tr44/#General_Category_Values
+// For some reason, ANTLR does not understand \p{Separator} and gives
+// an 'invalid escape sequence' error when it's used. So manually
+// replicate that class definition here.
+Space: [\p{Space_Separator}\p{Line_Separator}\p{Paragraph_Separator}];
+Char: [\p{Letter}\p{Mark}\p{Number}\p{Punctuation}\p{Symbol}];
