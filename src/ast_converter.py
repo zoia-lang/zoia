@@ -21,7 +21,6 @@
 # =============================================================================
 """This module houses the parse tree visitor that generates an AST from the
 ANTLR parse tree."""
-from antlr4 import TerminalNode
 from io import StringIO
 
 from ast_nodes import AliasNode, CommandNode, HeaderNode, KwdArgumentNode,\
@@ -68,7 +67,7 @@ class ASTConverter(zoiaVisitor):
             elif (hasattr(tf_child, 'symbol') and
                   tf_child.symbol.type == zoiaParser.Space):
                 # This whole branch is ugly, but TerminalNodeImpl (which has
-                # 'symbol' is not exposed by the ANTLR runtime)
+                # 'symbol') is not exposed by the ANTLR runtime
                 s.write(tf_child.getText())
             else:
                 raise ASTConversionError(f"Unknown text fragment '{ctx}'")

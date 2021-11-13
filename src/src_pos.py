@@ -19,16 +19,17 @@
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # =============================================================================
-from dataclasses import dataclass, field
+"""This module houses SourcePos, a class for storing source code positions."""
+from dataclasses import dataclass
 
-from exception import AbstractError
-from src_pos import SourcePos
+@dataclass
+class SourcePos:
+    """Stores a position in source code somewhere, consisting of the source
+    file, line number and character offset within that line."""
+    src_file: str
+    src_line: int
+    src_char: int
 
-@dataclass(slots=True)
-class ASTNode:
-    """Base class for all Zoia AST nodes."""
-    src_pos: SourcePos = field(kw_only=True)
-
-    def canonical(self) -> str:
-        """Returns a canonical string representation of this node."""
-        raise AbstractError(self.canonical)
+    def __repr__(self):
+        return (f"File '{self.src_file}', on line "
+                f"{self.src_line}:{self.src_char}")
