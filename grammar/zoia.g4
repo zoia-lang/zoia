@@ -66,8 +66,5 @@ COMMENT: '#' ~[\r\n]* -> skip;
 // Tokens
 Newline: ('\r\n' | '\r' | '\n');
 // See https://unicode.org/reports/tr44/#General_Category_Values
-// For some reason, ANTLR does not understand \p{Separator} and gives
-// an 'invalid escape sequence' error when it's used. So manually
-// replicate that class definition here.
-Space: [\p{Space_Separator}\p{Line_Separator}\p{Paragraph_Separator}];
-Char: [\p{Letter}\p{Mark}\p{Number}\p{Punctuation}\p{Symbol}];
+Space: [\p{Z}];
+Char: [\p{L}\p{M}\p{N}\p{P}\p{S}\p{C}];
