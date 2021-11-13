@@ -20,12 +20,13 @@ zoiaFile: header line* EOF;
 // and comments).
 header: '\\header' arguments Newline;
 
-// An arbitrary combination of text fragments, commands and
-// spaces. Must be ended by a newline.
-line: (textFragment | command | Space)* Newline;
+// An arbitrary combination of text fragments and commands.
+// Must be ended by a newline.
+line: lineElement* Newline;
+lineElement: textFragment | command;
 
-// An arbitrary combination of words and aliases.
-textFragment: (Word | alias)+;
+// An arbitrary combination of words, aliases and spaces.
+textFragment: (Word | alias | Space)+;
 
 // An at sign followed by a word.
 alias: '@' Word;
@@ -47,8 +48,8 @@ arguments: '[' whitespace* argument Space* (',' whitespace* argument)* Space* ',
 // Either a text fragment or a word, an equals sign and a text
 // fragment.
 argument: kwdArgument | stdArgument;
-kwdArgument: Word Space* '=' Space* textFragment;
-stdArgument: textFragment; // TODO unnecessary?
+kwdArgument: Word Space* '=' Space* lineElement+;
+stdArgument: lineElement+;
 
 whitespace: (Newline | Space)+;
 
