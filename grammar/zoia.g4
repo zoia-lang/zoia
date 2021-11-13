@@ -51,6 +51,7 @@ argument: kwdArgument | stdArgument;
 kwdArgument: Word Space* '=' Space* lineElement+;
 stdArgument: lineElement+;
 
+// Any kind of whitespace: newlines, spaces, tabs, etc.
 whitespace: (Newline | Space)+;
 
 /* ==== LEXER ==== */
@@ -59,6 +60,6 @@ COMMENT: '#' ~[\r\n]* -> skip;
 
 // Tokens
 Newline: ('\r\n' | '\r' | '\n');
-Space: (' ' | '\t');
+Space: (' ' | '\t'); // TODO unicode
 Word: [A-Za-z0-9]+; // TODO unicode
 // Asterisk: '*';
