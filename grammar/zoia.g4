@@ -61,8 +61,6 @@ whitespace: (Newline | Space)+;
 // Skip all comments.
 COMMENT: '#' ~[\r\n]* -> skip;
 
-// TODO Asterisk: '*';
-
 // Tokens
 Newline: ('\r\n' | '\r' | '\n');
 // See https://unicode.org/reports/tr44/#General_Category_Values
