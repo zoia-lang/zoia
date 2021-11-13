@@ -151,13 +151,11 @@ class zoiaParser ( Parser ):
         def getRuleIndex(self):
             return zoiaParser.RULE_zoiaFile
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterZoiaFile" ):
-                listener.enterZoiaFile(self)
-
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitZoiaFile" ):
-                listener.exitZoiaFile(self)
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitZoiaFile" ):
+                return visitor.visitZoiaFile(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 
@@ -209,13 +207,11 @@ class zoiaParser ( Parser ):
         def getRuleIndex(self):
             return zoiaParser.RULE_header
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterHeader" ):
-                listener.enterHeader(self)
-
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitHeader" ):
-                listener.exitHeader(self)
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitHeader" ):
+                return visitor.visitHeader(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 
@@ -261,13 +257,11 @@ class zoiaParser ( Parser ):
         def getRuleIndex(self):
             return zoiaParser.RULE_line
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterLine" ):
-                listener.enterLine(self)
-
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitLine" ):
-                listener.exitLine(self)
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitLine" ):
+                return visitor.visitLine(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 
@@ -318,13 +312,11 @@ class zoiaParser ( Parser ):
         def getRuleIndex(self):
             return zoiaParser.RULE_lineElement
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterLineElement" ):
-                listener.enterLineElement(self)
-
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitLineElement" ):
-                listener.exitLineElement(self)
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitLineElement" ):
+                return visitor.visitLineElement(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 
@@ -389,13 +381,11 @@ class zoiaParser ( Parser ):
         def getRuleIndex(self):
             return zoiaParser.RULE_textFragment
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterTextFragment" ):
-                listener.enterTextFragment(self)
-
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitTextFragment" ):
-                listener.exitTextFragment(self)
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitTextFragment" ):
+                return visitor.visitTextFragment(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 
@@ -461,13 +451,11 @@ class zoiaParser ( Parser ):
         def getRuleIndex(self):
             return zoiaParser.RULE_word
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterWord" ):
-                listener.enterWord(self)
-
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitWord" ):
-                listener.exitWord(self)
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitWord" ):
+                return visitor.visitWord(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 
@@ -515,13 +503,11 @@ class zoiaParser ( Parser ):
         def getRuleIndex(self):
             return zoiaParser.RULE_alias
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterAlias" ):
-                listener.enterAlias(self)
-
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitAlias" ):
-                listener.exitAlias(self)
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitAlias" ):
+                return visitor.visitAlias(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 
@@ -563,13 +549,11 @@ class zoiaParser ( Parser ):
         def getRuleIndex(self):
             return zoiaParser.RULE_command
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterCommand" ):
-                listener.enterCommand(self)
-
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitCommand" ):
-                listener.exitCommand(self)
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitCommand" ):
+                return visitor.visitCommand(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 
@@ -640,13 +624,11 @@ class zoiaParser ( Parser ):
         def getRuleIndex(self):
             return zoiaParser.RULE_arguments
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterArguments" ):
-                listener.enterArguments(self)
-
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitArguments" ):
-                listener.exitArguments(self)
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitArguments" ):
+                return visitor.visitArguments(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 
@@ -766,13 +748,11 @@ class zoiaParser ( Parser ):
         def getRuleIndex(self):
             return zoiaParser.RULE_argument
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterArgument" ):
-                listener.enterArgument(self)
-
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitArgument" ):
-                listener.exitArgument(self)
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitArgument" ):
+                return visitor.visitArgument(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 
@@ -834,13 +814,11 @@ class zoiaParser ( Parser ):
         def getRuleIndex(self):
             return zoiaParser.RULE_kwdArgument
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterKwdArgument" ):
-                listener.enterKwdArgument(self)
-
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitKwdArgument" ):
-                listener.exitKwdArgument(self)
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitKwdArgument" ):
+                return visitor.visitKwdArgument(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 
@@ -917,13 +895,11 @@ class zoiaParser ( Parser ):
         def getRuleIndex(self):
             return zoiaParser.RULE_stdArgument
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterStdArgument" ):
-                listener.enterStdArgument(self)
-
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitStdArgument" ):
-                listener.exitStdArgument(self)
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitStdArgument" ):
+                return visitor.visitStdArgument(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 
@@ -979,13 +955,11 @@ class zoiaParser ( Parser ):
         def getRuleIndex(self):
             return zoiaParser.RULE_whitespace
 
-        def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterWhitespace" ):
-                listener.enterWhitespace(self)
-
-        def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitWhitespace" ):
-                listener.exitWhitespace(self)
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitWhitespace" ):
+                return visitor.visitWhitespace(self)
+            else:
+                return visitor.visitChildren(self)
 
 
 

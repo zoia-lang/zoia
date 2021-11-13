@@ -12,7 +12,7 @@ CLASSPATH=".:$(realpath scripts/antlr.jar):$CLASSPATH"
 export CLASSPATH
 
 # Generate the parser
-java org.antlr.v4.Tool -Dlanguage=Python3 -o src grammar/zoia.g4
+java org.antlr.v4.Tool -Dlanguage=Python3 -o src -visitor -no-listener grammar/zoia.g4
 
 # Delete the interp/tokens files, we don't need them
 find src/grammar -name "*.interp" -delete
