@@ -37,6 +37,6 @@ class HeaderNode(ASTNode):
         for a in self.arguments:
             s.write('    ')
             s.write(a.canonical())
-            s.write(',\n')
+            s.write(';\n')
         s.write(']')
         return s.getvalue()

@@ -22,7 +22,7 @@
 """This module houses SourcePos, a class for storing source code positions."""
 from dataclasses import dataclass
 
-@dataclass
+@dataclass(slots=True)
 class SourcePos:
     """Stores a position in source code somewhere, consisting of the source
     file, line number and character offset within that line."""

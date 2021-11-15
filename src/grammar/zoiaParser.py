@@ -12,60 +12,53 @@ else:
 def serializedATN():
     with StringIO() as buf:
         buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\16")
-        buf.write("\u009a\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7")
+        buf.write("\u008e\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7")
         buf.write("\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t\13\4\f\t\f\4\r\t\r\4\16")
         buf.write("\t\16\3\2\3\2\7\2\37\n\2\f\2\16\2\"\13\2\3\2\3\2\3\3\3")
         buf.write("\3\3\3\3\3\3\4\7\4+\n\4\f\4\16\4.\13\4\3\4\3\4\3\5\3\5")
         buf.write("\3\5\5\5\65\n\5\3\6\3\6\6\69\n\6\r\6\16\6:\3\7\6\7>\n")
         buf.write("\7\r\7\16\7?\3\b\3\b\3\b\3\t\3\t\3\t\5\tH\n\t\3\t\5\t")
-        buf.write("K\n\t\3\n\3\n\7\nO\n\n\f\n\16\nR\13\n\3\n\3\n\7\nV\n\n")
-        buf.write("\f\n\16\nY\13\n\3\n\3\n\7\n]\n\n\f\n\16\n`\13\n\3\n\7")
-        buf.write("\nc\n\n\f\n\16\nf\13\n\3\n\7\ni\n\n\f\n\16\nl\13\n\3\n")
-        buf.write("\5\no\n\n\3\n\7\nr\n\n\f\n\16\nu\13\n\3\n\3\n\3\13\3\13")
-        buf.write("\5\13{\n\13\3\f\3\f\7\f\177\n\f\f\f\16\f\u0082\13\f\3")
-        buf.write("\f\3\f\7\f\u0086\n\f\f\f\16\f\u0089\13\f\3\f\6\f\u008c")
-        buf.write("\n\f\r\f\16\f\u008d\3\r\6\r\u0091\n\r\r\r\16\r\u0092\3")
-        buf.write("\16\6\16\u0096\n\16\r\16\16\16\u0097\3\16\2\2\17\2\4\6")
-        buf.write("\b\n\f\16\20\22\24\26\30\32\2\3\3\2\f\r\2\u00a2\2\34\3")
-        buf.write("\2\2\2\4%\3\2\2\2\6,\3\2\2\2\b\64\3\2\2\2\n8\3\2\2\2\f")
-        buf.write("=\3\2\2\2\16A\3\2\2\2\20D\3\2\2\2\22L\3\2\2\2\24z\3\2")
-        buf.write("\2\2\26|\3\2\2\2\30\u0090\3\2\2\2\32\u0095\3\2\2\2\34")
-        buf.write(" \5\4\3\2\35\37\5\6\4\2\36\35\3\2\2\2\37\"\3\2\2\2 \36")
-        buf.write("\3\2\2\2 !\3\2\2\2!#\3\2\2\2\" \3\2\2\2#$\7\2\2\3$\3\3")
-        buf.write("\2\2\2%&\7\3\2\2&\'\5\22\n\2\'(\7\f\2\2(\5\3\2\2\2)+\5")
-        buf.write("\b\5\2*)\3\2\2\2+.\3\2\2\2,*\3\2\2\2,-\3\2\2\2-/\3\2\2")
-        buf.write("\2.,\3\2\2\2/\60\7\f\2\2\60\7\3\2\2\2\61\65\5\n\6\2\62")
-        buf.write("\65\5\16\b\2\63\65\5\20\t\2\64\61\3\2\2\2\64\62\3\2\2")
-        buf.write("\2\64\63\3\2\2\2\65\t\3\2\2\2\669\5\f\7\2\679\7\r\2\2")
-        buf.write("8\66\3\2\2\28\67\3\2\2\29:\3\2\2\2:8\3\2\2\2:;\3\2\2\2")
-        buf.write(";\13\3\2\2\2<>\7\16\2\2=<\3\2\2\2>?\3\2\2\2?=\3\2\2\2")
-        buf.write("?@\3\2\2\2@\r\3\2\2\2AB\7\4\2\2BC\5\f\7\2C\17\3\2\2\2")
-        buf.write("DE\7\5\2\2EG\5\f\7\2FH\5\22\n\2GF\3\2\2\2GH\3\2\2\2HJ")
-        buf.write("\3\2\2\2IK\7\6\2\2JI\3\2\2\2JK\3\2\2\2K\21\3\2\2\2LP\7")
-        buf.write("\7\2\2MO\5\32\16\2NM\3\2\2\2OR\3\2\2\2PN\3\2\2\2PQ\3\2")
-        buf.write("\2\2QS\3\2\2\2RP\3\2\2\2SW\5\24\13\2TV\7\r\2\2UT\3\2\2")
-        buf.write("\2VY\3\2\2\2WU\3\2\2\2WX\3\2\2\2Xd\3\2\2\2YW\3\2\2\2Z")
-        buf.write("^\7\b\2\2[]\5\32\16\2\\[\3\2\2\2]`\3\2\2\2^\\\3\2\2\2")
-        buf.write("^_\3\2\2\2_a\3\2\2\2`^\3\2\2\2ac\5\24\13\2bZ\3\2\2\2c")
-        buf.write("f\3\2\2\2db\3\2\2\2de\3\2\2\2ej\3\2\2\2fd\3\2\2\2gi\7")
-        buf.write("\r\2\2hg\3\2\2\2il\3\2\2\2jh\3\2\2\2jk\3\2\2\2kn\3\2\2")
-        buf.write("\2lj\3\2\2\2mo\7\b\2\2nm\3\2\2\2no\3\2\2\2os\3\2\2\2p")
-        buf.write("r\5\32\16\2qp\3\2\2\2ru\3\2\2\2sq\3\2\2\2st\3\2\2\2tv")
-        buf.write("\3\2\2\2us\3\2\2\2vw\7\t\2\2w\23\3\2\2\2x{\5\26\f\2y{")
-        buf.write("\5\30\r\2zx\3\2\2\2zy\3\2\2\2{\25\3\2\2\2|\u0080\5\f\7")
-        buf.write("\2}\177\7\r\2\2~}\3\2\2\2\177\u0082\3\2\2\2\u0080~\3\2")
-        buf.write("\2\2\u0080\u0081\3\2\2\2\u0081\u0083\3\2\2\2\u0082\u0080")
-        buf.write("\3\2\2\2\u0083\u0087\7\n\2\2\u0084\u0086\7\r\2\2\u0085")
-        buf.write("\u0084\3\2\2\2\u0086\u0089\3\2\2\2\u0087\u0085\3\2\2\2")
-        buf.write("\u0087\u0088\3\2\2\2\u0088\u008b\3\2\2\2\u0089\u0087\3")
-        buf.write("\2\2\2\u008a\u008c\5\b\5\2\u008b\u008a\3\2\2\2\u008c\u008d")
-        buf.write("\3\2\2\2\u008d\u008b\3\2\2\2\u008d\u008e\3\2\2\2\u008e")
-        buf.write("\27\3\2\2\2\u008f\u0091\5\b\5\2\u0090\u008f\3\2\2\2\u0091")
-        buf.write("\u0092\3\2\2\2\u0092\u0090\3\2\2\2\u0092\u0093\3\2\2\2")
-        buf.write("\u0093\31\3\2\2\2\u0094\u0096\t\2\2\2\u0095\u0094\3\2")
-        buf.write("\2\2\u0096\u0097\3\2\2\2\u0097\u0095\3\2\2\2\u0097\u0098")
-        buf.write("\3\2\2\2\u0098\33\3\2\2\2\27 ,\648:?GJPW^djnsz\u0080\u0087")
-        buf.write("\u008d\u0092\u0097")
+        buf.write("K\n\t\3\n\3\n\7\nO\n\n\f\n\16\nR\13\n\3\n\3\n\3\n\7\n")
+        buf.write("W\n\n\f\n\16\nZ\13\n\3\n\7\n]\n\n\f\n\16\n`\13\n\3\n\5")
+        buf.write("\nc\n\n\3\n\7\nf\n\n\f\n\16\ni\13\n\3\n\3\n\3\13\3\13")
+        buf.write("\5\13o\n\13\3\f\3\f\7\fs\n\f\f\f\16\fv\13\f\3\f\3\f\7")
+        buf.write("\fz\n\f\f\f\16\f}\13\f\3\f\6\f\u0080\n\f\r\f\16\f\u0081")
+        buf.write("\3\r\6\r\u0085\n\r\r\r\16\r\u0086\3\16\6\16\u008a\n\16")
+        buf.write("\r\16\16\16\u008b\3\16\3^\2\17\2\4\6\b\n\f\16\20\22\24")
+        buf.write("\26\30\32\2\3\3\2\f\r\2\u0094\2\34\3\2\2\2\4%\3\2\2\2")
+        buf.write("\6,\3\2\2\2\b\64\3\2\2\2\n8\3\2\2\2\f=\3\2\2\2\16A\3\2")
+        buf.write("\2\2\20D\3\2\2\2\22L\3\2\2\2\24n\3\2\2\2\26p\3\2\2\2\30")
+        buf.write("\u0084\3\2\2\2\32\u0089\3\2\2\2\34 \5\4\3\2\35\37\5\6")
+        buf.write("\4\2\36\35\3\2\2\2\37\"\3\2\2\2 \36\3\2\2\2 !\3\2\2\2")
+        buf.write("!#\3\2\2\2\" \3\2\2\2#$\7\2\2\3$\3\3\2\2\2%&\7\3\2\2&")
+        buf.write("\'\5\22\n\2\'(\7\f\2\2(\5\3\2\2\2)+\5\b\5\2*)\3\2\2\2")
+        buf.write("+.\3\2\2\2,*\3\2\2\2,-\3\2\2\2-/\3\2\2\2.,\3\2\2\2/\60")
+        buf.write("\7\f\2\2\60\7\3\2\2\2\61\65\5\n\6\2\62\65\5\16\b\2\63")
+        buf.write("\65\5\20\t\2\64\61\3\2\2\2\64\62\3\2\2\2\64\63\3\2\2\2")
+        buf.write("\65\t\3\2\2\2\669\5\f\7\2\679\7\r\2\28\66\3\2\2\28\67")
+        buf.write("\3\2\2\29:\3\2\2\2:8\3\2\2\2:;\3\2\2\2;\13\3\2\2\2<>\7")
+        buf.write("\16\2\2=<\3\2\2\2>?\3\2\2\2?=\3\2\2\2?@\3\2\2\2@\r\3\2")
+        buf.write("\2\2AB\7\4\2\2BC\5\f\7\2C\17\3\2\2\2DE\7\5\2\2EG\5\f\7")
+        buf.write("\2FH\5\22\n\2GF\3\2\2\2GH\3\2\2\2HJ\3\2\2\2IK\7\6\2\2")
+        buf.write("JI\3\2\2\2JK\3\2\2\2K\21\3\2\2\2LP\7\7\2\2MO\5\32\16\2")
+        buf.write("NM\3\2\2\2OR\3\2\2\2PN\3\2\2\2PQ\3\2\2\2QS\3\2\2\2RP\3")
+        buf.write("\2\2\2S^\5\24\13\2TX\7\b\2\2UW\5\32\16\2VU\3\2\2\2WZ\3")
+        buf.write("\2\2\2XV\3\2\2\2XY\3\2\2\2Y[\3\2\2\2ZX\3\2\2\2[]\5\24")
+        buf.write("\13\2\\T\3\2\2\2]`\3\2\2\2^_\3\2\2\2^\\\3\2\2\2_b\3\2")
+        buf.write("\2\2`^\3\2\2\2ac\7\b\2\2ba\3\2\2\2bc\3\2\2\2cg\3\2\2\2")
+        buf.write("df\5\32\16\2ed\3\2\2\2fi\3\2\2\2ge\3\2\2\2gh\3\2\2\2h")
+        buf.write("j\3\2\2\2ig\3\2\2\2jk\7\t\2\2k\23\3\2\2\2lo\5\26\f\2m")
+        buf.write("o\5\30\r\2nl\3\2\2\2nm\3\2\2\2o\25\3\2\2\2pt\5\f\7\2q")
+        buf.write("s\7\r\2\2rq\3\2\2\2sv\3\2\2\2tr\3\2\2\2tu\3\2\2\2uw\3")
+        buf.write("\2\2\2vt\3\2\2\2w{\7\n\2\2xz\7\r\2\2yx\3\2\2\2z}\3\2\2")
+        buf.write("\2{y\3\2\2\2{|\3\2\2\2|\177\3\2\2\2}{\3\2\2\2~\u0080\5")
+        buf.write("\b\5\2\177~\3\2\2\2\u0080\u0081\3\2\2\2\u0081\177\3\2")
+        buf.write("\2\2\u0081\u0082\3\2\2\2\u0082\27\3\2\2\2\u0083\u0085")
+        buf.write("\5\b\5\2\u0084\u0083\3\2\2\2\u0085\u0086\3\2\2\2\u0086")
+        buf.write("\u0084\3\2\2\2\u0086\u0087\3\2\2\2\u0087\31\3\2\2\2\u0088")
+        buf.write("\u008a\t\2\2\2\u0089\u0088\3\2\2\2\u008a\u008b\3\2\2\2")
+        buf.write("\u008b\u0089\3\2\2\2\u008b\u008c\3\2\2\2\u008c\33\3\2")
+        buf.write("\2\2\25 ,\648:?GJPX^bgnt{\u0081\u0086\u008b")
         return buf.getvalue()
 
 
@@ -613,12 +606,6 @@ class zoiaParser ( Parser ):
                 return self.getTypedRuleContext(zoiaParser.WhitespaceContext,i)
 
 
-        def Space(self, i:int=None):
-            if i is None:
-                return self.getTokens(zoiaParser.Space)
-            else:
-                return self.getToken(zoiaParser.Space, i)
-
         def getRuleIndex(self):
             return zoiaParser.RULE_arguments
 
@@ -653,71 +640,49 @@ class zoiaParser ( Parser ):
 
             self.state = 81
             self.argument()
-            self.state = 85
+            self.state = 92
             self._errHandler.sync(self)
-            _alt = self._interp.adaptivePredict(self._input,9,self._ctx)
-            while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
-                if _alt==1:
+            _alt = self._interp.adaptivePredict(self._input,10,self._ctx)
+            while _alt!=1 and _alt!=ATN.INVALID_ALT_NUMBER:
+                if _alt==1+1:
                     self.state = 82
-                    self.match(zoiaParser.Space)
-                self.state = 87
-                self._errHandler.sync(self)
-                _alt = self._interp.adaptivePredict(self._input,9,self._ctx)
-
-            self.state = 98
-            self._errHandler.sync(self)
-            _alt = self._interp.adaptivePredict(self._input,11,self._ctx)
-            while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
-                if _alt==1:
-                    self.state = 88
                     self.match(zoiaParser.T__5)
-                    self.state = 92
+                    self.state = 86
                     self._errHandler.sync(self)
-                    _alt = self._interp.adaptivePredict(self._input,10,self._ctx)
+                    _alt = self._interp.adaptivePredict(self._input,9,self._ctx)
                     while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
                         if _alt==1:
-                            self.state = 89
+                            self.state = 83
                             self.whitespace()
-                        self.state = 94
+                        self.state = 88
                         self._errHandler.sync(self)
-                        _alt = self._interp.adaptivePredict(self._input,10,self._ctx)
+                        _alt = self._interp.adaptivePredict(self._input,9,self._ctx)
 
-                    self.state = 95
+                    self.state = 89
                     self.argument()
-                self.state = 100
+                self.state = 94
                 self._errHandler.sync(self)
-                _alt = self._interp.adaptivePredict(self._input,11,self._ctx)
+                _alt = self._interp.adaptivePredict(self._input,10,self._ctx)
 
-            self.state = 104
-            self._errHandler.sync(self)
-            _alt = self._interp.adaptivePredict(self._input,12,self._ctx)
-            while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
-                if _alt==1:
-                    self.state = 101
-                    self.match(zoiaParser.Space)
-                self.state = 106
-                self._errHandler.sync(self)
-                _alt = self._interp.adaptivePredict(self._input,12,self._ctx)
-
-            self.state = 108
+            self.state = 96
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             if _la==zoiaParser.T__5:
-                self.state = 107
+                self.state = 95
                 self.match(zoiaParser.T__5)
 
 
-            self.state = 113
+            self.state = 101
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             while _la==zoiaParser.Newline or _la==zoiaParser.Space:
-                self.state = 110
+                self.state = 98
                 self.whitespace()
-                self.state = 115
+                self.state = 103
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
 
-            self.state = 116
+            self.state = 104
             self.match(zoiaParser.T__6)
         except RecognitionException as re:
             localctx.exception = re
@@ -760,18 +725,18 @@ class zoiaParser ( Parser ):
         localctx = zoiaParser.ArgumentContext(self, self._ctx, self.state)
         self.enterRule(localctx, 18, self.RULE_argument)
         try:
-            self.state = 120
+            self.state = 108
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input,15,self._ctx)
+            la_ = self._interp.adaptivePredict(self._input,13,self._ctx)
             if la_ == 1:
                 self.enterOuterAlt(localctx, 1)
-                self.state = 118
+                self.state = 106
                 self.kwdArgument()
                 pass
 
             elif la_ == 2:
                 self.enterOuterAlt(localctx, 2)
-                self.state = 119
+                self.state = 107
                 self.stdArgument()
                 pass
 
@@ -828,44 +793,44 @@ class zoiaParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 122
+            self.state = 110
             self.word()
-            self.state = 126
+            self.state = 114
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             while _la==zoiaParser.Space:
-                self.state = 123
+                self.state = 111
                 self.match(zoiaParser.Space)
-                self.state = 128
+                self.state = 116
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
 
-            self.state = 129
+            self.state = 117
             self.match(zoiaParser.T__7)
-            self.state = 133
+            self.state = 121
             self._errHandler.sync(self)
-            _alt = self._interp.adaptivePredict(self._input,17,self._ctx)
+            _alt = self._interp.adaptivePredict(self._input,15,self._ctx)
             while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
                 if _alt==1:
-                    self.state = 130
+                    self.state = 118
                     self.match(zoiaParser.Space)
-                self.state = 135
+                self.state = 123
                 self._errHandler.sync(self)
-                _alt = self._interp.adaptivePredict(self._input,17,self._ctx)
+                _alt = self._interp.adaptivePredict(self._input,15,self._ctx)
 
-            self.state = 137
+            self.state = 125
             self._errHandler.sync(self)
             _alt = 1
             while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
                 if _alt == 1:
-                    self.state = 136
+                    self.state = 124
                     self.lineElement()
 
                 else:
                     raise NoViableAltException(self)
-                self.state = 139
+                self.state = 127
                 self._errHandler.sync(self)
-                _alt = self._interp.adaptivePredict(self._input,18,self._ctx)
+                _alt = self._interp.adaptivePredict(self._input,16,self._ctx)
 
         except RecognitionException as re:
             localctx.exception = re
@@ -908,19 +873,19 @@ class zoiaParser ( Parser ):
         self.enterRule(localctx, 22, self.RULE_stdArgument)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 142
+            self.state = 130
             self._errHandler.sync(self)
             _alt = 1
             while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
                 if _alt == 1:
-                    self.state = 141
+                    self.state = 129
                     self.lineElement()
 
                 else:
                     raise NoViableAltException(self)
-                self.state = 144
+                self.state = 132
                 self._errHandler.sync(self)
-                _alt = self._interp.adaptivePredict(self._input,19,self._ctx)
+                _alt = self._interp.adaptivePredict(self._input,17,self._ctx)
 
         except RecognitionException as re:
             localctx.exception = re
@@ -969,12 +934,12 @@ class zoiaParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 147
+            self.state = 135
             self._errHandler.sync(self)
             _alt = 1
             while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
                 if _alt == 1:
-                    self.state = 146
+                    self.state = 134
                     _la = self._input.LA(1)
                     if not(_la==zoiaParser.Newline or _la==zoiaParser.Space):
                         self._errHandler.recoverInline(self)
@@ -984,9 +949,9 @@ class zoiaParser ( Parser ):
 
                 else:
                     raise NoViableAltException(self)
-                self.state = 149
+                self.state = 137
                 self._errHandler.sync(self)
-                _alt = self._interp.adaptivePredict(self._input,20,self._ctx)
+                _alt = self._interp.adaptivePredict(self._input,18,self._ctx)
 
         except RecognitionException as re:
             localctx.exception = re
