@@ -24,6 +24,7 @@ from ast_converter import ASTConverter
 from test.base import ATestParser
 
 class _ATestCanonicalRepr(ATestParser):
+    """Base class for tests that check canonical representations."""
     _do_fixups = False
     _test_rep: str
 
@@ -44,6 +45,8 @@ class _ATestCanonicalRepr(ATestParser):
 
 # Some helpers for easily making sources and canonical representations
 def _mk_shared(*lines):
+    """Adds newlines to the specified lines and adds a trailing one to the
+    end."""
     return '\n'.join(lines) + '\n'
 
 _common_s = _mk_shared('\\header[foo]') + '\n'
@@ -53,8 +56,12 @@ _common_r = _mk_shared('\\header[',
                        '')
 
 def _mks(*lines):
+    """Makes a source 'file' using the specified lines (with a header
+    prepended)."""
     return _common_s + _mk_shared(*lines)
 def _mkr(*lines):
+    """Makes a canonical representation 'file' using the specified lines (with
+    a header prepended)."""
     return _common_r + _mk_shared(*lines)
 
 class TestHeaderCR(_ATestCanonicalRepr):
