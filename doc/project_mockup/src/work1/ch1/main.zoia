@@ -1,0 +1,28 @@
+\header[chapter]
+
+\begin_work_summary
+This is the \em[summary] of the \st[entire work].
+\end_work_summary
+
+\begin_work_notes_b
+These are the \em[beginning notes] for the \st[entire work].
+\end_work_notes_b
+
+\begin_work_notes_e
+These are the \em[end notes] for the \st[entire work].
+\end_work_notes_e
+
+\begin_summary
+This is the \em[summary] of the \st[first chapter].
+\end_summary
+
+\begin_notes_b
+These are the \em[beginning notes] for the \st[first chapter].
+\end_notes_b
+
+\begin_notes_e
+These are the \em[end notes] for the \st[first chapter].
+\end_notes_e
+
+# The actual content of the work begins here.
+@A met @B at a party in @HW.

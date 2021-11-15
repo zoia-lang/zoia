@@ -16,6 +16,16 @@ A language for writing fiction.
   - [x] What's the nicest output format? One file, multiple files? -> multiple HTML files
   - [x] What about summaries and author notes? -> separate files per chapter
   - [x] And all the other stuff (warnings, tags, etc.)? -> not useful (esp. for warnings, which are radio buttons)
+  - [ ] Revisit later: What about work summaries/notes? E.g. [this fic](https://archiveofourown.org/works/24293356/chapters/58558123) has:
+    - A work summary
+    - Author notes at the beginning of the work
+    - Author notes at the end of the work
+    - A summary on the first chapter
+    - Author notes at the end of the first chapter
+  - But the AO3 form only has three boxes for entering a summary and 2x notes
+  - Probably can't figure this out without actually posting a fic, hence revisit later
+  - Work off the assumption that we'll potentially put out three extra files for work summaries and notes
+- [x] Come up with a mockup for a project layout (src, build, config, etc.)
 - [ ] Come up with mockup classes to model this (series, story, chapter)
 - [ ] Model how we want the whole system to process our nodes (rough draft):
   - [ ] 1. Parse aliases

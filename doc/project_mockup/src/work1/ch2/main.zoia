@@ -1,0 +1,13 @@
+\header[chapter]
+
+\begin_summary
+@A and @B share their first kiss, but are interrupted by @E and a fight breaks out.
+\end_summary
+
+\insert_fragment[kiss.zoia]
+
+\horizontal_line
+
+\insert_fragment[fight.zoia]
+
+\center\h2[The End.]
