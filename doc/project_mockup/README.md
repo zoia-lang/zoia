@@ -7,14 +7,14 @@ This is a mockup for what the layout of a typical Zoia project would look like.
 │   └── work1
 │       ├── ch1
 │       │   ├── <a href="#notes_beginninghtml">notes_beginning.html</a>
-│       │   ├── notes_end.html
+│       │   ├── <a href="#notes_endhtml">notes_end.html</a>
 │       │   ├── <a href="#summaryhtml">summary.html</a>
 │       │   └── <a href="#texthtml">text.html</a>
 │       ├── ch2
 │       │   ├── <a href="#summaryhtml">summary.html</a>
 │       │   └── <a href="#texthtml">text.html</a>
-│       ├── notes_beginning.html
-│       ├── notes_end.html
+│       ├── <a href="#notes_beginninghtml">notes_beginning.html</a>
+│       ├── <a href="#notes_endhtml">notes_end.html</a>
 │       └── <a href="#summaryhtml">summary.html</a>
 ├── <a href="#src">src</a>
 │   └── work1
