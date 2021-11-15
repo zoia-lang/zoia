@@ -11,7 +11,7 @@ A language for writing fiction.
 - [x] Implement AST node classes
 - [x] Write a converter (parse tree -> AST)
 - [x] Implement canonical reprs for all AST nodes
-- [ ] Come up with some tests for the lexer, parser and canonical repr
+- [x] Come up with some tests for the lexer, parser and canonical repr
 - [ ] Experiment with AO3 (the primary output target) drafts:
   - [ ] What's the nicest output format? One file, multiple files?
   - [ ] What about summaries and author notes?
