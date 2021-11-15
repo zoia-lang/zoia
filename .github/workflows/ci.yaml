@@ -3,8 +3,9 @@ name: CI
 on: push
 
 jobs:
-  test:
+  build-grammar:
     runs-on: ubuntu-latest
+    name: Build Zoia Grammar
     steps:
       - name: Checkout commit
         uses: actions/checkout@v2
@@ -15,7 +16,29 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 8 # ANTLR needs Java 8
-      - name: Download ANTLR v4
+      - name: Download ANTLR4
         run: ./scripts/prereq.sh
-      - name: Build zoia
+      - name: Build Zoia
         run: ./scripts/build.sh
+      - name: Check that diff is empty
+        run: git diff --quiet
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # We need at least 3.10 (dataclasses with slots)
+        python-version: [ '3.10', '3.11-dev' ]
+    name: Run Zoia Tests on Python ${{ matrix.python-version }}
+    steps:
+      - name: Checkout commit
+        uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install -U pip
+          python -m pip install -r requirements.txt
+      - name: Test Zoia
+        run: python -m pytest
