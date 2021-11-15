@@ -1,1 +1,5 @@
+# Runtime
 antlr4-python3-runtime==4.9.3
+
+# Build/Test-time
+pytest==6.2.5
