@@ -12,10 +12,10 @@ A language for writing fiction.
 - [x] Write a converter (parse tree -> AST)
 - [x] Implement canonical reprs for all AST nodes
 - [x] Come up with some tests for the lexer, parser and canonical repr
-- [ ] Experiment with AO3 (the primary output target) drafts:
-  - [ ] What's the nicest output format? One file, multiple files?
-  - [ ] What about summaries and author notes?
-  - [ ] And all the other stuff (warnings, tags, etc.)?
+- [x] Experiment with AO3 (the primary output target) drafts:
+  - [x] What's the nicest output format? One file, multiple files? -> multiple HTML files
+  - [x] What about summaries and author notes? -> separate files per chapter
+  - [x] And all the other stuff (warnings, tags, etc.)? -> not useful (esp. for warnings, which are radio buttons)
 - [ ] Come up with mockup classes to model this (series, story, chapter)
 - [ ] Model how we want the whole system to process our nodes (rough draft):
   - [ ] 1. Parse aliases
