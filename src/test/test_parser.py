@@ -21,38 +21,15 @@
 # =============================================================================
 """This module houses tests related to the Zoia parser."""
 import pytest
-from antlr4 import BailErrorStrategy, CommonTokenStream, InputStream
 from antlr4.error.Errors import ParseCancellationException
 
-from grammar import zoiaLexer, zoiaParser
-
-# Some common code for both expect-success and expect-fail tests
-_default_header = '\\header[fragment]\n\n'
-
-class _ATestParser:
-    _test_src: str
-    _do_fixups: bool = True
-
-    def _setup_parser(self):
-        # For convenience, the \header part can be elided in tests
-        if self._do_fixups and '\\header' not in self._test_src:
-            self._test_src = _default_header + self._test_src
-        # For convenience, an ending \n can be elided in tests
-        if self._do_fixups and not self._test_src.endswith('\n'):
-            self._test_src += '\n'
-        ins = InputStream(self._test_src)
-        lexer = zoiaLexer(ins)
-        tokens = CommonTokenStream(lexer)
-        parser = zoiaParser(tokens)
-        # Ugh, why isn't there an API for this?
-        parser._errHandler = BailErrorStrategy()
-        return parser
+from test.base import ATestParser
 
 # ==== Expect-Success Tests ===================================================
-class _ATestParserPass(_ATestParser):
+class _ATestParserPass(ATestParser):
     """Base class for parser tests that are expected to succeed."""
     def test_parser(self):
-        self._setup_parser().zoiaFile()
+        self._make_parser().zoiaFile()
 
 class TestAcceptsHeader(_ATestParserPass):
     """A simple header should be accepted."""
@@ -110,13 +87,16 @@ class TestAcceptsSpaceArg(_ATestParserPass):
     spaces."""
     _test_src = '\\cmd[ ]'
 
+class TestAcceptsUnicode(_ATestParserPass):
+    """Unicode characters should be accepted."""
+    _test_src = '\\cömmänd[😀] 警告'
 
 # ==== Expect-Fail Tests ======================================================
-class _ATestParserFail(_ATestParser):
+class _ATestParserFail(ATestParser):
     """Base class for parser tests that are expected to fail."""
     def test_parser(self):
         try:
-            parser = self._setup_parser()
+            parser = self._make_parser()
             # We're expecting to fail, don't print to stdout
             parser.removeErrorListeners()
             parser.zoiaFile()

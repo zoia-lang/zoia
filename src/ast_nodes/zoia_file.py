@@ -36,7 +36,7 @@ class ZoiaFileNode(ASTNode):
     def canonical(self) -> str:
         s = StringIO()
         s.write(self.header.canonical())
-        s.write('\n\n')
+        s.write('\n')
         for l in self.lines:
             s.write(l.canonical())
         return s.getvalue()
