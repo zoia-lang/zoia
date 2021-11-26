@@ -1,6 +1,6 @@
 \header[aliases]
 
-\def_alias[A, Alice]
-\def_alias[B, Bob]
-\def_alias[E, Eve]
-\def_alias[HW, Hugglesworth]
+\def_alias[A; Alice]
+\def_alias[B; Bob]
+\def_alias[E; Eve]
+\def_alias[HW; Hugglesworth]
