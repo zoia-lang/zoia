@@ -33,8 +33,10 @@ from ast_nodes.header import *
 from ast_nodes.italic_line_element import *
 from ast_nodes.kwd_argument import *
 from ast_nodes.line import *
+from ast_nodes.line_element import *
 from ast_nodes.line_elements import *
 from ast_nodes.marked_up_line_elements import *
+from ast_nodes.regular_line_elements import *
 from ast_nodes.std_argument import *
 from ast_nodes.text_fragment import *
 from ast_nodes.zoia_file import *
