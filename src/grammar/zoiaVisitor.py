@@ -24,8 +24,38 @@ class zoiaVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by zoiaParser#lineElements.
+    def visitLineElements(self, ctx:zoiaParser.LineElementsContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by zoiaParser#regularLineElements.
+    def visitRegularLineElements(self, ctx:zoiaParser.RegularLineElementsContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by zoiaParser#lineElement.
     def visitLineElement(self, ctx:zoiaParser.LineElementContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by zoiaParser#markedUpLineElements.
+    def visitMarkedUpLineElements(self, ctx:zoiaParser.MarkedUpLineElementsContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by zoiaParser#boldItalicLineElements.
+    def visitBoldItalicLineElements(self, ctx:zoiaParser.BoldItalicLineElementsContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by zoiaParser#boldLineElements.
+    def visitBoldLineElements(self, ctx:zoiaParser.BoldLineElementsContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by zoiaParser#italicLineElements.
+    def visitItalicLineElements(self, ctx:zoiaParser.ItalicLineElementsContext):
         return self.visitChildren(ctx)
 
 

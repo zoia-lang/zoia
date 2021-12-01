@@ -24,12 +24,12 @@ dependencies."""
 from dataclasses import dataclass
 
 from ast_nodes.base import ASTNode
-from ast_nodes.line_element import LineElementNode
+from ast_nodes.line_elements import LineElementsNode
 
 @dataclass(slots=True)
 class ArgumentNode(ASTNode):
     """Base AST node for arguments. See KwdArgumentNode and StdArgumentNode."""
-    arg_value: list[LineElementNode]
+    arg_value: LineElementsNode
 
     def canonical(self) -> str:
-        return ''.join([a.canonical() for a in self.arg_value])
+        return self.arg_value.canonical()

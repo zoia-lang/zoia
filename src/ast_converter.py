@@ -21,10 +21,13 @@
 # =============================================================================
 """This module houses the parse tree visitor that generates an AST from the
 ANTLR parse tree."""
+from antlr4.tree.Tree import TerminalNodeImpl
 from io import StringIO
 
 from ast_nodes import AliasNode, CommandNode, HeaderNode, KwdArgumentNode, \
-    LineNode, StdArgumentNode, TextFragmentNode, ZoiaFileNode
+    LineNode, StdArgumentNode, TextFragmentNode, ZoiaFileNode, \
+    LineElementsNode, RegularLineElementsNode, BoldItalicLineElementsNode, \
+    BoldLineElementsNode, ItalicLineElementsNode
 from exception import ASTConversionError
 from grammar import zoiaParser, zoiaVisitor
 from src_pos import SourcePos
@@ -56,8 +59,26 @@ class ASTConverter(zoiaVisitor):
                           src_pos=self.make_pos(ctx))
 
     def visitLine(self, ctx: zoiaParser.LineContext):
+        return LineNode(self.visitLineElements(ctx.lineElements()),
+                        src_pos=self.make_pos(ctx))
+
+    def visitLineElements(self, ctx: zoiaParser.LineElementsContext):
+        if ctx is None:
+            return None # lineElements is optional in line
+        elements = []
+        for le_child in ctx.children:
+            if isinstance(le_child, zoiaParser.MarkedUpLineElementsContext):
+                elements.append(self.visitMarkedUpLineElements(le_child))
+            elif isinstance(le_child, zoiaParser.RegularLineElementsContext):
+                elements.append(self.visitRegularLineElements(le_child))
+            else:
+                raise ASTConversionError(f"Unknown line elements '{ctx}'")
+        return LineElementsNode(elements, src_pos=self.make_pos(ctx))
+
+    def visitRegularLineElements(self,
+                                 ctx: zoiaParser.RegularLineElementsContext):
         elements = [self.visitLineElement(e) for e in ctx.lineElement()]
-        return LineNode(elements, src_pos=self.make_pos(ctx))
+        return RegularLineElementsNode(elements, src_pos=self.make_pos(ctx))
 
     def visitLineElement(self, ctx: zoiaParser.LineElementContext):
         text_fragment = ctx.textFragment()
@@ -72,15 +93,45 @@ class ASTConverter(zoiaVisitor):
         else:
             raise ASTConversionError(f"Unknown line element '{ctx}'")
 
+    def visitMarkedUpLineElements(self,
+                                  ctx: zoiaParser.MarkedUpLineElementsContext):
+        bi_elements = ctx.boldItalicLineElements()
+        if bi_elements is not None:
+            return self.visitBoldItalicLineElements(bi_elements)
+        b_elements = ctx.boldLineElements()
+        if b_elements is not None:
+            return self.visitBoldLineElements(b_elements)
+        i_elements = ctx.italicLineElements()
+        if i_elements is not None:
+            return self.visitItalicLineElements(i_elements)
+        else:
+            raise ASTConversionError(f"Unknown marked up line elements "
+                                     f"'{ctx}'")
+
+    def visitBoldItalicLineElements(self, ctx: zoiaParser.
+                                    BoldItalicLineElementsContext): # ugh
+        return BoldItalicLineElementsNode(
+            self.visitRegularLineElements(ctx.regularLineElements()),
+            src_pos=self.make_pos(ctx))
+
+    def visitBoldLineElements(self, ctx: zoiaParser.BoldLineElementsContext):
+        return BoldLineElementsNode(
+            self.visitRegularLineElements(ctx.regularLineElements()),
+            src_pos=self.make_pos(ctx))
+
+    def visitItalicLineElements(self,
+                                ctx: zoiaParser.ItalicLineElementsContext):
+        return ItalicLineElementsNode(
+            self.visitRegularLineElements(ctx.regularLineElements()),
+            src_pos=self.make_pos(ctx))
+
     def visitTextFragment(self, ctx: zoiaParser.TextFragmentContext):
         s = StringIO()
         for tf_child in ctx.children:
             if isinstance(tf_child, zoiaParser.WordContext):
                 s.write(self.visitWord(tf_child))
-            elif (hasattr(tf_child, 'symbol') and
+            elif (isinstance(tf_child, TerminalNodeImpl) and
                   tf_child.symbol.type == zoiaParser.Space):
-                # This whole branch is ugly, but TerminalNodeImpl (which has
-                # 'symbol') is not exposed by the ANTLR runtime
                 s.write(tf_child.getText())
             else:
                 raise ASTConversionError(f"Unknown text fragment '{ctx}'")
@@ -115,11 +166,10 @@ class ASTConverter(zoiaVisitor):
 
     def visitKwdArgument(self, ctx: zoiaParser.KwdArgumentContext):
         kwd_name = self.visitWord(ctx.word())
-        arg_value = [self.visitLineElement(e) for e in ctx.lineElement()]
+        arg_value = self.visitLineElements(ctx.lineElements())
         # Reverse order due to dataclass inheritance
         return KwdArgumentNode(arg_value, kwd_name, src_pos=self.make_pos(ctx))
 
     def visitStdArgument(self, ctx: zoiaParser.StdArgumentContext):
-        return StdArgumentNode([self.visitLineElement(e)
-                                for e in ctx.lineElement()],
+        return StdArgumentNode(self.visitLineElements(ctx.lineElements()),
                                src_pos=self.make_pos(ctx))

@@ -21,14 +21,16 @@
 # =============================================================================
 """Implements the AST node for lines."""
 from dataclasses import dataclass
+from typing import Optional
 
 from ast_nodes.base import ASTNode
-from ast_nodes.line_element import LineElementNode
+from ast_nodes.line_elements import LineElementsNode
 
 @dataclass(slots=True)
 class LineNode(ASTNode):
     """AST node for lines."""
-    elements: list[LineElementNode]
+    elements: Optional[LineElementsNode]
 
     def canonical(self) -> str:
-        return ''.join([e.canonical() for e in self.elements]) + '\n'
+        elements_canon = self.elements.canonical() if self.elements else ''
+        return elements_canon + '\n'

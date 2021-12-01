@@ -19,15 +19,17 @@
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # =============================================================================
-"""This module contains all custom exceptions for Zoia."""
-# NO LOCAL IMPORTS! This has to be importable from any module/package.
+"""Implements the AST node for line elements."""
+from dataclasses import dataclass
 
-class AbstractError(Exception):
-    """Abstract section of code called."""
-    def __init__(self, abs_method):
+from ast_nodes.base import ASTNode
+from ast_nodes.marked_up_line_elements import MarkedUpLineElementsNode
+from ast_nodes.regular_line_elements import RegularLineElementsNode
 
-        super().__init__(f"Abstract method '{abs_method.__qualname__}' was "
-                         f"called")
+@dataclass(slots=True)
+class LineElementsNode(ASTNode):
+    """AST node for line elements."""
+    elements: list[MarkedUpLineElementsNode | RegularLineElementsNode]
 
-class ASTConversionError(Exception):
-    """An error that occurred during AST conversion."""
+    def canonical(self) -> str:
+        return ''.join([e.canonical() for e in self.elements])

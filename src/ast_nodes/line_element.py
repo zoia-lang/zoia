@@ -19,7 +19,7 @@
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # =============================================================================
-"""Implements the AST node for line elements. Separate to avoid circular
+"""Implements the AST node for single line elements. Separate to avoid circular
 dependencies."""
 from dataclasses import dataclass
 
@@ -27,6 +27,5 @@ from ast_nodes.base import ASTNode
 
 @dataclass(slots=True)
 class LineElementNode(ASTNode):
-    """Base AST node for line elements. See AliasNode, CommandNode and
+    """Base AST node for single line elements. See AliasNode, CommandNode and
     TextFragmentNode."""
-    pass

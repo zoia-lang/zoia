@@ -21,9 +21,23 @@ zoiaFile: header line* EOF;
 header: '\\header' arguments Newline;
 
 // An arbitrary combination of text fragments, aliases and commands.
-// Must be ended by a newline.
-line: lineElement* Newline;
+// Must be ended by a newline, may be marked up with asterisks.
+line: lineElements? Newline;
+lineElements: (markedUpLineElements | regularLineElements)+;
+regularLineElements: lineElement+;
 lineElement: textFragment | alias | command;
+
+// One or more line elements, surrounded by 1-3 asterisks.
+markedUpLineElements: boldItalicLineElements
+                      | boldLineElements
+                      | italicLineElements;
+boldItalicLineElements: Asterisk Asterisk Asterisk
+                        regularLineElements
+                        Asterisk Asterisk Asterisk;
+boldLineElements: Asterisk Asterisk
+                  regularLineElements
+                  Asterisk Asterisk;
+italicLineElements: Asterisk regularLineElements Asterisk;
 
 // An arbitrary combination of words and spaces.
 textFragment: (word | Space)+;
@@ -46,13 +60,14 @@ command: '\\' word arguments? '|'?;
 // semicolons. Trailing semicolons are allowed.
 // The whitespace handling here is ugly grammar-wise, but should be
 // fairly intuitive when actually using the language.
-arguments: '[' whitespace* argument (';' whitespace* argument)*? ';'? whitespace* ']';
+arguments: '[' whitespace* argument (';' whitespace* argument)*? ';'?
+           whitespace* ']';
 
 // Either a text fragment or a word, an equals sign and a text
 // fragment.
 argument: kwdArgument | stdArgument;
-kwdArgument: word Space* '=' Space* lineElement+;
-stdArgument: lineElement+;
+kwdArgument: word Space* '=' Space* lineElements;
+stdArgument: lineElements;
 
 // Any kind of whitespace: newlines, spaces, tabs, etc.
 whitespace: (Newline | Space)+;
@@ -62,6 +77,7 @@ whitespace: (Newline | Space)+;
 COMMENT: '#' ~[\r\n]* -> skip;
 
 // Tokens
+Asterisk: '*';
 Newline: ('\r\n' | '\r' | '\n');
 // See https://unicode.org/reports/tr44/#General_Category_Values
 Space: [\p{Z}];

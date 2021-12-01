@@ -26,11 +26,15 @@ files that define the classes. That way they can be moved around easily."""
 from ast_nodes.alias import *
 from ast_nodes.argument import *
 from ast_nodes.base import *
+from ast_nodes.bold_italic_line_element import *
+from ast_nodes.bold_line_element import *
 from ast_nodes.command import *
 from ast_nodes.header import *
+from ast_nodes.italic_line_element import *
 from ast_nodes.kwd_argument import *
 from ast_nodes.line import *
-from ast_nodes.line_element import *
+from ast_nodes.line_elements import *
+from ast_nodes.marked_up_line_elements import *
 from ast_nodes.std_argument import *
 from ast_nodes.text_fragment import *
 from ast_nodes.zoia_file import *
