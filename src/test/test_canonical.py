@@ -123,9 +123,66 @@ class TestCommandWhitespaceCR(_ATestCanonicalRepr):
                      '    bar = rab ;',
                      ']')
 
+class TestCommandMarkup(_ATestCanonicalRepr):
+    """Markup should be handled correctly inside commands."""
+    _test_src = _mks('\\foo[',
+                     '    *italic*;',
+                     '    bar = **bold**;',
+                     '    qux = Text that is ***bold-italic***.;',
+                     ']')
+    _test_rep = _mkr('\\foo[',
+                     '    *italic*;',
+                     '    bar = **bold**;',
+                     '    qux = Text that is ***bold-italic***.;',
+                     ']')
+
+class TestCommandNested(_ATestCanonicalRepr):
+    """Nested commands should be handled correctly."""
+    _test_src = _mks('\\foo[',
+                     '    \\bar[',
+                     '        \\qux;',
+                     '    ];'
+                     ']')
+    ##: This is ugly, should somehow come up with a way to fix it
+    _test_rep = _mkr('\\foo[',
+                     '    \\bar[',
+                     '    \\qux|;',
+                     '];',
+                     ']')
+
 class TestUnicodeCR(_ATestCanonicalRepr):
     """Canonical representations should handle unicode characters correctly."""
     _test_src = _mks('Внимание \\cömmänd[😀] 警告')
     _test_rep = _mkr('Внимание \\cömmänd[',
                      '    😀;',
                      '] 警告')
+
+class TestItalic(_ATestCanonicalRepr):
+    """Italic text should have an unchanged canonical representation."""
+    _test_src = _mks('This is *italic text*.')
+    _test_rep = _mkr('This is *italic text*.')
+
+class TestBold(_ATestCanonicalRepr):
+    """Bold text should have an unchanged canonical representation."""
+    _test_src = _mks('This is **bold text**.')
+    _test_rep = _mkr('This is **bold text**.')
+
+class TestBoldItalic(_ATestCanonicalRepr):
+    """Bold-italic text should have an unchanged canonical representation."""
+    _test_src = _mks('This is ***bold-italic text***.')
+    _test_rep = _mkr('This is ***bold-italic text***.')
+
+class TestItalicComplex(_ATestCanonicalRepr):
+    """Aliases and commands in italic text should be handled correctly."""
+    _test_src = _mks('*Italic with @aliases and \\commands*')
+    _test_rep = _mkr('*Italic with @aliases and \\commands|*')
+
+class TestBoldComplex(_ATestCanonicalRepr):
+    """Aliases and commands in bold text should be handled correctly."""
+    _test_src = _mks('**Bold with @aliases and \\commands**')
+    _test_rep = _mkr('**Bold with @aliases and \\commands|**')
+
+class TestBoldItalicComplex(_ATestCanonicalRepr):
+    """Aliases and commands in bold-italic text should be handled correctly."""
+    _test_src = _mks('***Bold-italic with @aliases and \\commands***')
+    _test_rep = _mkr('***Bold-italic with @aliases and \\commands|***')

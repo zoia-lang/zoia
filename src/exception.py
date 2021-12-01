@@ -25,7 +25,6 @@
 class AbstractError(Exception):
     """Abstract section of code called."""
     def __init__(self, abs_method):
-
         super().__init__(f"Abstract method '{abs_method.__qualname__}' was "
                          f"called")
 

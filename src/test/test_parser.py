@@ -91,6 +91,14 @@ class TestAcceptsUnicode(_ATestParserPass):
     """Unicode characters should be accepted."""
     _test_src = '\\cömmänd[😀] 警告'
 
+class TestAcceptsMarkup(_ATestParserPass):
+    """Bold, italic and bold-italic markup should be accepted."""
+    _test_src = 'This is *italic*, **bold** and ***bold-italic*** text.'
+
+class TestAcceptsMarkupComplex(_ATestParserPass):
+    """Markup that contains aliases and commands should be accepted."""
+    _test_src = 'This is *markup with @aliases and \\commands*'
+
 # ==== Expect-Fail Tests ======================================================
 class _ATestParserFail(ATestParser):
     """Base class for parser tests that are expected to fail."""
@@ -125,3 +133,54 @@ class TestRejectsKwdArgWithoutValue1(_ATestParserFail):
 class TestRejectsKwdArgWithoutValue2(_ATestParserFail):
     """Keyword arguments without a value after the '=' should be rejected."""
     _test_src = '\\cmd[a =; c]'
+
+class TestRejectsUnclosedBold(_ATestParserFail):
+    """Unclosed bold markup should be rejected."""
+    _test_src = '**this is bold markup'
+
+class TestRejectsPartiallyClosedBold(_ATestParserFail):
+    """Bold markup that is only closed with one asterisk should be rejected."""
+    _test_src = '**this is bold markup*'
+
+class TestRejectsUnclosedBoldItalic(_ATestParserFail):
+    """Unclosed bold-italic markup should be rejected."""
+    _test_src = '***this is bold-italic markup'
+
+class TestRejectsPartiallyClosedBoldItalic1(_ATestParserFail):
+    """Bold-italic markup that is only closed with one asterisk should be
+    rejected."""
+    _test_src = '***this is bold-italic markup*'
+
+class TestRejectsPartiallyClosedBoldItalic2(_ATestParserFail):
+    """Bold-italic markup that is only closed with one asterisk should be
+    rejected."""
+    _test_src = '***this is bold-italic markup**'
+
+class TestRejectsUnclosedItalic(_ATestParserFail):
+    """Unclosed italic markup should be rejected."""
+    _test_src = '*this is italic markup'
+
+class TestRejectsKwdAlias(_ATestParserFail):
+    """Aliases should be rejected when used as a keyword."""
+    _test_src = '\\cmd[@foo = bar]'
+
+class TestRejectsKwdCommand(_ATestParserFail):
+    """Commands should be rejected when used as a keyword."""
+    _test_src = '\\cmd[\\foo = bar]'
+
+class TestRejectsKwdTextFragment(_ATestParserFail):
+    """Text fragments (text fragments containing more than one word, that is)
+    should be rejected when used as a keyword."""
+    _test_src = '\\cmd[foo qux = bar]'
+
+class TestRejectsKwdItalic(_ATestParserFail):
+    """Italic text should be rejected when used as a keyword."""
+    _test_src = '\\cmd[*foo* = bar]'
+
+class TestRejectsKwdBold(_ATestParserFail):
+    """Bold text should be rejected when used as a keyword."""
+    _test_src = '\\cmd[**foo** = bar]'
+
+class TestRejectsKwdBoldItalic(_ATestParserFail):
+    """Bold-italic text should be rejected when used as a keyword."""
+    _test_src = '\\cmd[***foo*** = bar]'
