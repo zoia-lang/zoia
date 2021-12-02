@@ -1,0 +1,24 @@
+[run]
+branch = True
+omit =
+    # Exclude the tests themselves
+    src/test/*
+
+    # Exclude the generated parser/lexer files
+    src/grammar/*
+
+[report]
+exclude_lines =
+    # Re-enable the standard pragma since we're overriding exclude_lines
+    pragma: no cover
+
+    # __repr__s are often debug-only, so ignore those
+    def __repr__
+
+    # Ignore defensive exceptions that will likely never be raised during tests
+    raise (exception\.)?AbstractError
+    raise NotImplementedError
+    raise ASTConversionError
+
+[html]
+directory = .cov_html

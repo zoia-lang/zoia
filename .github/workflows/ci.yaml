@@ -48,4 +48,4 @@ jobs:
           python -m pip install -U pip
           python -m pip install -r requirements.txt
       - name: Test Zoia
-        run: python -m pytest
+        run: python -m pytest --cov --cov-fail-under=90
