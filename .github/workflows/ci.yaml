@@ -49,9 +49,6 @@ jobs:
           python -m pip install -r requirements.txt
       - name: Test Zoia
         run: coverage run -m pytest
-      - name: Create coverage report
-        # This fails the CI if coverage is too low (see .coveragerc)
-        run: coverage report
       - name: Upload coverage data to coveralls.io
         run: coveralls --service=github
         env:
