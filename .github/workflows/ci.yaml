@@ -45,7 +45,7 @@ jobs:
             ${{ runner.os }}-pip-
       - name: Install dependencies
         run: |
-          python -m pip install -U pip
+          python -m pip install -U pip setuptools wheel
           python -m pip install -r requirements.txt
       - name: Test Zoia
         run: coverage run -m pytest
