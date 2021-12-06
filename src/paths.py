@@ -19,27 +19,18 @@
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # =============================================================================
-"""Implements chapter folders."""
-from dataclasses import dataclass
+"""Implements ZPath, an extension of pathlib.Path."""
+from pathlib import Path
 
-from files_src.zoia_file import ZoiaFile
-from paths import ZPath
+# Who thought making Path.__new__ magic hackery was a good idea?
+class ZPath(type(Path())):
+    """An extension of pathlib.Path."""
+    @property
+    def cname(self) -> str:
+        """Lower-case version of self.name."""
+        return self.name.lower()
 
-@dataclass(slots=True)
-class Chapter:
-    """A chapter is a folder containing a main file (main.zoia) and one or more
-    auxiliary files (*.zoia)."""
-    main_file: ZoiaFile
-    aux_files: list[ZoiaFile]
-
-    @classmethod
-    def parse_chapter(cls, chapter_folder: ZPath):
-        aux_files = [ZoiaFile(f) for f in chapter_folder.iterdir()
-                 if f.suffix.lower() == '.zoia']
-        try:
-            main_file = next(f for f in aux_files if f.is_main_file())
-        # TODO Custom exception - malformed project structure
-        except StopIteration:
-            raise RuntimeError
-        aux_files.remove(main_file)
-        return cls(main_file, aux_files)
+    @property
+    def csuffix(self) -> str:
+        """Lower-case version of self.suffix."""
+        return self.suffix.lower()
