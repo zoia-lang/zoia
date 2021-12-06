@@ -35,7 +35,7 @@ class Chapter:
     @classmethod
     def parse_chapter(cls, chapter_folder: ZPath):
         aux_files = [ZoiaFile(f) for f in chapter_folder.iterdir()
-                 if f.suffix.lower() == '.zoia']
+                 if f.csuffix == '.zoia']
         try:
             main_file = next(f for f in aux_files if f.is_main_file())
         # TODO Custom exception - malformed project structure
