@@ -22,26 +22,42 @@
 """Implements chapter folders."""
 import re
 from dataclasses import dataclass
+from functools import total_ordering
 
 from exception import ProjectStructureError
 from files_src.zoia_file import ZoiaFile
 from paths import ZPath
 
-# Valid chapter folder names consist of the word 'chapter' followed by one or
-# more digits
-is_valid_chapter = re.compile(r'chapter\d+', re.I).fullmatch
+# Valid chapter folder names consist of the word 'ch' followed by one or more
+# digits
+match_chapter = re.compile(r'ch(\d+)', re.I).fullmatch
 
 @dataclass(slots=True)
+@total_ordering
 class Chapter:
     """A chapter is a folder containing a main file (main.zoia) and one or more
     auxiliary files (*.zoia)."""
     main_file: ZoiaFile
     aux_files: list[ZoiaFile]
+    chapter_index: int
+
+    def __init__(self, chapter_name: str, main_file: ZoiaFile,
+                 aux_files: list[ZoiaFile]):
+        self.main_file = main_file
+        self.aux_files = aux_files
+        # Extract the chapter index from the name of the chapter (we know the
+        # regex matches at this point)
+        self.chapter_index = int(match_chapter(chapter_name).group(1))
+
+    def __lt__(self, other):
+        if not isinstance(other, Chapter):
+            return NotImplemented
+        return self.chapter_index < other.chapter_index
 
     @classmethod
     def parse_chapter(cls, chapter_folder: ZPath):
-        aux_files = [ZoiaFile(f) for f in chapter_folder.iterdir()
-                 if f.csuffix == '.zoia']
+        aux_files = sorted(ZoiaFile(f) for f in chapter_folder.iterdir()
+                           if f.csuffix == '.zoia')
         # Ensure there is exactly one main file (on case-sensitive file
         # systems, there can be >1 file with the case-insensitive name
         # 'main.zoia')
@@ -55,4 +71,4 @@ class Chapter:
                                 "chapter")
         main_file = main_files[0]
         aux_files.remove(main_file)
-        return cls(main_file, aux_files)
+        return cls(chapter_folder.name, main_file, aux_files)

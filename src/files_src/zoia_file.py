@@ -22,6 +22,7 @@
 # TODO This should maybe be elsewhere?
 from dataclasses import dataclass
 from enum import Enum
+from functools import total_ordering
 
 from paths import ZPath
 
@@ -30,9 +31,15 @@ class FileType(Enum):
 
 
 @dataclass(slots=True)
+@total_ordering
 class ZoiaFile:
     file_path: ZPath
 
     def is_main_file(self) -> bool:
         """Checks if this is a main.zoia file."""
         return self.file_path.cname == 'main.zoia'
+
+    def __lt__(self, other):
+        if not isinstance(other, ZoiaFile):
+            return NotImplemented
+        return self.file_path < other.file_path

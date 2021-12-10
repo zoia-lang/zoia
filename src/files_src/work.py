@@ -22,25 +22,41 @@
 """Implements work folders."""
 import re
 from dataclasses import dataclass
+from functools import total_ordering
 
 from exception import ProjectStructureError
-from files_src.chapter import Chapter, is_valid_chapter
+from files_src.chapter import Chapter, match_chapter
 from paths import ZPath
 
 # Valid work folder names consist of the word 'work' followed by one or more
 # digits
-is_valid_work = re.compile(r'work\d+', re.I).fullmatch
+match_work = re.compile(r'work(\d+)', re.I).fullmatch
 
 @dataclass(slots=True)
+@total_ordering
 class Work:
     """A work folder is a folder containing one or more chapters."""
     chapters: list[Chapter]
+    work_index: int
+
+    def __init__(self, work_name: str, chapters: list[Chapter]):
+        self.chapters = chapters
+        # Extract the work index from the name of the work (we know the regex
+        # matches at this point)
+        self.work_index = int(match_work(work_name).group(1))
+
+    def __lt__(self, other):
+        if not isinstance(other, Work):
+            return NotImplemented
+        return self.work_index < other.work_index
 
     @classmethod
     def parse_work(cls, work_folder: ZPath):
-        chapters = [Chapter.parse_chapter(c) for c in work_folder.iterdir()
-                 if is_valid_chapter(c.name)]
+        chapters = sorted(Chapter.parse_chapter(c)
+                          for c in work_folder.iterdir()
+                          if match_chapter(c.name))
+        # TODO Check if chapters are contiguous
         if not chapters:
             raise ProjectStructureError(
                 work_folder, 'Work folders must contain one or more chapters')
-        return cls(chapters)
+        return cls(work_folder.name, chapters)

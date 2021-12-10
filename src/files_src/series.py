@@ -23,7 +23,7 @@
 from dataclasses import dataclass
 
 from exception import ProjectStructureError
-from files_src.work import Work, is_valid_work
+from files_src.work import Work, match_work
 from paths import ZPath
 
 @dataclass(slots=True)
@@ -34,8 +34,12 @@ class Series:
 
     @classmethod
     def parse_series(cls, series_folder: ZPath):
-        works = [Work.parse_work(w) for w in series_folder.iterdir()
-                 if is_valid_work(w.name)]
+        # Resolve the path first so all later operations can use full paths and
+        # ensure it exists while we're at it
+        series_folder = series_folder.resolve(strict=True)
+        works = sorted(Work.parse_work(w) for w in series_folder.iterdir()
+                       if match_work(w.name))
+        # TODO Check if works are contiguous
         if not works:
             raise ProjectStructureError(
                 series_folder, "The 'src' folder must contain one or more "

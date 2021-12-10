@@ -27,7 +27,8 @@ A language for writing fiction.
   - Probably can't figure this out without actually posting a fic, hence revisit later
   - Work off the assumption that we'll potentially put out three extra files for work summaries and notes
 - [x] Come up with a mockup for a project layout (src, build, config, etc.)
-- [ ] Come up with mockup classes to model this (series, story, chapter)
+- [x] Come up with mockup classes to model this (series, story, chapter)
+- [ ] Write tests for these mockup classes (not really mockup anymore, so hey)
 - [ ] Model how we want the whole system to process our nodes (rough draft):
   - [ ] 1. Parse aliases
   - [ ] 2. Parse dict
