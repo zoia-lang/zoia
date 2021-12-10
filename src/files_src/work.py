@@ -52,6 +52,7 @@ class Work:
 
     @classmethod
     def parse_work(cls, work_folder: ZPath):
+        """Parses a work folder at the specified path."""
         chapters = sorted(Chapter.parse_chapter(c)
                           for c in work_folder.iterdir()
                           if match_chapter(c.name))

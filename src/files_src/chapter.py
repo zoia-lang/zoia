@@ -56,6 +56,7 @@ class Chapter:
 
     @classmethod
     def parse_chapter(cls, chapter_folder: ZPath):
+        """Parses a chapter folder at the specified path."""
         aux_files = sorted(ZoiaFile(f) for f in chapter_folder.iterdir()
                            if f.csuffix == '.zoia')
         # Ensure there is exactly one main file (on case-sensitive file

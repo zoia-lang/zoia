@@ -34,6 +34,7 @@ class Series:
 
     @classmethod
     def parse_series(cls, series_folder: ZPath):
+        """Parses a series ('src' folder) at the specified path."""
         # Resolve the path first so all later operations can use full paths and
         # ensure it exists while we're at it
         series_folder = series_folder.resolve(strict=True)

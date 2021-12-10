@@ -20,4 +20,11 @@
 #
 # =============================================================================
 """This package implements classes for representing a project's source
-structure."""
+structure.
+
+All imports should come directly from here - *never* import from the actual
+files that define the classes. That way they can be moved around easily."""
+from .chapter import *
+from .series import *
+from .work import *
+from .zoia_file import *

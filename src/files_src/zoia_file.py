@@ -19,13 +19,14 @@
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # =============================================================================
-# TODO This should maybe be elsewhere?
+"""Implements .zoia files."""
 from dataclasses import dataclass
 from enum import Enum
 from functools import total_ordering
 
 from paths import ZPath
 
+# FIXME finish
 class FileType(Enum):
     ALIASES = 0
 
@@ -33,6 +34,8 @@ class FileType(Enum):
 @dataclass(slots=True)
 @total_ordering
 class ZoiaFile:
+    """A Zoia file is a file with the .zoia extension, following the layout
+    specified by the Zoia grammar."""
     file_path: ZPath
 
     def is_main_file(self) -> bool:
@@ -43,3 +46,5 @@ class ZoiaFile:
         if not isinstance(other, ZoiaFile):
             return NotImplemented
         return self.file_path < other.file_path
+
+    # FIXME parse_zoia_file method
