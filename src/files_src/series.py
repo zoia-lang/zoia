@@ -22,17 +22,22 @@
 """Implements series folders."""
 from dataclasses import dataclass
 
-from files_src.work import Work
+from exception import ProjectStructureError
+from files_src.work import Work, is_valid_work
 from paths import ZPath
 
 @dataclass(slots=True)
 class Series:
-    """The series is the main 'src' folder, containing one or more works in
+    """A series is the main 'src' folder, containing one or more works in
     it."""
     works: list[Work]
 
     @classmethod
     def parse_series(cls, series_folder: ZPath):
         works = [Work.parse_work(w) for w in series_folder.iterdir()
-                 if w.cname.startswith('work')]
+                 if is_valid_work(w.name)]
+        if not works:
+            raise ProjectStructureError(
+                series_folder, "The 'src' folder must contain one or more "
+                               "works")
         return cls(works)

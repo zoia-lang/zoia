@@ -20,13 +20,21 @@
 #
 # =============================================================================
 """This module contains all custom exceptions for Zoia."""
+from pathlib import Path
+
 # NO LOCAL IMPORTS! This has to be importable from any module/package.
 
 class AbstractError(Exception):
     """Abstract section of code called."""
-    def __init__(self, abs_method):
+    def __init__(self, abs_method: callable):
         super().__init__(f"Abstract method '{abs_method.__qualname__}' was "
                          f"called")
 
 class ASTConversionError(Exception):
     """An error that occurred during AST conversion."""
+
+class ProjectStructureError(Exception):
+    """The project structure is invalid."""
+    def __init__(self, offending_folder: Path, msg: str):
+        super().__init__(f"Invalid project structure at '{offending_folder}': "
+                         f"{msg}")

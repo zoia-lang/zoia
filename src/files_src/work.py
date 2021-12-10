@@ -20,10 +20,16 @@
 #
 # =============================================================================
 """Implements work folders."""
+import re
 from dataclasses import dataclass
 
-from files_src.chapter import Chapter
+from exception import ProjectStructureError
+from files_src.chapter import Chapter, is_valid_chapter
 from paths import ZPath
+
+# Valid work folder names consist of the word 'work' followed by one or more
+# digits
+is_valid_work = re.compile(r'work\d+', re.I).fullmatch
 
 @dataclass(slots=True)
 class Work:
@@ -33,5 +39,8 @@ class Work:
     @classmethod
     def parse_work(cls, work_folder: ZPath):
         chapters = [Chapter.parse_chapter(c) for c in work_folder.iterdir()
-                 if c.cname.startswith('chapter')]
+                 if is_valid_chapter(c.name)]
+        if not chapters:
+            raise ProjectStructureError(
+                work_folder, 'Work folders must contain one or more chapters')
         return cls(chapters)

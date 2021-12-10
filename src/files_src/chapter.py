@@ -20,10 +20,16 @@
 #
 # =============================================================================
 """Implements chapter folders."""
+import re
 from dataclasses import dataclass
 
+from exception import ProjectStructureError
 from files_src.zoia_file import ZoiaFile
 from paths import ZPath
+
+# Valid chapter folder names consist of the word 'chapter' followed by one or
+# more digits
+is_valid_chapter = re.compile(r'chapter\d+', re.I).fullmatch
 
 @dataclass(slots=True)
 class Chapter:
@@ -36,10 +42,17 @@ class Chapter:
     def parse_chapter(cls, chapter_folder: ZPath):
         aux_files = [ZoiaFile(f) for f in chapter_folder.iterdir()
                  if f.csuffix == '.zoia']
-        try:
-            main_file = next(f for f in aux_files if f.is_main_file())
-        # TODO Custom exception - malformed project structure
-        except StopIteration:
-            raise RuntimeError
+        # Ensure there is exactly one main file (on case-sensitive file
+        # systems, there can be >1 file with the case-insensitive name
+        # 'main.zoia')
+        main_files = [f for f in aux_files if f.is_main_file()]
+        if not main_files:
+            raise ProjectStructureError(
+                chapter_folder, "Each chapter must contain a 'main.zoia' file")
+        if len(main_files) != 1:
+            raise ProjectStructureError(
+                chapter_folder, "There may only be one 'main.zoia' file per "
+                                "chapter")
+        main_file = main_files[0]
         aux_files.remove(main_file)
         return cls(main_file, aux_files)
