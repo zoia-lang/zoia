@@ -35,8 +35,8 @@ match_chapter = re.compile(r'ch(\d+)', re.I).fullmatch
 @dataclass(slots=True)
 @total_ordering
 class Chapter:
-    """A chapter is a folder containing a main file (main.zoia) and one or more
-    auxiliary files (*.zoia)."""
+    """A chapter is a folder containing a main file (main.zoia) and,
+    optionally, any number of auxiliary files (*.zoia)."""
     main_file: ZoiaFile
     aux_files: list[ZoiaFile]
     chapter_index: int
