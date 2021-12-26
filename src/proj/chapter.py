@@ -25,7 +25,7 @@ from dataclasses import dataclass
 from functools import total_ordering
 
 from exception import ProjectStructureError
-from files_src.zoia_file import ZoiaFile
+from proj.zoia_file import ZoiaFile
 from paths import ZPath
 
 # Valid chapter folder names consist of the word 'ch' followed by one or more

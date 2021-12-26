@@ -23,7 +23,7 @@
 from dataclasses import dataclass
 
 from exception import ProjectStructureError
-from files_src.work import Work, match_work
+from proj.work import Work, match_work
 from paths import ZPath
 from utils import is_contiguous
 

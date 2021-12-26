@@ -25,7 +25,7 @@ from dataclasses import dataclass
 from functools import total_ordering
 
 from exception import ProjectStructureError
-from files_src.chapter import Chapter, match_chapter
+from proj.chapter import Chapter, match_chapter
 from paths import ZPath
 from utils import is_contiguous
 
