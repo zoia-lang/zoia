@@ -65,3 +65,9 @@ class TestNoIndex1Work(_ATestProjectFailing):
     """A series without a work with index 1 should not be accepted."""
     _test_name = 'no_index_1_work'
     _exp_error = 'The first work in a series must have index 1'
+
+class TestIncontiguousWorks(_ATestProjectFailing):
+    """A series with works whose indices are not contiguous should not be
+    accepted."""
+    _test_name = 'incontiguous_works'
+    _exp_error = 'Work indices must form a contiguous sequence'
