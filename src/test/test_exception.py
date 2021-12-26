@@ -22,10 +22,9 @@
 """This module houses tests related to custom exceptions."""
 from exception import AbstractError
 
-class TestAbstractError:
+def test_abstract_msg() -> None:
     """AbstractError should correctly derive qualified method names."""
-    def test_abstract_msg(self) -> None:
-        try:
-            raise AbstractError(self.test_abstract_msg)
-        except AbstractError as e:
-            assert 'TestAbstractError.test_abstract_msg' in str(e)
+    try:
+        raise AbstractError(test_abstract_msg)
+    except AbstractError as e:
+        assert 'test_abstract_msg' in str(e)
