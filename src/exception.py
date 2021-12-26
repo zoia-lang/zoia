@@ -26,7 +26,7 @@ from pathlib import Path
 
 class AbstractError(Exception):
     """Abstract section of code called."""
-    def __init__(self, abs_method: callable):
+    def __init__(self, abs_method: callable) -> None:
         super().__init__(f"Abstract method '{abs_method.__qualname__}' was "
                          f"called")
 
@@ -35,6 +35,6 @@ class ASTConversionError(Exception):
 
 class ProjectStructureError(Exception):
     """The project structure is invalid."""
-    def __init__(self, offending_folder: Path, msg: str):
+    def __init__(self, offending_folder: Path, msg: str) -> None:
         super().__init__(f"Invalid project structure at '{offending_folder}': "
                          f"{msg}")

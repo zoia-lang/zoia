@@ -27,7 +27,8 @@ from io import StringIO
 from ast_nodes import AliasNode, CommandNode, HeaderNode, KwdArgumentNode, \
     LineNode, StdArgumentNode, TextFragmentNode, ZoiaFileNode, \
     LineElementsNode, RegularLineElementsNode, BoldItalicLineElementsNode, \
-    BoldLineElementsNode, ItalicLineElementsNode
+    BoldLineElementsNode, ItalicLineElementsNode, LineElementNode, \
+    MarkedUpLineElementsNode, ArgumentNode
 from exception import ASTConversionError
 from grammar import zoiaParser, zoiaVisitor
 from src_pos import SourcePos
@@ -40,29 +41,34 @@ from src_pos import SourcePos
 # Ignore the non-PEP8 names, inherited from the generated code
 class ASTConverter(zoiaVisitor):
     """Converts an ANTLR parse tree into a Zoia AST."""
-    def __init__(self, parsed_file: str):
+    def __init__(self, parsed_file: str) -> None:
         self.parsed_file = parsed_file
 
-    def make_pos(self, ctx):
+    def make_pos(self, ctx) -> SourcePos:
         """Creates a source position from the specified context object."""
         return SourcePos(src_file=self.parsed_file, src_line=ctx.start.line,
                          src_char=ctx.start.column)
 
+    # Override to add typing information to this method
+    def visit(self, tree: zoiaParser.ZoiaFileContext) -> ZoiaFileNode:
+        return super(ASTConverter, self).visit(tree)
+
     # Sorted by the order in which they are defined in the grammar
-    def visitZoiaFile(self, ctx: zoiaParser.ZoiaFileContext):
+    def visitZoiaFile(self, ctx: zoiaParser.ZoiaFileContext) -> ZoiaFileNode:
         header = self.visitHeader(ctx.header())
         lines = [self.visitLine(l) for l in ctx.line()]
         return ZoiaFileNode(header, lines, src_pos=self.make_pos(ctx))
 
-    def visitHeader(self, ctx: zoiaParser.HeaderContext):
+    def visitHeader(self, ctx: zoiaParser.HeaderContext) -> HeaderNode:
         return HeaderNode(self.visitArguments(ctx.arguments()),
                           src_pos=self.make_pos(ctx))
 
-    def visitLine(self, ctx: zoiaParser.LineContext):
+    def visitLine(self, ctx: zoiaParser.LineContext) -> LineNode:
         return LineNode(self.visitLineElements(ctx.lineElements()),
                         src_pos=self.make_pos(ctx))
 
-    def visitLineElements(self, ctx: zoiaParser.LineElementsContext):
+    def visitLineElements(self, ctx: zoiaParser.LineElementsContext) \
+            -> LineElementsNode | None:
         if ctx is None:
             return None # lineElements is optional in line
         elements = []
@@ -75,12 +81,14 @@ class ASTConverter(zoiaVisitor):
                 raise ASTConversionError(f"Unknown line elements '{ctx}'")
         return LineElementsNode(elements, src_pos=self.make_pos(ctx))
 
-    def visitRegularLineElements(self,
-                                 ctx: zoiaParser.RegularLineElementsContext):
+    def visitRegularLineElements(
+            self, ctx: zoiaParser.RegularLineElementsContext) \
+            -> RegularLineElementsNode:
         elements = [self.visitLineElement(e) for e in ctx.lineElement()]
         return RegularLineElementsNode(elements, src_pos=self.make_pos(ctx))
 
-    def visitLineElement(self, ctx: zoiaParser.LineElementContext):
+    def visitLineElement(self, ctx: zoiaParser.LineElementContext) \
+            -> LineElementNode:
         text_fragment = ctx.textFragment()
         if text_fragment is not None:
             return self.visitTextFragment(text_fragment)
@@ -93,8 +101,9 @@ class ASTConverter(zoiaVisitor):
         else:
             raise ASTConversionError(f"Unknown line element '{ctx}'")
 
-    def visitMarkedUpLineElements(self,
-                                  ctx: zoiaParser.MarkedUpLineElementsContext):
+    def visitMarkedUpLineElements(
+            self, ctx: zoiaParser.MarkedUpLineElementsContext) \
+            -> MarkedUpLineElementsNode:
         bi_elements = ctx.boldItalicLineElements()
         if bi_elements is not None:
             return self.visitBoldItalicLineElements(bi_elements)
@@ -108,24 +117,28 @@ class ASTConverter(zoiaVisitor):
             raise ASTConversionError(f"Unknown marked up line elements "
                                      f"'{ctx}'")
 
-    def visitBoldItalicLineElements(self, ctx: zoiaParser.
-                                    BoldItalicLineElementsContext): # ugh
+    def visitBoldItalicLineElements(
+            self, ctx: zoiaParser.BoldItalicLineElementsContext) \
+            -> BoldItalicLineElementsNode:
         return BoldItalicLineElementsNode(
             self.visitRegularLineElements(ctx.regularLineElements()),
             src_pos=self.make_pos(ctx))
 
-    def visitBoldLineElements(self, ctx: zoiaParser.BoldLineElementsContext):
+    def visitBoldLineElements(self, ctx: zoiaParser.BoldLineElementsContext) \
+            -> BoldLineElementsNode:
         return BoldLineElementsNode(
             self.visitRegularLineElements(ctx.regularLineElements()),
             src_pos=self.make_pos(ctx))
 
-    def visitItalicLineElements(self,
-                                ctx: zoiaParser.ItalicLineElementsContext):
+    def visitItalicLineElements(
+            self, ctx: zoiaParser.ItalicLineElementsContext) \
+            -> ItalicLineElementsNode:
         return ItalicLineElementsNode(
             self.visitRegularLineElements(ctx.regularLineElements()),
             src_pos=self.make_pos(ctx))
 
-    def visitTextFragment(self, ctx: zoiaParser.TextFragmentContext):
+    def visitTextFragment(self, ctx: zoiaParser.TextFragmentContext) \
+            -> TextFragmentNode:
         s = StringIO()
         for tf_child in ctx.children:
             if isinstance(tf_child, zoiaParser.WordContext):
@@ -137,24 +150,25 @@ class ASTConverter(zoiaVisitor):
                 raise ASTConversionError(f"Unknown text fragment '{ctx}'")
         return TextFragmentNode(s.getvalue(), src_pos=self.make_pos(ctx))
 
-    def visitWord(self, ctx: zoiaParser.WordContext):
+    def visitWord(self, ctx: zoiaParser.WordContext) -> str:
         return ctx.getText()
 
-    def visitAlias(self, ctx: zoiaParser.AliasContext):
+    def visitAlias(self, ctx: zoiaParser.AliasContext) -> AliasNode:
         return AliasNode(self.visitWord(ctx.word()),
                          src_pos=self.make_pos(ctx))
 
-    def visitCommand(self, ctx: zoiaParser.CommandContext):
+    def visitCommand(self, ctx: zoiaParser.CommandContext) -> CommandNode:
         cmd_name = self.visitWord(ctx.word())
         arguments = self.visitArguments(ctx.arguments())
         return CommandNode(cmd_name, arguments, src_pos=self.make_pos(ctx))
 
-    def visitArguments(self, ctx: zoiaParser.ArgumentsContext):
+    def visitArguments(self, ctx: zoiaParser.ArgumentsContext) \
+            -> list[ArgumentNode]:
         if ctx is None:
             return [] # command has an optional arguments param
         return [self.visitArgument(a) for a in ctx.argument()]
 
-    def visitArgument(self, ctx: zoiaParser.ArgumentContext):
+    def visitArgument(self, ctx: zoiaParser.ArgumentContext) -> ArgumentNode:
         std_argument = ctx.stdArgument()
         if std_argument is not None:
             return self.visitStdArgument(std_argument)
@@ -164,12 +178,14 @@ class ASTConverter(zoiaVisitor):
         else:
             raise ASTConversionError(f"Unknown argument: '{ctx}'")
 
-    def visitKwdArgument(self, ctx: zoiaParser.KwdArgumentContext):
+    def visitKwdArgument(self, ctx: zoiaParser.KwdArgumentContext) \
+            -> KwdArgumentNode:
         kwd_name = self.visitWord(ctx.word())
         arg_value = self.visitLineElements(ctx.lineElements())
         # Reverse order due to dataclass inheritance
         return KwdArgumentNode(arg_value, kwd_name, src_pos=self.make_pos(ctx))
 
-    def visitStdArgument(self, ctx: zoiaParser.StdArgumentContext):
+    def visitStdArgument(self, ctx: zoiaParser.StdArgumentContext) \
+            -> StdArgumentNode:
         return StdArgumentNode(self.visitLineElements(ctx.lineElements()),
                                src_pos=self.make_pos(ctx))

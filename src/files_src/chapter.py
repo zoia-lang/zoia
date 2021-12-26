@@ -42,14 +42,14 @@ class Chapter:
     chapter_index: int
 
     def __init__(self, chapter_name: str, main_file: ZoiaFile,
-                 aux_files: list[ZoiaFile]):
+                 aux_files: list[ZoiaFile]) -> None:
         self.main_file = main_file
         self.aux_files = aux_files
         # Extract the chapter index from the name of the chapter (we know the
         # regex matches at this point)
         self.chapter_index = int(match_chapter(chapter_name).group(1))
 
-    def __lt__(self, other):
+    def __lt__(self, other) -> bool:
         if not isinstance(other, Chapter):
             return NotImplemented
         return self.chapter_index < other.chapter_index

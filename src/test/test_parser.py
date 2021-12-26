@@ -28,8 +28,8 @@ from test.base import ATestParser
 # ==== Expect-Success Tests ===================================================
 class _ATestParserPass(ATestParser):
     """Base class for parser tests that are expected to succeed."""
-    def test_parser(self):
-        self._make_parser().zoiaFile()
+    def test_parser(self) -> None:
+        assert self._make_parser().zoiaFile()
 
 class TestAcceptsHeader(_ATestParserPass):
     """A simple header should be accepted."""
@@ -102,7 +102,7 @@ class TestAcceptsMarkupComplex(_ATestParserPass):
 # ==== Expect-Fail Tests ======================================================
 class _ATestParserFail(ATestParser):
     """Base class for parser tests that are expected to fail."""
-    def test_parser(self):
+    def test_parser(self) -> None:
         try:
             parser = self._make_parser()
             # We're expecting to fail, don't print to stdout

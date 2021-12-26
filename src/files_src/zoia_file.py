@@ -42,7 +42,7 @@ class ZoiaFile:
         """Checks if this is a main.zoia file."""
         return self.file_path.cname == 'main.zoia'
 
-    def __lt__(self, other):
+    def __lt__(self, other) -> bool:
         if not isinstance(other, ZoiaFile):
             return NotImplemented
         return self.file_path < other.file_path

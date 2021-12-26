@@ -25,6 +25,7 @@ from dataclasses import dataclass
 from exception import ProjectStructureError
 from files_src.work import Work, match_work
 from paths import ZPath
+from utils import is_contiguous
 
 @dataclass(slots=True)
 class Series:
@@ -40,9 +41,15 @@ class Series:
         series_folder = series_folder.resolve(strict=True)
         works = sorted(Work.parse_work(w) for w in series_folder.iterdir()
                        if match_work(w.name))
-        # TODO Check if works are contiguous
         if not works:
             raise ProjectStructureError(
                 series_folder, "The 'src' folder must contain one or more "
                                "works")
+        work_indices = [w.work_index for w in works]
+        if work_indices[0] != 1:
+            raise ProjectStructureError(
+                series_folder, 'The first work in a series must have index 1')
+        if not is_contiguous(work_indices):
+            raise ProjectStructureError(
+                series_folder, 'Work indices must form a contiguous sequence')
         return cls(works)

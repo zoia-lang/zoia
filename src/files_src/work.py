@@ -27,6 +27,7 @@ from functools import total_ordering
 from exception import ProjectStructureError
 from files_src.chapter import Chapter, match_chapter
 from paths import ZPath
+from utils import is_contiguous
 
 # Valid work folder names consist of the word 'work' followed by one or more
 # digits
@@ -39,13 +40,13 @@ class Work:
     chapters: list[Chapter]
     work_index: int
 
-    def __init__(self, work_name: str, chapters: list[Chapter]):
+    def __init__(self, work_name: str, chapters: list[Chapter]) -> None:
         self.chapters = chapters
         # Extract the work index from the name of the work (we know the regex
         # matches at this point)
         self.work_index = int(match_work(work_name).group(1))
 
-    def __lt__(self, other):
+    def __lt__(self, other) -> bool:
         if not isinstance(other, Work):
             return NotImplemented
         return self.work_index < other.work_index
@@ -56,8 +57,14 @@ class Work:
         chapters = sorted(Chapter.parse_chapter(c)
                           for c in work_folder.iterdir()
                           if match_chapter(c.name))
-        # TODO Check if chapters are contiguous
         if not chapters:
             raise ProjectStructureError(
                 work_folder, 'Work folders must contain one or more chapters')
+        chapter_indices = [c.chapter_index for c in chapters]
+        if chapter_indices[0] != 1:
+            raise ProjectStructureError(
+                work_folder, 'The first chapter in a work must have index 1')
+        if not is_contiguous(chapter_indices):
+            raise ProjectStructureError(
+                work_folder, 'Chapter indices must form a contiguous sequence')
         return cls(work_folder.name, chapters)

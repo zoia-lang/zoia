@@ -19,13 +19,12 @@
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # =============================================================================
-"""This module houses tests related to custom exceptions."""
-from exception import AbstractError
+"""Random utility functions and classes that didn't fit anywhere else."""
 
-class TestAbstractError:
-    """AbstractError should correctly derive qualified method names."""
-    def test_abstract_msg(self) -> None:
-        try:
-            raise AbstractError(self.test_abstract_msg)
-        except AbstractError as e:
-            assert 'TestAbstractError.test_abstract_msg' in str(e)
+from itertools import groupby
+
+def is_contiguous(l: list[int]) -> bool:
+    """Returns True if the specified list of integers is contiguous. In other
+    words, if the element at index n has value v, then the element at index
+    n + 1 must have value v + 1."""
+    return len(list(groupby(enumerate(l), key=lambda x: x[0] - x[1]))) == 1

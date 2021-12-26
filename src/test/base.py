@@ -31,7 +31,7 @@ class ATestParser:
     _test_src: str
     _do_fixups: bool = True
 
-    def _make_parser(self, test_src: str = None):
+    def _make_parser(self, test_src: str = None) -> zoiaParser:
         """Creates a new zoiaParser instance with the specified source code
         (falling back to self._test_src if it is None)."""
         if test_src is None:

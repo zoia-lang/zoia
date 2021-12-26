@@ -28,23 +28,23 @@ class _ATestCanonicalRepr(ATestParser):
     _do_fixups = False
     _test_rep: str
 
-    def _get_canonical(self, test_src: str):
+    def _get_canonical(self, test_src: str) -> str:
         parse_tree = self._make_parser(test_src).zoiaFile()
         zoia_conv = ASTConverter(f"<test '{self.__class__.__name__}'>")
         return zoia_conv.visit(parse_tree).canonical()
 
-    def test_parse_src(self):
+    def test_parse_src(self) -> None:
         """Parsing the source should produce the canonical representation."""
         assert self._get_canonical(self._test_src) == self._test_rep
 
-    def test_parse_repr(self):
+    def test_parse_repr(self) -> None:
         """Parsing the canonical representation should produce the canonical
         representation itself again."""
         assert self._get_canonical(self._test_rep) == self._test_rep
 
 
 # Some helpers for easily making sources and canonical representations
-def _mk_shared(*lines):
+def _mk_shared(*lines) -> str:
     """Adds newlines to the specified lines and adds a trailing one to the
     end."""
     return '\n'.join(lines) + '\n'
