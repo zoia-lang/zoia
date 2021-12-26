@@ -20,5 +20,8 @@ exclude_lines =
     raise NotImplementedError
     raise ASTConversionError
 
+    # Same goes for defensive checks in __lt__ implementations
+    return NotImplemented
+
 [html]
 directory = .cov_html

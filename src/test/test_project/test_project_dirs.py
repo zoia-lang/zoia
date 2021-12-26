@@ -61,13 +61,18 @@ class TestEmptySeries(_ATestProjectFailing):
     _test_name = 'empty_series'
     _exp_error = "The 'src' folder must contain one or more works"
 
-class TestNoIndex1Work(_ATestProjectFailing):
-    """A series without a work with index 1 should not be accepted."""
-    _test_name = 'no_index_1_work'
-    _exp_error = 'The first work in a series must have index 1'
+class TestEmptyWork(_ATestProjectFailing):
+    """An empty work folder should not be accepted."""
+    _test_name = 'empty_work'
+    _exp_error = 'Work folders must contain one or more chapters'
 
 class TestIncontiguousWorks(_ATestProjectFailing):
     """A series with works whose indices are not contiguous should not be
     accepted."""
     _test_name = 'incontiguous_works'
     _exp_error = 'Work indices must form a contiguous sequence'
+
+class TestNoIndex1Work(_ATestProjectFailing):
+    """A series without a work with index 1 should not be accepted."""
+    _test_name = 'no_index_1_work'
+    _exp_error = 'The first work in a series must have index 1'
