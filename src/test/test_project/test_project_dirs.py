@@ -66,6 +66,12 @@ class TestEmptyWork(_ATestProjectFailing):
     _test_name = 'empty_work'
     _exp_error = 'Work folders must contain one or more chapters'
 
+class TestIncontiguousChapters(_ATestProjectFailing):
+    """A work with chapters whose indices are not contiguous should not be
+    accepted."""
+    _test_name = 'incontiguous_chapters'
+    _exp_error = 'Chapter indices must form a contiguous sequence'
+
 class TestIncontiguousWorks(_ATestProjectFailing):
     """A series with works whose indices are not contiguous should not be
     accepted."""
