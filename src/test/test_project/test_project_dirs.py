@@ -72,6 +72,11 @@ class TestIncontiguousWorks(_ATestProjectFailing):
     _test_name = 'incontiguous_works'
     _exp_error = 'Work indices must form a contiguous sequence'
 
+class TestNoIndex1Chapter(_ATestProjectFailing):
+    """A work without a chapter with index should not be accepted."""
+    _test_name = 'no_index_1_chapter'
+    _exp_error = 'The first chapter in a work must have index 1'
+
 class TestNoIndex1Work(_ATestProjectFailing):
     """A series without a work with index 1 should not be accepted."""
     _test_name = 'no_index_1_work'
