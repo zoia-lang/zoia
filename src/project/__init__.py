@@ -24,7 +24,7 @@ structure.
 
 All imports should come directly from here - *never* import from the actual
 files that define the classes. That way they can be moved around easily."""
-from proj.chapter import *
-from proj.series import *
-from proj.work import *
-from proj.zoia_file import *
+from project.chapter import *
+from project.series import *
+from project.work import *
+from project.zoia_file import *
