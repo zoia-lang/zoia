@@ -56,7 +56,7 @@ class _ATestProjectFailing(_ATestProject):
         except ProjectStructureError as e:
             assert self._exp_error in str(e)
 
-# Actual tests begin here
+# Failing tests begin here
 class TestEmptySeries(_ATestProjectFailing):
     """An empty series folder should be rejected."""
     _test_name = 'empty_series'
@@ -101,3 +101,9 @@ class TestNoMainFile(_ATestProjectFailing):
     """A chapter without a main file should be rejected."""
     _test_name = 'no_main_file'
     _exp_error = "Each chapter must contain a 'main.zoia' file"
+
+# Passing tests begin here
+class TestSimpleStructure(_ATestProjectPassing):
+    """A single work with a single chapter and a valid main.zoia file should be
+    accepted."""
+    _test_name = 'simple_structure'
