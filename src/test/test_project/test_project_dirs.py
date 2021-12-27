@@ -58,40 +58,46 @@ class _ATestProjectFailing(_ATestProject):
 
 # Actual tests begin here
 class TestEmptySeries(_ATestProjectFailing):
-    """An empty series folder should not be accepted."""
+    """An empty series folder should be rejected."""
     _test_name = 'empty_series'
     _exp_error = "The 'src' folder must contain one or more works"
 
 class TestEmptyWork(_ATestProjectFailing):
-    """An empty work folder should not be accepted."""
+    """An empty work folder should be rejected."""
     _test_name = 'empty_work'
     _exp_error = 'Work folders must contain one or more chapters'
 
 class TestIncontiguousChapters(_ATestProjectFailing):
-    """A work with chapters whose indices are not contiguous should not be
-    accepted."""
+    """A work with chapters whose indices are not contiguous should be
+    rejected."""
     _test_name = 'incontiguous_chapters'
     _exp_error = 'Chapter indices must form a contiguous sequence'
 
 class TestIncontiguousWorks(_ATestProjectFailing):
-    """A series with works whose indices are not contiguous should not be
-    accepted."""
+    """A series with works whose indices are not contiguous should be
+    rejected."""
     _test_name = 'incontiguous_works'
     _exp_error = 'Work indices must form a contiguous sequence'
-
-class TestNoIndex1Chapter(_ATestProjectFailing):
-    """A work without a chapter with index should not be accepted."""
-    _test_name = 'no_index_1_chapter'
-    _exp_error = 'The first chapter in a work must have index 1'
-
-class TestNoIndex1Work(_ATestProjectFailing):
-    """A series without a work with index 1 should not be accepted."""
-    _test_name = 'no_index_1_work'
-    _exp_error = 'The first work in a series must have index 1'
 
 @pytest.mark.skipif(
     not is_fs_case_sensitive(_get_src_path('multiple_main_files')),
     reason='Irrelevant on case-insensitive file systems')
 class TestMultipleMainFiles(_ATestProjectFailing):
+    """A chapter with multiple main files should be rejected."""
     _test_name = 'multiple_main_files'
     _exp_error = "There may only be one 'main.zoia' file per chapter"
+
+class TestNoIndex1Chapter(_ATestProjectFailing):
+    """A work without a chapter with index should be rejected."""
+    _test_name = 'no_index_1_chapter'
+    _exp_error = 'The first chapter in a work must have index 1'
+
+class TestNoIndex1Work(_ATestProjectFailing):
+    """A series without a work with index 1 should be rejected."""
+    _test_name = 'no_index_1_work'
+    _exp_error = 'The first work in a series must have index 1'
+
+class TestNoMainFile(_ATestProjectFailing):
+    """A chapter without a main file should be rejected."""
+    _test_name = 'no_main_file'
+    _exp_error = "Each chapter must contain a 'main.zoia' file"
