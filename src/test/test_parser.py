@@ -20,8 +20,8 @@
 #
 # =============================================================================
 """This module houses tests related to the Zoia parser."""
+import pytest
 from antlr4.error.Errors import ParseCancellationException
-from pytest import fail
 
 from test.base import ATestParser
 
@@ -108,7 +108,7 @@ class _ATestParserFail(ATestParser):
             # We're expecting to fail, don't print to stdout
             parser.removeErrorListeners()
             parser.zoiaFile()
-            fail('Parsing was supposed to fail, but succeeded instead')
+            pytest.fail('Parsing was supposed to fail, but succeeded instead')
         except ParseCancellationException:
             pass
 

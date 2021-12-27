@@ -20,11 +20,24 @@
 #
 # =============================================================================
 """Random utility functions and classes that didn't fit anywhere else."""
-
 from itertools import groupby
+from pathlib import Path
+from shutil import rmtree
 
 def is_contiguous(l: list[int]) -> bool:
     """Returns True if the specified list of integers is contiguous. In other
     words, if the element at index n has value v, then the element at index
     n + 1 must have value v + 1."""
     return len(list(groupby(enumerate(l), key=lambda x: x[0] - x[1]))) == 1
+
+def is_fs_case_sensitive(test_path: Path) -> bool:
+    """Returns True if the file system used at the specified path is
+    case-sensitive."""
+    temp_path = test_path / 'temp'
+    temp_path.mkdir()
+    try:
+        (temp_path / 'foo.txt').touch()
+        (temp_path / 'Foo.txt').touch()
+        return len(list(temp_path.iterdir())) != 1
+    finally:
+        rmtree(temp_path)

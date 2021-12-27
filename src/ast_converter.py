@@ -51,7 +51,7 @@ class ASTConverter(zoiaVisitor):
 
     # Override to add typing information to this method
     def visit(self, tree: zoiaParser.ZoiaFileContext) -> ZoiaFileNode:
-        return super(ASTConverter, self).visit(tree)
+        return super().visit(tree)
 
     # Sorted by the order in which they are defined in the grammar
     def visitZoiaFile(self, ctx: zoiaParser.ZoiaFileContext) -> ZoiaFileNode:

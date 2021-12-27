@@ -20,11 +20,12 @@
 #
 # =============================================================================
 """This module runs the actual project tests on the ."""
-from pytest import fail
+import pytest
 
 from exception import ProjectStructureError
 from paths import ZPath
 from project import Series
+from utils import is_fs_case_sensitive
 
 # Utilities
 def _get_src_path(test_name: str) -> ZPath:
@@ -51,7 +52,7 @@ class _ATestProjectFailing(_ATestProject):
         not parse successfully."""
         try:
             Series.parse_series(_get_src_path(self._test_name))
-            fail('Parsing was supposed to fail, but succeeded instead')
+            pytest.fail('Parsing was supposed to fail, but succeeded instead')
         except ProjectStructureError as e:
             assert self._exp_error in str(e)
 
@@ -87,3 +88,10 @@ class TestNoIndex1Work(_ATestProjectFailing):
     """A series without a work with index 1 should not be accepted."""
     _test_name = 'no_index_1_work'
     _exp_error = 'The first work in a series must have index 1'
+
+@pytest.mark.skipif(
+    not is_fs_case_sensitive(_get_src_path('multiple_main_files')),
+    reason='Irrelevant on case-insensitive file systems')
+class TestMultipleMainFiles(_ATestProjectFailing):
+    _test_name = 'multiple_main_files'
+    _exp_error = "There may only be one 'main.zoia' file per chapter"
