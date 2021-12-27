@@ -102,6 +102,12 @@ class TestNoMainFile(_ATestProjectFailing):
     _test_name = 'no_main_file'
     _exp_error = "Each chapter must contain a 'main.zoia' file"
 
+class TestNoSrc(_ATestProjectFailing):
+    """A project without a src folder (i.e. without a series) should be
+    rejected."""
+    _test_name = 'no_src'
+    _exp_error = "No 'src' folder found"
+
 # Passing tests begin here
 class TestSimpleStructure(_ATestProjectPassing):
     """A single work with a single chapter and a valid main.zoia file should be

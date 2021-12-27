@@ -38,7 +38,10 @@ class Series:
         """Parses a series ('src' folder) at the specified path."""
         # Resolve the path first so all later operations can use full paths and
         # ensure it exists while we're at it
-        series_folder = series_folder.resolve(strict=True)
+        try:
+            series_folder = series_folder.resolve(strict=True)
+        except FileNotFoundError:
+            raise ProjectStructureError(series_folder, "No 'src' folder found")
         works = sorted(Work.parse_work(w) for w in series_folder.iterdir()
                        if match_work(w.name))
         if not works:
