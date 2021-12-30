@@ -22,9 +22,11 @@
 """This module is the main entry point for using Zoia from the command line."""
 import sys
 
+import log
 from zoia_processor import process_zoia_file
 
 def main(args):
+    log.init()
     if len(args) != 1:
         print('Usage: cli <zoia file>', file=sys.stderr)
         sys.exit(1)

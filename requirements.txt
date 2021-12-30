@@ -1,5 +1,6 @@
 # Runtime
 antlr4-python3-runtime==4.9.3
+colorama==0.4.4
 
 # Build/Test-time
 coveralls==3.3.1
