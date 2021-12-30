@@ -24,7 +24,9 @@ from dataclasses import dataclass
 from enum import Enum
 from functools import total_ordering
 
+from ast_nodes import ZoiaFileNode
 from paths import ZPath
+from zoia_processor import process_zoia_file
 
 # FIXME finish
 class FileType(Enum):
@@ -37,6 +39,7 @@ class ZoiaFile:
     """A Zoia file is a file with the .zoia extension, following the layout
     specified by the Zoia grammar."""
     file_path: ZPath
+    file_ast: ZoiaFileNode
 
     def is_main_file(self) -> bool:
         """Checks if this is a main.zoia file."""
@@ -47,4 +50,7 @@ class ZoiaFile:
             return NotImplemented
         return self.file_path < other.file_path
 
-    # FIXME parse_zoia_file method
+    @classmethod
+    def parse_zoia_file(cls, file_path: ZPath):
+        """Parses a Zoia file at the specified path."""
+        return ZoiaFile(file_path, process_zoia_file(file_path))
