@@ -21,22 +21,15 @@
 # =============================================================================
 """This module is the main entry point for using Zoia from the command line."""
 import sys
-from antlr4 import CommonTokenStream, FileStream
 
-from grammar import zoiaLexer, zoiaParser
-from ast_converter import ASTConverter
+from zoia_processor import process_zoia_file
 
 def main(args):
     if len(args) != 1:
         print('Usage: cli <zoia file>', file=sys.stderr)
         sys.exit(1)
-    ins = FileStream(args[0], encoding='utf-8')
-    lexer = zoiaLexer(ins)
-    tokens = CommonTokenStream(lexer)
-    parser = zoiaParser(tokens)
-    tree = parser.zoiaFile()
-    ast = ASTConverter(ins.fileName).visit(tree)
-    print(ast.canonical())
+    zoia_ast = process_zoia_file(args[0])
+    print(zoia_ast.canonical())
 
 if __name__ == '__main__':
     main(sys.argv[1:])
