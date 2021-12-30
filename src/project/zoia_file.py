@@ -53,4 +53,4 @@ class ZoiaFile:
     @classmethod
     def parse_zoia_file(cls, file_path: ZPath):
         """Parses a Zoia file at the specified path."""
-        return ZoiaFile(file_path, process_zoia_file(file_path))
+        return cls(file_path, process_zoia_file(file_path))
