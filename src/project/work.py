@@ -24,10 +24,11 @@ import re
 from dataclasses import dataclass
 from functools import total_ordering
 
+import log
 from exception import ProjectStructureError
 from project.chapter import Chapter, match_chapter
 from paths import ZPath
-from utils import is_contiguous
+from utils import arrow, is_contiguous
 
 # Valid work folder names consist of the word 'work' followed by one or more
 # digits
@@ -52,9 +53,11 @@ class Work:
         return self.work_index < other.work_index
 
     @classmethod
-    def parse_work(cls, work_folder: ZPath):
+    def parse_work(cls, work_folder: ZPath, project_folder: ZPath):
         """Parses a work folder at the specified path."""
-        chapters = sorted(Chapter.parse_chapter(c)
+        work_rel = work_folder.relative_to(project_folder)
+        log.info(arrow(2, f'Found work at $fYl${work_rel}$R$'))
+        chapters = sorted(Chapter.parse_chapter(c, project_folder)
                           for c in work_folder.iterdir()
                           if match_chapter(c.name))
         if not chapters:

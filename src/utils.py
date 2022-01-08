@@ -24,6 +24,9 @@ from itertools import groupby
 from pathlib import Path
 from shutil import rmtree
 
+def arrow(n: int, s: str) -> str:
+    return f'$B${"=" * n}>$R$ {s}'
+
 def is_contiguous(l: list[int]) -> bool:
     """Returns True if the specified list of integers is contiguous. In other
     words, if the element at index n has value v, then the element at index

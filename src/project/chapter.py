@@ -24,9 +24,11 @@ import re
 from dataclasses import dataclass
 from functools import total_ordering
 
+import log
 from exception import ProjectStructureError
 from project.zoia_file import ZoiaFile
 from paths import ZPath
+from utils import arrow
 
 # Valid chapter folder names consist of the word 'ch' followed by one or more
 # digits
@@ -55,9 +57,11 @@ class Chapter:
         return self.chapter_index < other.chapter_index
 
     @classmethod
-    def parse_chapter(cls, chapter_folder: ZPath):
+    def parse_chapter(cls, chapter_folder: ZPath, project_folder: ZPath):
         """Parses a chapter folder at the specified path."""
-        aux_files = sorted(ZoiaFile.parse_zoia_file(f)
+        chapter_rel = chapter_folder.relative_to(project_folder)
+        log.info(arrow(3, f'Found chapter at $fYl${chapter_rel}$R$'))
+        aux_files = sorted(ZoiaFile.parse_zoia_file(f, project_folder)
                            for f in chapter_folder.iterdir()
                            if f.csuffix == '.zoia')
         # Ensure there is exactly one main file (on case-sensitive file
@@ -73,4 +77,5 @@ class Chapter:
                                 "chapter")
         main_file = main_files[0]
         aux_files.remove(main_file)
+        log.info(arrow(1, f'Finished parsing $fYl${chapter_rel}$R$'))
         return cls(chapter_folder.name, main_file, aux_files)

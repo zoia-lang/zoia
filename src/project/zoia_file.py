@@ -24,8 +24,10 @@ from dataclasses import dataclass
 from enum import Enum
 from functools import total_ordering
 
+import log
 from ast_nodes import ZoiaFileNode
 from paths import ZPath
+from utils import arrow
 from zoia_processor import process_zoia_file
 
 # FIXME finish
@@ -51,6 +53,9 @@ class ZoiaFile:
         return self.file_path < other.file_path
 
     @classmethod
-    def parse_zoia_file(cls, file_path: ZPath):
+    def parse_zoia_file(cls, file_path: ZPath, project_folder: ZPath):
         """Parses a Zoia file at the specified path."""
-        return cls(file_path, process_zoia_file(file_path))
+        file_rel = file_path.relative_to(project_folder)
+        log.info(arrow(4, f'Parsing Zoia file at $fCl${file_rel}$R$'))
+        processed_file = process_zoia_file(file_path)
+        return cls(file_path, processed_file)

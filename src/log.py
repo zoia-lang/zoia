@@ -166,7 +166,7 @@ def debug(s: str) -> None:
 
 def log_stats() -> None:
     if _num_warnings == _num_errors == 0:
-        info('No warnings or errors occurred')
+        info('$fGl$No warnings or errors occurred$R$')
     else:
         if _num_warnings > 0:
             warning(f'{_num_warnings} total warning(s)', count_warning=False)

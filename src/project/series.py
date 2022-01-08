@@ -22,10 +22,11 @@
 """Implements series folders."""
 from dataclasses import dataclass
 
+import log
 from exception import ProjectStructureError
 from project.work import Work, match_work
 from paths import ZPath
-from utils import is_contiguous
+from utils import arrow, is_contiguous
 
 @dataclass(slots=True)
 class Series:
@@ -36,14 +37,18 @@ class Series:
     @classmethod
     def parse_series(cls, series_folder: ZPath):
         """Parses a series ('src' folder) at the specified path."""
+        log.info(arrow(1, 'Looking for series'))
         # Resolve the path first so all later operations can use full paths and
         # ensure it exists while we're at it
         try:
             series_folder = series_folder.resolve(strict=True)
         except FileNotFoundError:
             raise ProjectStructureError(series_folder, "No 'src' folder found")
-        works = sorted(Work.parse_work(w) for w in series_folder.iterdir()
-                       if match_work(w.name))
+        project_folder = series_folder.parent
+        series_rel = series_folder.relative_to(project_folder)
+        log.info(arrow(1, f'Found series at $fYl${series_rel}$R$'))
+        works = sorted(Work.parse_work(w, project_folder)
+                       for w in series_folder.iterdir() if match_work(w.name))
         if not works:
             raise ProjectStructureError(
                 series_folder, "The 'src' folder must contain one or more "

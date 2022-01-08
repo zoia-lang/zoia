@@ -21,17 +21,70 @@
 # =============================================================================
 """This module is the main entry point for using Zoia from the command line."""
 import sys
+import time
 
 import log
-from zoia_processor import process_zoia_file
+from exception import AbstractError
+from paths import ZPath
+from project import Series
+
+def _print_legal_verbs(*, illegal_verb: str = ''):
+    msg = ('Legal verbs are:' if not illegal_verb else
+           f"Illegal verb '{illegal_verb}', legal verbs are:")
+    print(msg, file=sys.stderr)
+    for verb in sorted(_verbs):
+        print(f' - {verb}', file=sys.stderr)
 
 def main(args):
     log.init()
-    if len(args) != 1:
-        print('Usage: cli <zoia file>', file=sys.stderr)
+    if len(args) < 1:
+        print('Usage: zoia <verb>', file=sys.stderr)
+        _print_legal_verbs()
         sys.exit(1)
-    zoia_ast = process_zoia_file(args[0])
-    print(zoia_ast.canonical())
+    try:
+        verb = _verbs[args[0]]
+    except KeyError:
+        _print_legal_verbs(illegal_verb=args[0])
+        sys.exit(1)
+    verb.run(args[1:])
+
+_zoia_version = '0.1'
+def _log_boot_info():
+    log.info('Zoia - a language for writing fiction')
+    _log_version()
+
+def _log_version():
+    log.info(f'Version {_zoia_version}')
+
+class _Verb:
+    def run(self, args: list[str]) -> None:
+        raise AbstractError(self.run)
+
+class _CommonVerb(_Verb):
+    def run(self, args: list[str]) -> None:
+        _log_boot_info()
+        self._run_common(args)
+        log.log_stats()
+
+    def _run_common(self, args: list[str]) -> None:
+        raise AbstractError(self._run_common)
+
+class _Build(_CommonVerb):
+    def _run_common(self, args: list[str]) -> None:
+        log.info(f'Working directory is $fWl${ZPath.cwd()}$R$')
+        start_time = time.time()
+        Series.parse_series(ZPath.cwd() / 'src')
+        duration = time.time() - start_time
+        log.info(f'Build took {duration:.1f}s')
+
+class _Version(_Verb):
+    def run(self, args: list[str]) -> None:
+        _log_version()
+
+_verbs = {
+    'build': _Build(),
+    'version': _Version(),
+}
 
 if __name__ == '__main__':
     main(sys.argv[1:])
