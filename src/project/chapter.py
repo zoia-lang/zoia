@@ -25,10 +25,9 @@ from dataclasses import dataclass
 from functools import total_ordering
 
 import log
-from exception import ProjectStructureError
 from project.zoia_file import ZoiaFile
 from paths import ZPath
-from utils import arrow
+from utils import arrow, ps_error
 
 # Valid chapter folder names consist of the word 'ch' followed by one or more
 # digits
@@ -57,25 +56,31 @@ class Chapter:
         return self.chapter_index < other.chapter_index
 
     @classmethod
-    def parse_chapter(cls, chapter_folder: ZPath, project_folder: ZPath):
+    def parse_chapter(cls, chapter_folder: ZPath, project_folder: ZPath,
+                      raise_errors: bool):
         """Parses a chapter folder at the specified path."""
         chapter_rel = chapter_folder.relative_to(project_folder)
         log.info(arrow(3, f'Found chapter at $fYl${chapter_rel}$R$'))
-        aux_files = sorted(ZoiaFile.parse_zoia_file(f, project_folder)
-                           for f in chapter_folder.iterdir()
-                           if f.csuffix == '.zoia')
+        aux_files = [ZoiaFile.parse_zoia_file(f, project_folder, raise_errors)
+                     for f in chapter_folder.iterdir()
+                     if f.csuffix == '.zoia']
+        if not all(aux_files):
+            # This error isn't the cause you should be investigating for why
+            # your build is failing, so show it in gray
+            log.error('$fDl$Failed to parse chapter due to errors when '
+                      'parsing one or more Zoia files$R$')
+            return None
+        aux_files.sort() # Blows up on None
         # Ensure there is exactly one main file (on case-sensitive file
         # systems, there can be >1 file with the case-insensitive name
         # 'main.zoia')
         main_files = [f for f in aux_files if f.is_main_file()]
         if not main_files:
-            raise ProjectStructureError(
-                chapter_folder, "Each chapter must contain a 'main.zoia' file")
+            return ps_error("Each chapter must contain a 'main.zoia' file",
+                            chapter_folder, raise_errors)
         if len(main_files) != 1:
-            raise ProjectStructureError(
-                chapter_folder, "There may only be one 'main.zoia' file per "
-                                "chapter")
+            return ps_error("There may only be one 'main.zoia' file per "
+                            "chapter", chapter_folder, raise_errors)
         main_file = main_files[0]
         aux_files.remove(main_file)
-        log.info(arrow(1, f'Finished parsing $fYl${chapter_rel}$R$'))
         return cls(chapter_folder.name, main_file, aux_files)

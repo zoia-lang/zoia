@@ -41,7 +41,8 @@ class _ATestProjectPassing(_ATestProject):
     def test_proj_passes(self) -> None:
         """Asserts that the series located at this test directory parses
         successfully."""
-        assert Series.parse_series(_get_src_path(self._test_name))
+        assert Series.parse_series(_get_src_path(self._test_name),
+                                   raise_errors=True)
 
 class _ATestProjectFailing(_ATestProject):
     """Base class for failing project directory tests."""
@@ -51,7 +52,8 @@ class _ATestProjectFailing(_ATestProject):
         """Asserts that the series located at the specified test directory does
         not parse successfully."""
         try:
-            Series.parse_series(_get_src_path(self._test_name))
+            Series.parse_series(_get_src_path(self._test_name),
+                                raise_errors=True)
             pytest.fail('Parsing was supposed to fail, but succeeded instead')
         except ProjectStructureError as e:
             assert self._exp_error in str(e)

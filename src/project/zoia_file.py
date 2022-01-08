@@ -53,9 +53,9 @@ class ZoiaFile:
         return self.file_path < other.file_path
 
     @classmethod
-    def parse_zoia_file(cls, file_path: ZPath, project_folder: ZPath):
+    def parse_zoia_file(cls, file_path: ZPath, project_folder: ZPath,
+                        raise_errors: bool):
         """Parses a Zoia file at the specified path."""
         file_rel = file_path.relative_to(project_folder)
         log.info(arrow(4, f'Parsing Zoia file at $fCl${file_rel}$R$'))
-        processed_file = process_zoia_file(file_path)
-        return cls(file_path, processed_file)
+        return cls(file_path, process_zoia_file(file_path))

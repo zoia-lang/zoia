@@ -23,10 +23,9 @@
 from dataclasses import dataclass
 
 import log
-from exception import ProjectStructureError
 from project.work import Work, match_work
 from paths import ZPath
-from utils import arrow, is_contiguous
+from utils import arrow, is_contiguous, ps_error
 
 @dataclass(slots=True)
 class Series:
@@ -35,29 +34,35 @@ class Series:
     works: list[Work]
 
     @classmethod
-    def parse_series(cls, series_folder: ZPath):
+    def parse_series(cls, series_folder: ZPath, *, raise_errors: bool = False):
         """Parses a series ('src' folder) at the specified path."""
-        log.info(arrow(1, 'Looking for series'))
         # Resolve the path first so all later operations can use full paths and
         # ensure it exists while we're at it
         try:
             series_folder = series_folder.resolve(strict=True)
         except FileNotFoundError:
-            raise ProjectStructureError(series_folder, "No 'src' folder found")
+            return ps_error("No 'src' folder found", series_folder,
+                            raise_errors)
         project_folder = series_folder.parent
         series_rel = series_folder.relative_to(project_folder)
         log.info(arrow(1, f'Found series at $fYl${series_rel}$R$'))
-        works = sorted(Work.parse_work(w, project_folder)
-                       for w in series_folder.iterdir() if match_work(w.name))
+        works = [Work.parse_work(w, project_folder, raise_errors)
+                 for w in series_folder.iterdir() if match_work(w.name)]
+        if not all(works):
+            # This error isn't the cause you should be investigating for why
+            # your build is failing, so show it in gray
+            log.error('$fDl$Failed to parse series due to errors when parsing '
+                      'one or more works$R$')
+            return None
         if not works:
-            raise ProjectStructureError(
-                series_folder, "The 'src' folder must contain one or more "
-                               "works")
+            return ps_error("The 'src' folder must contain one or more works",
+                            series_folder, raise_errors)
+        works.sort() # Blows up on None
         work_indices = [w.work_index for w in works]
         if work_indices[0] != 1:
-            raise ProjectStructureError(
-                series_folder, 'The first work in a series must have index 1')
+            return ps_error('The first work in a series must have index 1',
+                            series_folder, raise_errors)
         if not is_contiguous(work_indices):
-            raise ProjectStructureError(
-                series_folder, 'Work indices must form a contiguous sequence')
+            return ps_error('Work indices must form a contiguous sequence',
+                            series_folder, raise_errors)
         return cls(works)

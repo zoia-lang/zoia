@@ -24,7 +24,11 @@ from itertools import groupby
 from pathlib import Path
 from shutil import rmtree
 
+import log
+from exception import ProjectStructureError
+
 def arrow(n: int, s: str) -> str:
+    """Formats a message with a colorized, leading arrow with n """
     return f'$B${"=" * n}>$R$ {s}'
 
 def is_contiguous(l: list[int]) -> bool:
@@ -44,3 +48,11 @@ def is_fs_case_sensitive(test_path: Path) -> bool:
         return len(list(temp_path.iterdir())) != 1
     finally:
         rmtree(temp_path)
+
+def ps_error(msg: str, relevant_path: Path, raise_errors: bool):
+    if raise_errors:
+        raise ProjectStructureError(relevant_path, msg)
+    else:
+        log.error(f'Invalid project structure at $fWl${relevant_path}$fT$: '
+                  f'$fRl${msg}$fT$')
+        return None

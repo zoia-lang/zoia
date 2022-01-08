@@ -35,6 +35,6 @@ class ASTConversionError(Exception):
 
 class ProjectStructureError(Exception):
     """The project structure is invalid."""
-    def __init__(self, offending_folder: Path, msg: str) -> None:
-        super().__init__(f"Invalid project structure at '{offending_folder}': "
+    def __init__(self, relevant_path: Path, msg: str) -> None:
+        super().__init__(f"Invalid project structure at '{relevant_path}': "
                          f"{msg}")

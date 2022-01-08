@@ -48,6 +48,7 @@ In the latter case, the third letter must be an 'l'. It indicates that the
 color is to be chosen as a 'light' color by the terminal. The other two
 characters are processed the same way as in the two-character case.
 """
+import os
 import sys
 
 from colorama import Back, Fore, Style
@@ -58,7 +59,8 @@ from io import StringIO
 # TODO This module needs to create an output log in build/, where detailed logs
 #  go (including debug messages, timestamps, etc.)
 
-wrapped_stdout = sys.stdout
+# Discard all output until init() is called
+wrapped_stdout = open(os.devnull, 'w')
 
 def init() -> None:
     global wrapped_stdout
@@ -149,13 +151,13 @@ def info(s: str) -> None:
     _do_log(s, level=_Level.INFO)
 
 def error(s: str, *, count_error: bool = True) -> None:
-    _do_log(f'$fR$[!] error:$fT$ {s}', level=_Level.ERROR)
+    _do_log(f'$fR$[!] Error:$fT$ {s}', level=_Level.ERROR)
     if count_error:
         global _num_errors
         _num_errors += 1
 
 def warning(s: str, *, count_warning: bool = True) -> None:
-    _do_log(f'$fY$[!] warning:$fT$ {s}', level=_Level.WARNING)
+    _do_log(f'$fY$[!] Warning:$fT$ {s}', level=_Level.WARNING)
     if count_warning:
         global _num_warnings
         _num_warnings += 1
