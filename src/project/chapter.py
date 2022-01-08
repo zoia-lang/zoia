@@ -27,7 +27,7 @@ from functools import total_ordering
 import log
 from project.zoia_file import ZoiaFile
 from paths import ZPath
-from utils import arrow, ps_error
+from utils import ps_error
 
 # Valid chapter folder names consist of the word 'ch' followed by one or more
 # digits
@@ -60,7 +60,8 @@ class Chapter:
                       raise_errors: bool):
         """Parses a chapter folder at the specified path."""
         chapter_rel = chapter_folder.relative_to(project_folder)
-        log.info(arrow(3, f'Found chapter at $fYl${chapter_rel}$R$'))
+        log.info(log.arrow(3, f'Found chapter at '
+                              f'$fYl${chapter_rel}$R$'))
         aux_files = [ZoiaFile.parse_zoia_file(f, project_folder, raise_errors)
                      for f in chapter_folder.iterdir()
                      if f.csuffix == '.zoia']

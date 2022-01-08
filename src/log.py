@@ -56,6 +56,8 @@ from colorama.initialise import wrap_stream
 from enum import Enum
 from io import StringIO
 
+# NO LOCAL IMPORTS! This has to be importable from any module/package.
+
 # TODO This module needs to create an output log in build/, where detailed logs
 #  go (including debug messages, timestamps, etc.)
 
@@ -63,11 +65,15 @@ from io import StringIO
 wrapped_stdout = open(os.devnull, 'w')
 
 def init() -> None:
+    """Initializes the logging module. Without this method having been called
+    beforehand, all functions in this module will discard their output."""
     global wrapped_stdout
     wrapped_stdout = wrap_stream(sys.stdout, autoreset=True, convert=None,
                                  strip=None, wrap=True)
 
 def _colorize_line(line: str) -> str:
+    """Parses the specified line for color syntax and replaces it with the
+    appropriate escape codes."""
     wip_line = StringIO()
     for i, part in enumerate(line.split('$')):
         # Every second element is a color command
@@ -100,6 +106,7 @@ _char_to_style = {
 }
 
 def _parse_cmd(cmd: str) -> str:
+    """Parses a single command and returns it as an escape code."""
     if len(cmd) == 3:
         if cmd[2] != 'l':
             raise SyntaxError(f"Invalid log command: Last character of "
@@ -122,6 +129,7 @@ def _parse_cmd(cmd: str) -> str:
                           f'has length {len(cmd)}')
 
 def _parse_color(color: str, *, light: bool = False) -> str:
+    """Parses a single color and returns it as an escape code."""
     try:
         target_loc = _char_to_location[color[0]]
     except KeyError:
@@ -136,37 +144,62 @@ def _parse_color(color: str, *, light: bool = False) -> str:
         color_name = f'LIGHT{color_name}_EX'
     return getattr(target_loc, color_name)
 
+def arrow(n: int, s: str) -> str:
+    """Formats a message with a colorized, leading 'arrow' composed of
+    n equal signs (=) and a single greater-than sign (>)."""
+    return f'$B${"=" * n}>$R$ {s}'
+
 class _Level(Enum):
-    INFO = 0
-    WARNING = 1
-    ERROR = 2
+    """An enum listing the different levels of severity supported by this
+    logging system."""
+    DEBUG = 0
+    INFO = 1
+    WARNING = 2
+    ERROR = 3
 
 _num_warnings = 0
 _num_errors = 0
 
-def _do_log(s: str, *, level: _Level) -> None:
+def _do_log(s: str, *, severity: _Level) -> None:
+    """The method that actually handles parsing and printing of a single log
+    line."""
     print(_colorize_line(s), file=wrapped_stdout)
 
+def debug(s: str) -> None:
+    """Logs a message with severity level of DEBUG. This will not print
+    anything to stdout and only print to the log, if that is enabled. Intended
+    for debugging messages that an end-user usually doesn't need to see."""
+    # TODO see other TODO above
+    #_do_log(s, severity=_Level.DEBUG)
+
 def info(s: str) -> None:
-    _do_log(s, level=_Level.INFO)
+    """Logs a message with severity level of INFO. The most common usage.
+    Intended for normal messages that the end-user should see."""
+    _do_log(s, severity=_Level.INFO)
 
 def error(s: str, *, count_error: bool = True) -> None:
-    _do_log(f'$fR$[!] Error:$fT$ {s}', level=_Level.ERROR)
+    """Logs a message with severity level of ERROR. Intended for critical
+    problems that prevent the program from completing its task. They will be
+    highlighted in red and preceded with a '[!]' marker. The number of
+    invocations is also tracked, see log_stats and reset_stats."""
+    _do_log(f'$fR$[!] Error:$fT$ {s}', severity=_Level.ERROR)
     if count_error:
         global _num_errors
         _num_errors += 1
 
 def warning(s: str, *, count_warning: bool = True) -> None:
-    _do_log(f'$fY$[*] Warning:$fT$ {s}', level=_Level.WARNING)
+    """Logs a message with severity level of WARNING. Intended for problems
+    that do not prevent the program from completing its task, but are likely to
+    be mistakes or could cause errors later down the line. They will be
+    highlighted in orange/yellow and preceded with a '[*]' marker."""
+    _do_log(f'$fY$[*] Warning:$fT$ {s}', severity=_Level.WARNING)
     if count_warning:
         global _num_warnings
         _num_warnings += 1
 
-def debug(s: str) -> None:
-    # see TODO above
-    info(s)
-
 def log_stats() -> None:
+    """Prints out error/warning statistics based on the internal error/warning
+    counters. See error and warning as well as reset_stats."""
     if _num_warnings == _num_errors == 0:
         info('$fGl$No warnings or errors occurred$R$')
     else:
@@ -180,6 +213,8 @@ def log_stats() -> None:
             error(f'{_num_errors} total errors', count_error=False)
 
 def reset_stats() -> None:
+    """Resets the error and warning counters. See log_stats as well as error
+    and warning."""
     global _num_errors, _num_warnings
     _num_errors = 0
     _num_warnings = 0

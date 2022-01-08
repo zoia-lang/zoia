@@ -29,6 +29,7 @@ from ast_converter import ASTConverter
 from exception import ParsingError
 from grammar import zoiaLexer, zoiaParser
 from paths import ZPath
+from src_pos import SourcePos
 
 class _RaiseErrorListener(ErrorListener):
     def syntaxError(self, recognizer, offending_symbol, line, column, msg, e):
@@ -36,7 +37,7 @@ class _RaiseErrorListener(ErrorListener):
             origin_file = offending_symbol.source[1].fileName
         except (AttributeError, KeyError, TypeError):
             origin_file = '<unknown file>'
-        raise ParsingError(origin_file, line, column, msg)
+        raise ParsingError(SourcePos(origin_file, line, column), msg)
 
 _REL_INSTANCE = _RaiseErrorListener()
 

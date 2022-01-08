@@ -29,6 +29,8 @@ from paths import ZPath
 from project import Series
 
 def _print_legal_verbs(*, illegal_verb: str = ''):
+    """Helper function for printing all recognized verbs (and optionally
+    highlighting an invalid verb provided by the user)."""
     msg = ('Legal verbs are:' if not illegal_verb else
            f"Illegal verb '{illegal_verb}', legal verbs are:")
     print(msg, file=sys.stderr)
@@ -69,15 +71,20 @@ class _Verb:
         raise AbstractError(self.run)
 
 class _CommonVerb(_Verb):
+    """Base class for verbs that share a simple pattern of behavior: logging
+    the standard boot info at startup and printing errors/warnings at exit."""
     def run(self, args: list[str]) -> None:
         _log_boot_info()
         self._run_common(args)
         log.log_stats()
 
     def _run_common(self, args: list[str]) -> None:
+        """Implements the verb-specific behavior (everything besides the
+        boot/exit logging)."""
         raise AbstractError(self._run_common)
 
 class _Build(_CommonVerb):
+    """Verb that builds a project."""
     def _run_common(self, args: list[str]) -> None:
         log.info(f'Working directory is $fWl${ZPath.cwd()}$R$')
         start_time = time.time()
@@ -86,6 +93,7 @@ class _Build(_CommonVerb):
         log.info(f'Build took {duration:.1f}s')
 
 class _Version(_Verb):
+    """Verb that prints the Zoia version and exits."""
     def run(self, args: list[str]) -> None:
         _log_version()
 

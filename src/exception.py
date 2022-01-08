@@ -22,27 +22,36 @@
 """This module contains all custom exceptions for Zoia."""
 from os import PathLike
 
-# NO LOCAL IMPORTS! This has to be importable from any module/package.
+from src_pos import SourcePos
+# NO OTHER LOCAL IMPORTS! This has to be importable from any module/package.
 
+# FIXME docstrings
 class AbstractError(Exception):
     """Abstract section of code called."""
     def __init__(self, abs_method: callable) -> None:
         super().__init__(f"Abstract method '{abs_method.__qualname__}' was "
                          f"called")
 
-class ASTConversionError(Exception):
-    """An error that occurred during AST conversion."""
+class _SrcPosError(Exception):
+    """Base class for errors that carry information about where in a source
+    file they occurred."""
+    def __init__(self, pos: SourcePos, msg: str) -> None:
+        super().__init__(msg)
+        self.src_pos = pos
 
-class ParsingError(Exception):
+class ASTConversionError(_SrcPosError):
+    """An error that occurred during AST conversion."""
+    def __init__(self, pos: SourcePos, msg: str) -> None:
+        super().__init__(pos, f'Failed to AST-convert {pos.src_file} at line '
+                              f'{pos.src_line}, column {pos.src_char}: {msg}')
+        self.orig_msg = msg
+
+class ParsingError(_SrcPosError):
     """An error that occurred during parsing of a Zoia file."""
-    def __init__(self, origin_file: PathLike, line: int, column: int,
-                 msg: str):
-        super().__init__(f'Failed to parse {origin_file} at line {line}, '
-                         f'column {column}: {msg}')
-        self.origin_file = origin_file
-        self.line = line
-        self.column = column
-        self.msg = msg
+    def __init__(self, pos: SourcePos, msg: str) -> None:
+        super().__init__(pos, f'Failed to parse {pos.src_file} at line '
+                              f'{pos.src_line}, column {pos.src_char}: {msg}')
+        self.orig_msg = msg
 
 class ProjectStructureError(Exception):
     """The project structure is invalid."""

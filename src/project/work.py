@@ -27,7 +27,7 @@ from functools import total_ordering
 import log
 from project.chapter import Chapter, match_chapter
 from paths import ZPath
-from utils import arrow, is_contiguous, ps_error
+from utils import is_contiguous, ps_error
 
 # Valid work folder names consist of the word 'work' followed by one or more
 # digits
@@ -56,7 +56,7 @@ class Work:
                    raise_errors: bool):
         """Parses a work folder at the specified path."""
         work_rel = work_folder.relative_to(project_folder)
-        log.info(arrow(2, f'Found work at $fYl${work_rel}$R$'))
+        log.info(log.arrow(2, f'Found work at $fYl${work_rel}$R$'))
         chapters = [Chapter.parse_chapter(c, project_folder, raise_errors)
                     for c in work_folder.iterdir() if match_chapter(c.name)]
         if not all(chapters):

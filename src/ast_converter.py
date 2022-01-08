@@ -78,7 +78,9 @@ class ASTConverter(zoiaVisitor):
             elif isinstance(le_child, zoiaParser.RegularLineElementsContext):
                 elements.append(self.visitRegularLineElements(le_child))
             else:
-                raise ASTConversionError(f"Unknown line elements '{ctx}'")
+                raise ASTConversionError(self.make_pos(ctx),
+                                         f"Unknown or invalid line "
+                                         f"elements '{ctx.getText()}'")
         return LineElementsNode(elements, src_pos=self.make_pos(ctx))
 
     def visitRegularLineElements(
@@ -99,7 +101,9 @@ class ASTConverter(zoiaVisitor):
         if command is not None:
             return self.visitCommand(command)
         else:
-            raise ASTConversionError(f"Unknown line element '{ctx}'")
+            raise ASTConversionError(self.make_pos(ctx),
+                                     f"Unknown or invalid line element "
+                                     f"'{ctx.getText()}'")
 
     def visitMarkedUpLineElements(
             self, ctx: zoiaParser.MarkedUpLineElementsContext) \
@@ -114,8 +118,9 @@ class ASTConverter(zoiaVisitor):
         if i_elements is not None:
             return self.visitItalicLineElements(i_elements)
         else:
-            raise ASTConversionError(f"Unknown marked up line elements "
-                                     f"'{ctx}'")
+            raise ASTConversionError(self.make_pos(ctx),
+                                     f"Unknown or invalid marked up line "
+                                     f"elements '{ctx.getText()}'")
 
     def visitBoldItalicLineElements(
             self, ctx: zoiaParser.BoldItalicLineElementsContext) \
@@ -147,7 +152,9 @@ class ASTConverter(zoiaVisitor):
                   tf_child.symbol.type == zoiaParser.Space):
                 s.write(tf_child.getText())
             else:
-                raise ASTConversionError(f"Unknown text fragment '{ctx}'")
+                raise ASTConversionError(self.make_pos(ctx),
+                                         f"Unknown or invalid text fragment "
+                                         f"'{ctx.getText()}'")
         return TextFragmentNode(s.getvalue(), src_pos=self.make_pos(ctx))
 
     def visitWord(self, ctx: zoiaParser.WordContext) -> str:
@@ -176,7 +183,9 @@ class ASTConverter(zoiaVisitor):
         if kwd_argument is not None:
             return self.visitKwdArgument(kwd_argument)
         else:
-            raise ASTConversionError(f"Unknown argument: '{ctx}'")
+            raise ASTConversionError(self.make_pos(ctx),
+                                     f"Unknown or invalid argument: "
+                                     f"'{ctx.getText()}'")
 
     def visitKwdArgument(self, ctx: zoiaParser.KwdArgumentContext) \
             -> KwdArgumentNode:

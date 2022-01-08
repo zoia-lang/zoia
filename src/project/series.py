@@ -25,7 +25,7 @@ from dataclasses import dataclass
 import log
 from project.work import Work, match_work
 from paths import ZPath
-from utils import arrow, is_contiguous, ps_error
+from utils import is_contiguous, ps_error
 
 @dataclass(slots=True)
 class Series:
@@ -45,7 +45,8 @@ class Series:
                             raise_errors)
         project_folder = series_folder.parent
         series_rel = series_folder.relative_to(project_folder)
-        log.info(arrow(1, f'Found series at $fYl${series_rel}$R$'))
+        log.info(log.arrow(1, f'Found series at '
+                              f'$fYl${series_rel}$R$'))
         works = [Work.parse_work(w, project_folder, raise_errors)
                  for w in series_folder.iterdir() if match_work(w.name)]
         if not all(works):

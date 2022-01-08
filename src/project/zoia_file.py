@@ -26,9 +26,8 @@ from functools import total_ordering
 
 import log
 from ast_nodes import ZoiaFileNode
-from exception import ParsingError
+from exception import ASTConversionError, ParsingError
 from paths import ZPath
-from utils import arrow
 from zoia_processor import process_zoia_file
 
 # FIXME finish
@@ -58,14 +57,24 @@ class ZoiaFile:
                         raise_errors: bool):
         """Parses a Zoia file at the specified path."""
         file_rel = file_path.relative_to(project_folder)
-        log.info(arrow(4, f'Parsing Zoia file at $fCl${file_rel}$R$'))
+        log.info(log.arrow(4, f'Parsing Zoia file at '
+                              f'$fCl${file_rel}$R$'))
         try:
             processed_file = process_zoia_file(file_path)
         except ParsingError as e:
             if raise_errors:
                 raise
-            log.error(f'Failed to parse $fWl${e.origin_file}$fT$ at line '
-                      f'$fWl${e.line}$fT$, column $fWl${e.column}$fT$: '
-                      f'$fRl${e.msg}$fT$')
+            p = e.src_pos
+            log.error(f'Failed to parse $fWl${p.src_file}$fT$ at line '
+                      f'$fWl${p.src_line}$fT$, column $fWl${p.src_char}$fT$: '
+                      f'$fRl${e.orig_msg}$fT$')
+            return None
+        except ASTConversionError as e:
+            if raise_errors:
+                raise
+            p = e.src_pos
+            log.error(f'Failed to AST-convert $fWl${p.src_file}$fT$ at line '
+                      f'$fWl${p.src_line}$fT$, column $fWl${p.src_char}$fT$: '
+                      f'$fRl${e.orig_msg}$fT$')
             return None
         return cls(file_path, processed_file)

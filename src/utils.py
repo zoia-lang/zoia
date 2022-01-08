@@ -28,10 +28,6 @@ from shutil import rmtree
 import log
 from exception import ProjectStructureError
 
-def arrow(n: int, s: str) -> str:
-    """Formats a message with a colorized, leading arrow with n """
-    return f'$B${"=" * n}>$R$ {s}'
-
 def is_contiguous(l: list[int]) -> bool:
     """Returns True if the specified list of integers is contiguous. In other
     words, if the element at index n has value v, then the element at index
@@ -51,6 +47,8 @@ def is_fs_case_sensitive(test_path: Path) -> bool:
         rmtree(temp_path)
 
 def ps_error(msg: str, relevant_path: PathLike, raise_errors: bool):
+    """Prints or raises a project structure error, depending on whether
+    raise_errors is True or not."""
     if raise_errors:
         raise ProjectStructureError(relevant_path, msg)
     else:
