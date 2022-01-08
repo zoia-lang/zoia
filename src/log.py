@@ -52,6 +52,7 @@ import sys
 
 from colorama import Back, Fore, Style
 from colorama.initialise import wrap_stream
+from enum import Enum
 from io import StringIO
 
 # TODO This module needs to create an output log in build/, where detailed logs
@@ -59,12 +60,12 @@ from io import StringIO
 
 wrapped_stdout = sys.stdout
 
-def init():
+def init() -> None:
     global wrapped_stdout
     wrapped_stdout = wrap_stream(sys.stdout, autoreset=True, convert=None,
                                  strip=None, wrap=True)
 
-def _colorize_line(line: str):
+def _colorize_line(line: str) -> str:
     wip_line = StringIO()
     for i, part in enumerate(line.split('$')):
         # Every second element is a color command
@@ -95,7 +96,8 @@ _char_to_style = {
     'N': Style.NORMAL,
     'R': Style.RESET_ALL,
 }
-def _parse_cmd(cmd: str):
+
+def _parse_cmd(cmd: str) -> str:
     if len(cmd) == 3:
         if cmd[2] != 'l':
             raise SyntaxError(f"Invalid log command: Last character of "
@@ -117,7 +119,7 @@ def _parse_cmd(cmd: str):
         raise SyntaxError(f'Invalid log command: must have length 1-3, but '
                           f'has length {len(cmd)}')
 
-def _parse_color(color: str, light: bool = False):
+def _parse_color(color: str, *, light: bool = False) -> str:
     try:
         target_loc = _char_to_location[color[0]]
     except KeyError:
@@ -132,9 +134,46 @@ def _parse_color(color: str, light: bool = False):
         color_name = f'LIGHT{color_name}_EX'
     return getattr(target_loc, color_name)
 
-def info(s):
+class _Level(Enum):
+    INFO = 0
+    WARNING = 1
+    ERROR = 2
+
+_num_warnings = 0
+_num_errors = 0
+
+def _do_log(s: str, *, level: _Level) -> None:
     print(_colorize_line(s), file=wrapped_stdout)
 
-def debug(s):
+def info(s: str) -> None:
+    _do_log(s, level=_Level.INFO)
+
+def error(s: str, *, count_error: bool = True) -> None:
+    _do_log(f'$fR$[!] error:$fT$ {s}', level=_Level.ERROR)
+    if count_error:
+        global _num_errors
+        _num_errors += 1
+
+def warning(s: str, *, count_warning: bool = True) -> None:
+    _do_log(f'$fY$[!] warning:$fT$ {s}', level=_Level.WARNING)
+    if count_warning:
+        global _num_warnings
+        _num_warnings += 1
+
+def debug(s: str) -> None:
     # see TODO above
     info(s)
+
+def log_stats() -> None:
+    if _num_warnings == _num_errors == 0:
+        info('No warnings or errors occurred')
+    else:
+        if _num_warnings > 0:
+            warning(f'{_num_warnings} total warning(s)', count_warning=False)
+        if _num_errors > 0:
+            error(f'{_num_errors} total error(s)', count_error=False)
+
+def reset_stats() -> None:
+    global _num_errors, _num_warnings
+    _num_errors = 0
+    _num_warnings = 0
