@@ -3,7 +3,7 @@
 # GPL License and Copyright Notice ============================================
 #
 #   This file is part of Zoia, a language for writing fiction.
-#   Copyright (C) 2021 Infernio
+#   Copyright (C) 2021-2022 Infernio
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -48,16 +48,24 @@ def main(args):
         sys.exit(1)
     verb.run(args[1:])
 
-_zoia_version = '0.1'
 def _log_boot_info():
-    log.info('Zoia - a language for writing fiction')
+    """Prints a standard boot message informing the user of what they're using,
+    how it's licensed, what version it has"""
+    log.info('Zoia - a language for writing fiction.')
     _log_version()
+    log.info('Copyright (C) 2021-2022 Infernio')
+    log.info('This is free software licensed under the GPLv3. See the LICENSE '
+             'file included with this program for more information.')
 
+_zoia_version = '0.1'
 def _log_version():
+    """Prints the version of this Zoia implementation to the log."""
     log.info(f'Version {_zoia_version}')
 
 class _Verb:
+    """Base class for verbs."""
     def run(self, args: list[str]) -> None:
+        """Runs this verb on the specified arguments."""
         raise AbstractError(self.run)
 
 class _CommonVerb(_Verb):

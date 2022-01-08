@@ -3,7 +3,7 @@
 # GPL License and Copyright Notice ============================================
 #
 #   This file is part of Zoia, a language for writing fiction.
-#   Copyright (C) 2021 Infernio
+#   Copyright (C) 2021-2022 Infernio
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # =============================================================================
+"""Implements the base class for all Zoia AST nodes."""
 from dataclasses import dataclass, field
 
 from exception import AbstractError
