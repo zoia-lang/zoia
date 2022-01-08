@@ -21,6 +21,7 @@
 # =============================================================================
 """Random utility functions and classes that didn't fit anywhere else."""
 from itertools import groupby
+from os import PathLike
 from pathlib import Path
 from shutil import rmtree
 
@@ -49,7 +50,7 @@ def is_fs_case_sensitive(test_path: Path) -> bool:
     finally:
         rmtree(temp_path)
 
-def ps_error(msg: str, relevant_path: Path, raise_errors: bool):
+def ps_error(msg: str, relevant_path: PathLike, raise_errors: bool):
     if raise_errors:
         raise ProjectStructureError(relevant_path, msg)
     else:

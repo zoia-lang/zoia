@@ -20,7 +20,7 @@
 #
 # =============================================================================
 """This module contains all custom exceptions for Zoia."""
-from pathlib import Path
+from os import PathLike
 
 # NO LOCAL IMPORTS! This has to be importable from any module/package.
 
@@ -33,8 +33,19 @@ class AbstractError(Exception):
 class ASTConversionError(Exception):
     """An error that occurred during AST conversion."""
 
+class ParsingError(Exception):
+    """An error that occurred during parsing of a Zoia file."""
+    def __init__(self, origin_file: PathLike, line: int, column: int,
+                 msg: str):
+        super().__init__(f'Failed to parse {origin_file} at line {line}, '
+                         f'column {column}: {msg}')
+        self.origin_file = origin_file
+        self.line = line
+        self.column = column
+        self.msg = msg
+
 class ProjectStructureError(Exception):
     """The project structure is invalid."""
-    def __init__(self, relevant_path: Path, msg: str) -> None:
+    def __init__(self, relevant_path: PathLike, msg: str) -> None:
         super().__init__(f"Invalid project structure at '{relevant_path}': "
                          f"{msg}")

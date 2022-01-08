@@ -26,6 +26,7 @@ from functools import total_ordering
 
 import log
 from ast_nodes import ZoiaFileNode
+from exception import ParsingError
 from paths import ZPath
 from utils import arrow
 from zoia_processor import process_zoia_file
@@ -58,4 +59,13 @@ class ZoiaFile:
         """Parses a Zoia file at the specified path."""
         file_rel = file_path.relative_to(project_folder)
         log.info(arrow(4, f'Parsing Zoia file at $fCl${file_rel}$R$'))
-        return cls(file_path, process_zoia_file(file_path))
+        try:
+            processed_file = process_zoia_file(file_path)
+        except ParsingError as e:
+            if raise_errors:
+                raise
+            log.error(f'Failed to parse $fWl${e.origin_file}$fT$ at line '
+                      f'$fWl${e.line}$fT$, column $fWl${e.column}$fT$: '
+                      f'$fRl${e.msg}$fT$')
+            return None
+        return cls(file_path, processed_file)

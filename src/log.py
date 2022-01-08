@@ -157,7 +157,7 @@ def error(s: str, *, count_error: bool = True) -> None:
         _num_errors += 1
 
 def warning(s: str, *, count_warning: bool = True) -> None:
-    _do_log(f'$fY$[!] Warning:$fT$ {s}', level=_Level.WARNING)
+    _do_log(f'$fY$[*] Warning:$fT$ {s}', level=_Level.WARNING)
     if count_warning:
         global _num_warnings
         _num_warnings += 1
@@ -170,10 +170,14 @@ def log_stats() -> None:
     if _num_warnings == _num_errors == 0:
         info('$fGl$No warnings or errors occurred$R$')
     else:
-        if _num_warnings > 0:
-            warning(f'{_num_warnings} total warning(s)', count_warning=False)
-        if _num_errors > 0:
-            error(f'{_num_errors} total error(s)', count_error=False)
+        if _num_warnings == 1:
+            warning(f'1 total warning', count_warning=False)
+        elif _num_warnings > 1:
+            warning(f'{_num_warnings} total warnings', count_warning=False)
+        if _num_errors == 1:
+            error('1 total error', count_error=False)
+        elif _num_errors > 1:
+            error(f'{_num_errors} total errors', count_error=False)
 
 def reset_stats() -> None:
     global _num_errors, _num_warnings

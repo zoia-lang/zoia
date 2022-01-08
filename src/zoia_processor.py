@@ -23,10 +23,22 @@
 AST."""
 
 from antlr4 import CommonTokenStream, FileStream
+from antlr4.error.ErrorListener import ErrorListener
 
 from ast_converter import ASTConverter
+from exception import ParsingError
 from grammar import zoiaLexer, zoiaParser
 from paths import ZPath
+
+class _RaiseErrorListener(ErrorListener):
+    def syntaxError(self, recognizer, offending_symbol, line, column, msg, e):
+        try:
+            origin_file = offending_symbol.source[1].fileName
+        except (AttributeError, KeyError, TypeError):
+            origin_file = '<unknown file>'
+        raise ParsingError(origin_file, line, column, msg)
+
+_REL_INSTANCE = _RaiseErrorListener()
 
 def process_zoia_file(zoia_path: ZPath):
     """Parses the Zoia file at the specified path and converts it into a Zoia
@@ -35,5 +47,7 @@ def process_zoia_file(zoia_path: ZPath):
     ins = FileStream(zoia_path, encoding='utf-8')
     lexer = zoiaLexer(ins)
     parser = zoiaParser(CommonTokenStream(lexer))
+    parser.removeErrorListeners()
+    parser.addErrorListener(_REL_INSTANCE)
     parse_tree = parser.zoiaFile()
     return ASTConverter(ins.fileName).visit(parse_tree)
