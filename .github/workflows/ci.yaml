@@ -21,7 +21,9 @@ jobs:
         with:
           python-version: '3.10'
       - name: Install speedy-antlr-tool
-        run: python -m pip install speedy-antlr-tool
+        run: |
+          python -m pip install -U pip setuptools wheel
+          python -m pip install speedy-antlr-tool
       - name: Download ANTLR4
         run: ./scripts/prereq.sh
       - name: Build Zoia
