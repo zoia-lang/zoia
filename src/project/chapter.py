@@ -66,10 +66,9 @@ class Chapter:
                      for f in chapter_folder.iterdir()
                      if f.csuffix == '.zoia']
         if not all(aux_files):
-            # This error isn't the cause you should be investigating for why
-            # your build is failing, so show it in gray
-            log.error('$fDl$Failed to parse chapter due to errors when '
-                      'parsing one or more Zoia files$R$')
+            # This is just a cascading effect of a real error
+            log.warning('Failed to parse chapter due to errors when parsing '
+                        'one or more Zoia files')
             return None
         aux_files.sort() # Blows up on None
         # Ensure there is exactly one main file (on case-sensitive file

@@ -60,10 +60,9 @@ class Work:
         chapters = [Chapter.parse_chapter(c, project_folder, raise_errors)
                     for c in work_folder.iterdir() if match_chapter(c.name)]
         if not all(chapters):
-            # This error isn't the cause you should be investigating for why
-            # your build is failing, so show it in gray
-            log.error('$fDl$Failed to parse work due to errors when parsing '
-                      'one or more chapters$R$')
+            # This is just a cascading effect of a real error
+            log.warning('Failed to parse work due to errors when parsing one '
+                        'or more chapters')
             return None
         if not chapters:
             return ps_error('Work folders must contain one or more chapters',

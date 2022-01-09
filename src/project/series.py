@@ -50,10 +50,9 @@ class Series:
         works = [Work.parse_work(w, project_folder, raise_errors)
                  for w in series_folder.iterdir() if match_work(w.name)]
         if not all(works):
-            # This error isn't the cause you should be investigating for why
-            # your build is failing, so show it in gray
-            log.error('$fDl$Failed to parse series due to errors when parsing '
-                      'one or more works$R$')
+            # This is just a cascading effect of a real error
+            log.warning('Failed to parse series due to errors when parsing '
+                        'one or more works')
             return None
         if not works:
             return ps_error("The 'src' folder must contain one or more works",
