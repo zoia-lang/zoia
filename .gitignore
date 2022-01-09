@@ -6,20 +6,20 @@
 .vscode
 
 # Generated noise
-*.class
-*.jar
-*.java
 *.pyc
+*.so
 .coverage
 .cov_html/
 .pytest_cache/
+build/
+
+# Downloaded by the build script
+*.jar
+src/grammar/cpp/antlr4_runtime/
 
 # Virtual environment
 .venv/
 
-# Interp and tokens files do not seem to be necessary?
+# Interp and tokens files are not necessary
 *.interp
 *.tokens
-
-# Folder I use for storing the generated ANTLR output
-tmp/
