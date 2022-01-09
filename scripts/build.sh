@@ -24,6 +24,7 @@ rmdir src/grammar/cpp/grammar
 # === Generate the Python module
 if [ -f .venv/bin/activate ]
 then
+    # shellcheck source=/dev/null
     source .venv/bin/activate
     echo "Using virtual environment."
 else
