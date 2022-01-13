@@ -19,8 +19,8 @@
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # =============================================================================
-"""This module runs the actual project tests on the project folders
-included in this package."""
+"""This module runs tests that check whether project structures are being
+parsed correctly."""
 import pytest
 
 from exception import ProjectStructureError
