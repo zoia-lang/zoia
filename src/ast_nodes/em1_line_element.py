@@ -19,14 +19,14 @@
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # =============================================================================
-"""Implements the AST node for bold-italic line elements."""
+"""Implements the AST node for level 1 emphasized line elements."""
 from dataclasses import dataclass
 
-from ast_nodes.marked_up_line_elements import MarkedUpLineElementsNode
+from ast_nodes.em_line_element import _EmLineElementNode
 
 @dataclass(slots=True)
-class BoldItalicLineElementsNode(MarkedUpLineElementsNode):
-    """AST node for bold-italic line elements."""
+class Em1LineElementNode(_EmLineElementNode):
+    """AST node for level 1 emphasized line elements."""
 
     def canonical(self) -> str:
-        return f'***{super(BoldItalicLineElementsNode, self).canonical()}***'
+        return f'*{super(Em1LineElementNode, self).canonical()}*'

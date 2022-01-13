@@ -27,5 +27,6 @@ from ast_nodes.base import ASTNode
 
 @dataclass(slots=True)
 class LineElementNode(ASTNode):
-    """Base AST node for single line elements. See AliasNode, CommandNode and
+    """Base AST node for single line elements. See AliasNode, CommandNode,
+    Em1LineElementNode, Em2LineElementNode, Em3LineElementNode and
     TextFragmentNode."""

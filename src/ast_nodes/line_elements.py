@@ -19,17 +19,16 @@
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # =============================================================================
-"""Implements the AST node for line elements."""
+"""Implements the AST node for collections of line elements."""
 from dataclasses import dataclass
 
 from ast_nodes.base import ASTNode
-from ast_nodes.marked_up_line_elements import MarkedUpLineElementsNode
-from ast_nodes.regular_line_elements import RegularLineElementsNode
+from ast_nodes.line_element import LineElementNode
 
 @dataclass(slots=True)
 class LineElementsNode(ASTNode):
-    """AST node for line elements."""
-    elements: list[MarkedUpLineElementsNode | RegularLineElementsNode]
+    """AST node for collections of line elements."""
+    elements: list[LineElementNode]
 
     def canonical(self) -> str:
         return ''.join([e.canonical() for e in self.elements])

@@ -29,38 +29,33 @@ class zoiaVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by zoiaParser#regularLineElements.
-    def visitRegularLineElements(self, ctx:zoiaParser.RegularLineElementsContext):
+    # Visit a parse tree produced by zoiaParser#lineElementsInner.
+    def visitLineElementsInner(self, ctx:zoiaParser.LineElementsInnerContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by zoiaParser#lineElement.
-    def visitLineElement(self, ctx:zoiaParser.LineElementContext):
+    # Visit a parse tree produced by zoiaParser#em3LineElement.
+    def visitEm3LineElement(self, ctx:zoiaParser.Em3LineElementContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by zoiaParser#markedUpLineElements.
-    def visitMarkedUpLineElements(self, ctx:zoiaParser.MarkedUpLineElementsContext):
+    # Visit a parse tree produced by zoiaParser#em2LineElement.
+    def visitEm2LineElement(self, ctx:zoiaParser.Em2LineElementContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by zoiaParser#boldItalicLineElements.
-    def visitBoldItalicLineElements(self, ctx:zoiaParser.BoldItalicLineElementsContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by zoiaParser#boldLineElements.
-    def visitBoldLineElements(self, ctx:zoiaParser.BoldLineElementsContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by zoiaParser#italicLineElements.
-    def visitItalicLineElements(self, ctx:zoiaParser.ItalicLineElementsContext):
+    # Visit a parse tree produced by zoiaParser#em1LineElement.
+    def visitEm1LineElement(self, ctx:zoiaParser.Em1LineElementContext):
         return self.visitChildren(ctx)
 
 
     # Visit a parse tree produced by zoiaParser#textFragment.
     def visitTextFragment(self, ctx:zoiaParser.TextFragmentContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by zoiaParser#textFragmentReq.
+    def visitTextFragmentReq(self, ctx:zoiaParser.TextFragmentReqContext):
         return self.visitChildren(ctx)
 
 

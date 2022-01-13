@@ -23,26 +23,24 @@ header: Header arguments Newline;
 // An arbitrary combination of text fragments, aliases and commands.
 // Must be ended by a newline, may be marked up with asterisks.
 line: lineElements? Newline;
-lineElements: (markedUpLineElements | regularLineElements)+;
-regularLineElements: lineElement+;
-lineElement: textFragment | alias | command;
+lineElements: (textFragment | alias | command | em1LineElement |
+               em2LineElement | em3LineElement)+;
+// The lineElements that may occur inside emLineElements
+lineElementsInner: (textFragmentReq | alias | command)+;
 
 // One or more line elements, surrounded by 1-3 asterisks.
-markedUpLineElements: boldItalicLineElements
-                      | boldLineElements
-                      | italicLineElements;
-boldItalicLineElements: Asterisk Asterisk Asterisk
-                        regularLineElements
-                        Asterisk Asterisk Asterisk;
-boldLineElements: Asterisk Asterisk
-                  regularLineElements
-                  Asterisk Asterisk;
-italicLineElements: Asterisk regularLineElements Asterisk;
+em3LineElement: Asterisk Asterisk Asterisk
+                lineElementsInner
+                Asterisk Asterisk Asterisk;
+em2LineElement: Asterisk Asterisk lineElementsInner Asterisk Asterisk;
+em1LineElement: Asterisk lineElementsInner Asterisk;
 
-// An arbitrary combination of words and spaces.
-textFragment: (Word | Space)+;
+// Either a word or any number of spaces
+textFragment: Word | Spaces;
+// Version of textFragment that may not evaluate to pure whitespace.
+textFragmentReq: Spaces? Word Spaces?;
 
-// An at sign followed by a Word.
+// An at sign followed by a word.
 alias: At Word;
 
 // A backslash and a word, followed optionally by an argument list.
@@ -57,18 +55,18 @@ command: Backslash Word arguments? Bar?;
 // semicolons. Trailing semicolons are allowed.
 // The whitespace handling here is ugly grammar-wise, but should be
 // fairly intuitive when actually using the language.
-arguments: BracketsOpen whitespace* argument
-           (Semicolon whitespace* argument)*? Semicolon?
-           whitespace* BracketsClose;
+arguments: BracketsOpen whitespace? argument
+           (Semicolon whitespace? argument)*? Semicolon?
+           whitespace? BracketsClose;
 
 // Either a text fragment or a word, an equals sign and a text
 // fragment.
 argument: kwdArgument | stdArgument;
-kwdArgument: Word Space* Equals Space* lineElements;
+kwdArgument: Word Spaces? Equals Spaces? lineElements;
 stdArgument: lineElements;
 
 // Any kind of whitespace: newlines, spaces, tabs, etc.
-whitespace: (Newline | Space)+;
+whitespace: (Newline | Spaces)+;
 
 /* ==== LEXER ==== */
 // Skip all comments.
@@ -87,6 +85,6 @@ Newline: ('\r\n' | '\r' | '\n');
 Semicolon: ';';
 
 // See https://unicode.org/reports/tr44/#General_Category_Values
-Space: [\p{Z}];
+Spaces: [\p{Z}]+;
 // Everything that isn't one of the tokens above.
 Word: ~[\r\n@\\|[\];=*#\p{Z}]+;

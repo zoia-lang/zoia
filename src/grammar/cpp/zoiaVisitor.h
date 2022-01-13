@@ -27,19 +27,17 @@ public:
 
     virtual antlrcpp::Any visitLineElements(zoiaParser::LineElementsContext *context) = 0;
 
-    virtual antlrcpp::Any visitRegularLineElements(zoiaParser::RegularLineElementsContext *context) = 0;
+    virtual antlrcpp::Any visitLineElementsInner(zoiaParser::LineElementsInnerContext *context) = 0;
 
-    virtual antlrcpp::Any visitLineElement(zoiaParser::LineElementContext *context) = 0;
+    virtual antlrcpp::Any visitEm3LineElement(zoiaParser::Em3LineElementContext *context) = 0;
 
-    virtual antlrcpp::Any visitMarkedUpLineElements(zoiaParser::MarkedUpLineElementsContext *context) = 0;
+    virtual antlrcpp::Any visitEm2LineElement(zoiaParser::Em2LineElementContext *context) = 0;
 
-    virtual antlrcpp::Any visitBoldItalicLineElements(zoiaParser::BoldItalicLineElementsContext *context) = 0;
-
-    virtual antlrcpp::Any visitBoldLineElements(zoiaParser::BoldLineElementsContext *context) = 0;
-
-    virtual antlrcpp::Any visitItalicLineElements(zoiaParser::ItalicLineElementsContext *context) = 0;
+    virtual antlrcpp::Any visitEm1LineElement(zoiaParser::Em1LineElementContext *context) = 0;
 
     virtual antlrcpp::Any visitTextFragment(zoiaParser::TextFragmentContext *context) = 0;
+
+    virtual antlrcpp::Any visitTextFragmentReq(zoiaParser::TextFragmentReqContext *context) = 0;
 
     virtual antlrcpp::Any visitAlias(zoiaParser::AliasContext *context) = 0;
 

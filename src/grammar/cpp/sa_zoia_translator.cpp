@@ -15,13 +15,12 @@ SA_zoiaTranslator::~SA_zoiaTranslator() {
     Py_XDECREF(HeaderContext_cls);
     Py_XDECREF(LineContext_cls);
     Py_XDECREF(LineElementsContext_cls);
-    Py_XDECREF(RegularLineElementsContext_cls);
-    Py_XDECREF(LineElementContext_cls);
-    Py_XDECREF(MarkedUpLineElementsContext_cls);
-    Py_XDECREF(BoldItalicLineElementsContext_cls);
-    Py_XDECREF(BoldLineElementsContext_cls);
-    Py_XDECREF(ItalicLineElementsContext_cls);
+    Py_XDECREF(LineElementsInnerContext_cls);
+    Py_XDECREF(Em3LineElementContext_cls);
+    Py_XDECREF(Em2LineElementContext_cls);
+    Py_XDECREF(Em1LineElementContext_cls);
     Py_XDECREF(TextFragmentContext_cls);
+    Py_XDECREF(TextFragmentReqContext_cls);
     Py_XDECREF(AliasContext_cls);
     Py_XDECREF(CommandContext_cls);
     Py_XDECREF(ArgumentsContext_cls);
@@ -56,45 +55,39 @@ antlrcpp::Any SA_zoiaTranslator::visitLineElements(zoiaParser::LineElementsConte
     return py_ctx;
 }
 
-antlrcpp::Any SA_zoiaTranslator::visitRegularLineElements(zoiaParser::RegularLineElementsContext *ctx){
-    if(!RegularLineElementsContext_cls) RegularLineElementsContext_cls = PyObject_GetAttrString(translator->parser_cls, "RegularLineElementsContext");
-    PyObject *py_ctx = translator->convert_ctx(this, ctx, RegularLineElementsContext_cls);
+antlrcpp::Any SA_zoiaTranslator::visitLineElementsInner(zoiaParser::LineElementsInnerContext *ctx){
+    if(!LineElementsInnerContext_cls) LineElementsInnerContext_cls = PyObject_GetAttrString(translator->parser_cls, "LineElementsInnerContext");
+    PyObject *py_ctx = translator->convert_ctx(this, ctx, LineElementsInnerContext_cls);
     return py_ctx;
 }
 
-antlrcpp::Any SA_zoiaTranslator::visitLineElement(zoiaParser::LineElementContext *ctx){
-    if(!LineElementContext_cls) LineElementContext_cls = PyObject_GetAttrString(translator->parser_cls, "LineElementContext");
-    PyObject *py_ctx = translator->convert_ctx(this, ctx, LineElementContext_cls);
+antlrcpp::Any SA_zoiaTranslator::visitEm3LineElement(zoiaParser::Em3LineElementContext *ctx){
+    if(!Em3LineElementContext_cls) Em3LineElementContext_cls = PyObject_GetAttrString(translator->parser_cls, "Em3LineElementContext");
+    PyObject *py_ctx = translator->convert_ctx(this, ctx, Em3LineElementContext_cls);
     return py_ctx;
 }
 
-antlrcpp::Any SA_zoiaTranslator::visitMarkedUpLineElements(zoiaParser::MarkedUpLineElementsContext *ctx){
-    if(!MarkedUpLineElementsContext_cls) MarkedUpLineElementsContext_cls = PyObject_GetAttrString(translator->parser_cls, "MarkedUpLineElementsContext");
-    PyObject *py_ctx = translator->convert_ctx(this, ctx, MarkedUpLineElementsContext_cls);
+antlrcpp::Any SA_zoiaTranslator::visitEm2LineElement(zoiaParser::Em2LineElementContext *ctx){
+    if(!Em2LineElementContext_cls) Em2LineElementContext_cls = PyObject_GetAttrString(translator->parser_cls, "Em2LineElementContext");
+    PyObject *py_ctx = translator->convert_ctx(this, ctx, Em2LineElementContext_cls);
     return py_ctx;
 }
 
-antlrcpp::Any SA_zoiaTranslator::visitBoldItalicLineElements(zoiaParser::BoldItalicLineElementsContext *ctx){
-    if(!BoldItalicLineElementsContext_cls) BoldItalicLineElementsContext_cls = PyObject_GetAttrString(translator->parser_cls, "BoldItalicLineElementsContext");
-    PyObject *py_ctx = translator->convert_ctx(this, ctx, BoldItalicLineElementsContext_cls);
-    return py_ctx;
-}
-
-antlrcpp::Any SA_zoiaTranslator::visitBoldLineElements(zoiaParser::BoldLineElementsContext *ctx){
-    if(!BoldLineElementsContext_cls) BoldLineElementsContext_cls = PyObject_GetAttrString(translator->parser_cls, "BoldLineElementsContext");
-    PyObject *py_ctx = translator->convert_ctx(this, ctx, BoldLineElementsContext_cls);
-    return py_ctx;
-}
-
-antlrcpp::Any SA_zoiaTranslator::visitItalicLineElements(zoiaParser::ItalicLineElementsContext *ctx){
-    if(!ItalicLineElementsContext_cls) ItalicLineElementsContext_cls = PyObject_GetAttrString(translator->parser_cls, "ItalicLineElementsContext");
-    PyObject *py_ctx = translator->convert_ctx(this, ctx, ItalicLineElementsContext_cls);
+antlrcpp::Any SA_zoiaTranslator::visitEm1LineElement(zoiaParser::Em1LineElementContext *ctx){
+    if(!Em1LineElementContext_cls) Em1LineElementContext_cls = PyObject_GetAttrString(translator->parser_cls, "Em1LineElementContext");
+    PyObject *py_ctx = translator->convert_ctx(this, ctx, Em1LineElementContext_cls);
     return py_ctx;
 }
 
 antlrcpp::Any SA_zoiaTranslator::visitTextFragment(zoiaParser::TextFragmentContext *ctx){
     if(!TextFragmentContext_cls) TextFragmentContext_cls = PyObject_GetAttrString(translator->parser_cls, "TextFragmentContext");
     PyObject *py_ctx = translator->convert_ctx(this, ctx, TextFragmentContext_cls);
+    return py_ctx;
+}
+
+antlrcpp::Any SA_zoiaTranslator::visitTextFragmentReq(zoiaParser::TextFragmentReqContext *ctx){
+    if(!TextFragmentReqContext_cls) TextFragmentReqContext_cls = PyObject_GetAttrString(translator->parser_cls, "TextFragmentReqContext");
+    PyObject *py_ctx = translator->convert_ctx(this, ctx, TextFragmentReqContext_cls);
     return py_ctx;
 }
 

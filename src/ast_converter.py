@@ -26,15 +26,14 @@ from io import StringIO
 
 from ast_nodes import AliasNode, CommandNode, HeaderNode, KwdArgumentNode, \
     LineNode, StdArgumentNode, TextFragmentNode, ZoiaFileNode, \
-    LineElementsNode, RegularLineElementsNode, BoldItalicLineElementsNode, \
-    BoldLineElementsNode, ItalicLineElementsNode, LineElementNode, \
-    MarkedUpLineElementsNode, ArgumentNode
+    LineElementsNode, ArgumentNode, Em1LineElementNode, Em2LineElementNode, \
+    Em3LineElementNode
 from exception import ASTConversionError
 from grammar import zoiaParser, zoiaVisitor
 from src_pos import SourcePos
 
 # The token child types that can occur in text fragment
-_text_fragment_children = {zoiaParser.Space, zoiaParser.Word}
+_text_fragment_children = {zoiaParser.Spaces, zoiaParser.Word}
 
 # Currently, PyCharm seems to have a problem with kw_only fields in
 # dataclasses. It reports all the src_pos arguments as 'Unexpected argument'
@@ -46,6 +45,21 @@ class ASTConverter(zoiaVisitor):
     """Converts an ANTLR parse tree into a Zoia AST."""
     def __init__(self, parsed_file: str) -> None:
         self.parsed_file = parsed_file
+        # Avoids a bunch of 'if isinstance' checks in visitLineElements and
+        # visitLineElementsInner
+        shared_lookup = {
+            zoiaParser.AliasContext: self.visitAlias,
+            zoiaParser.CommandContext: self.visitCommand,
+        }
+        self._line_element_inner_lookup = shared_lookup | {
+            zoiaParser.TextFragmentReqContext: self.visitTextFragmentReq,
+        }
+        self._line_element_lookup = shared_lookup | {
+            zoiaParser.Em1LineElementContext: self.visitEm1LineElement,
+            zoiaParser.Em2LineElementContext: self.visitEm2LineElement,
+            zoiaParser.Em3LineElementContext: self.visitEm3LineElement,
+            zoiaParser.TextFragmentContext: self.visitTextFragment,
+        }
 
     def make_pos(self, ctx) -> SourcePos:
         """Creates a source position from the specified context object."""
@@ -70,78 +84,61 @@ class ASTConverter(zoiaVisitor):
             -> LineElementsNode | None:
         if ctx is None:
             return None # lineElements is optional in line
+        return self._visit_line_elements_shared(
+            ctx, self._line_element_lookup)
+
+    def visitLineElementsInner(self,
+                               ctx: zoiaParser.LineElementsInnerContext) \
+            -> LineElementsNode:
+        return self._visit_line_elements_shared(
+            ctx, self._line_element_inner_lookup)
+
+    def _visit_line_elements_shared(self, ctx, visit_lookup) \
+            -> LineElementsNode:
+        """Small helper method to deduplicate the shared logic of
+        visitLineElements and visitLineElementsInner."""
         elements = []
         for le_child in ctx.children:
-            if isinstance(le_child, zoiaParser.MarkedUpLineElementsContext):
-                elements.append(self.visitMarkedUpLineElements(le_child))
-            elif isinstance(le_child, zoiaParser.RegularLineElementsContext):
-                elements.append(self.visitRegularLineElements(le_child))
-            else:
-                raise ASTConversionError(self.make_pos(ctx),
+            try:
+                visit_method = visit_lookup[le_child.__class__]
+            except KeyError:
+                raise ASTConversionError(self.make_pos(le_child),
                                          f"Unknown or invalid line "
-                                         f"elements '{ctx.getText()}'")
+                                         f"element '{le_child.getText()}'")
+            elements.append(visit_method(le_child))
         return LineElementsNode(elements, src_pos=self.make_pos(ctx))
 
-    def visitRegularLineElements(
-            self, ctx: zoiaParser.RegularLineElementsContext) \
-            -> RegularLineElementsNode:
-        elements = [self.visitLineElement(e) for e in ctx.lineElement()]
-        return RegularLineElementsNode(elements, src_pos=self.make_pos(ctx))
+    def visitEm1LineElement(self, ctx: zoiaParser.Em1LineElementContext) \
+            -> Em1LineElementNode:
+        elements = self.visitLineElementsInner(ctx.lineElementsInner())
+        return Em1LineElementNode(elements, src_pos=self.make_pos(ctx))
 
-    def visitLineElement(self, ctx: zoiaParser.LineElementContext) \
-            -> LineElementNode:
-        text_fragment = ctx.textFragment()
-        if text_fragment is not None:
-            return self.visitTextFragment(text_fragment)
-        alias = ctx.alias()
-        if alias is not None:
-            return self.visitAlias(alias)
-        command = ctx.command()
-        if command is not None:
-            return self.visitCommand(command)
-        else:
-            raise ASTConversionError(self.make_pos(ctx),
-                                     f"Unknown or invalid line element "
-                                     f"'{ctx.getText()}'")
+    def visitEm2LineElement(self, ctx: zoiaParser.Em2LineElementContext) \
+            -> Em2LineElementNode:
+        elements = self.visitLineElementsInner(ctx.lineElementsInner())
+        return Em2LineElementNode(elements, src_pos=self.make_pos(ctx))
 
-    def visitMarkedUpLineElements(
-            self, ctx: zoiaParser.MarkedUpLineElementsContext) \
-            -> MarkedUpLineElementsNode:
-        bi_elements = ctx.boldItalicLineElements()
-        if bi_elements is not None:
-            return self.visitBoldItalicLineElements(bi_elements)
-        b_elements = ctx.boldLineElements()
-        if b_elements is not None:
-            return self.visitBoldLineElements(b_elements)
-        i_elements = ctx.italicLineElements()
-        if i_elements is not None:
-            return self.visitItalicLineElements(i_elements)
-        else:
-            raise ASTConversionError(self.make_pos(ctx),
-                                     f"Unknown or invalid marked up line "
-                                     f"elements '{ctx.getText()}'")
-
-    def visitBoldItalicLineElements(
-            self, ctx: zoiaParser.BoldItalicLineElementsContext) \
-            -> BoldItalicLineElementsNode:
-        return BoldItalicLineElementsNode(
-            self.visitRegularLineElements(ctx.regularLineElements()),
-            src_pos=self.make_pos(ctx))
-
-    def visitBoldLineElements(self, ctx: zoiaParser.BoldLineElementsContext) \
-            -> BoldLineElementsNode:
-        return BoldLineElementsNode(
-            self.visitRegularLineElements(ctx.regularLineElements()),
-            src_pos=self.make_pos(ctx))
-
-    def visitItalicLineElements(
-            self, ctx: zoiaParser.ItalicLineElementsContext) \
-            -> ItalicLineElementsNode:
-        return ItalicLineElementsNode(
-            self.visitRegularLineElements(ctx.regularLineElements()),
-            src_pos=self.make_pos(ctx))
+    def visitEm3LineElement(self, ctx: zoiaParser.Em3LineElementContext) \
+            -> Em3LineElementNode:
+        elements = self.visitLineElementsInner(ctx.lineElementsInner())
+        return Em3LineElementNode(elements, src_pos=self.make_pos(ctx))
 
     def visitTextFragment(self, ctx: zoiaParser.TextFragmentContext) \
+            -> TextFragmentNode:
+        child_word = ctx.Word()
+        if child_word:
+            node_text = child_word.getText()
+        else:
+            child_spaces = ctx.Spaces()
+            if child_spaces:
+                node_text = child_spaces.getText()
+            else:
+                raise ASTConversionError(self.make_pos(ctx),
+                                         f"Unknown or invalid text fragment "
+                                         f"'{ctx.getText()}'")
+        return TextFragmentNode(node_text, src_pos=self.make_pos(ctx))
+
+    def visitTextFragmentReq(self, ctx: zoiaParser.TextFragmentReqContext) \
             -> TextFragmentNode:
         s = StringIO()
         for tf_child in ctx.children:
@@ -150,8 +147,8 @@ class ASTConverter(zoiaVisitor):
                 s.write(tf_child.getText())
             else:
                 raise ASTConversionError(self.make_pos(ctx),
-                                         f"Unknown or invalid text fragment "
-                                         f"'{ctx.getText()}'")
+                                         f"Unknown or invalid required "
+                                         f"text fragment '{ctx.getText()}'")
         return TextFragmentNode(s.getvalue(), src_pos=self.make_pos(ctx))
 
     def visitAlias(self, ctx: zoiaParser.AliasContext) -> AliasNode:

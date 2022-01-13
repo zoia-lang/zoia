@@ -80,9 +80,9 @@ zoiaParser::ZoiaFileContext* zoiaParser::zoiaFile() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(36);
+    setState(34);
     header();
-    setState(40);
+    setState(38);
     _errHandler->sync(this);
     _la = _input->LA(1);
     while ((((_la & ~ 0x3fULL) == 0) &&
@@ -90,15 +90,15 @@ zoiaParser::ZoiaFileContext* zoiaParser::zoiaFile() {
       | (1ULL << zoiaParser::At)
       | (1ULL << zoiaParser::Backslash)
       | (1ULL << zoiaParser::Newline)
-      | (1ULL << zoiaParser::Space)
+      | (1ULL << zoiaParser::Spaces)
       | (1ULL << zoiaParser::Word))) != 0)) {
-      setState(37);
+      setState(35);
       line();
-      setState(42);
+      setState(40);
       _errHandler->sync(this);
       _la = _input->LA(1);
     }
-    setState(43);
+    setState(41);
     match(zoiaParser::EOF);
 
   }
@@ -155,11 +155,11 @@ zoiaParser::HeaderContext* zoiaParser::header() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(45);
+    setState(43);
     match(zoiaParser::Header);
-    setState(46);
+    setState(44);
     arguments();
-    setState(47);
+    setState(45);
     match(zoiaParser::Newline);
 
   }
@@ -213,7 +213,7 @@ zoiaParser::LineContext* zoiaParser::line() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(50);
+    setState(48);
     _errHandler->sync(this);
 
     _la = _input->LA(1);
@@ -221,12 +221,12 @@ zoiaParser::LineContext* zoiaParser::line() {
       ((1ULL << _la) & ((1ULL << zoiaParser::Asterisk)
       | (1ULL << zoiaParser::At)
       | (1ULL << zoiaParser::Backslash)
-      | (1ULL << zoiaParser::Space)
+      | (1ULL << zoiaParser::Spaces)
       | (1ULL << zoiaParser::Word))) != 0)) {
-      setState(49);
+      setState(47);
       lineElements();
     }
-    setState(52);
+    setState(50);
     match(zoiaParser::Newline);
 
   }
@@ -245,20 +245,52 @@ zoiaParser::LineElementsContext::LineElementsContext(ParserRuleContext *parent, 
   : ParserRuleContext(parent, invokingState) {
 }
 
-std::vector<zoiaParser::MarkedUpLineElementsContext *> zoiaParser::LineElementsContext::markedUpLineElements() {
-  return getRuleContexts<zoiaParser::MarkedUpLineElementsContext>();
+std::vector<zoiaParser::TextFragmentContext *> zoiaParser::LineElementsContext::textFragment() {
+  return getRuleContexts<zoiaParser::TextFragmentContext>();
 }
 
-zoiaParser::MarkedUpLineElementsContext* zoiaParser::LineElementsContext::markedUpLineElements(size_t i) {
-  return getRuleContext<zoiaParser::MarkedUpLineElementsContext>(i);
+zoiaParser::TextFragmentContext* zoiaParser::LineElementsContext::textFragment(size_t i) {
+  return getRuleContext<zoiaParser::TextFragmentContext>(i);
 }
 
-std::vector<zoiaParser::RegularLineElementsContext *> zoiaParser::LineElementsContext::regularLineElements() {
-  return getRuleContexts<zoiaParser::RegularLineElementsContext>();
+std::vector<zoiaParser::AliasContext *> zoiaParser::LineElementsContext::alias() {
+  return getRuleContexts<zoiaParser::AliasContext>();
 }
 
-zoiaParser::RegularLineElementsContext* zoiaParser::LineElementsContext::regularLineElements(size_t i) {
-  return getRuleContext<zoiaParser::RegularLineElementsContext>(i);
+zoiaParser::AliasContext* zoiaParser::LineElementsContext::alias(size_t i) {
+  return getRuleContext<zoiaParser::AliasContext>(i);
+}
+
+std::vector<zoiaParser::CommandContext *> zoiaParser::LineElementsContext::command() {
+  return getRuleContexts<zoiaParser::CommandContext>();
+}
+
+zoiaParser::CommandContext* zoiaParser::LineElementsContext::command(size_t i) {
+  return getRuleContext<zoiaParser::CommandContext>(i);
+}
+
+std::vector<zoiaParser::Em1LineElementContext *> zoiaParser::LineElementsContext::em1LineElement() {
+  return getRuleContexts<zoiaParser::Em1LineElementContext>();
+}
+
+zoiaParser::Em1LineElementContext* zoiaParser::LineElementsContext::em1LineElement(size_t i) {
+  return getRuleContext<zoiaParser::Em1LineElementContext>(i);
+}
+
+std::vector<zoiaParser::Em2LineElementContext *> zoiaParser::LineElementsContext::em2LineElement() {
+  return getRuleContexts<zoiaParser::Em2LineElementContext>();
+}
+
+zoiaParser::Em2LineElementContext* zoiaParser::LineElementsContext::em2LineElement(size_t i) {
+  return getRuleContext<zoiaParser::Em2LineElementContext>(i);
+}
+
+std::vector<zoiaParser::Em3LineElementContext *> zoiaParser::LineElementsContext::em3LineElement() {
+  return getRuleContexts<zoiaParser::Em3LineElementContext>();
+}
+
+zoiaParser::Em3LineElementContext* zoiaParser::LineElementsContext::em3LineElement(size_t i) {
+  return getRuleContext<zoiaParser::Em3LineElementContext>(i);
 }
 
 
@@ -288,32 +320,53 @@ zoiaParser::LineElementsContext* zoiaParser::lineElements() {
   try {
     size_t alt;
     enterOuterAlt(_localctx, 1);
-    setState(56);
+    setState(58);
     _errHandler->sync(this);
     alt = 1;
     do {
       switch (alt) {
         case 1: {
-              setState(56);
+              setState(58);
               _errHandler->sync(this);
-              switch (_input->LA(1)) {
-                case zoiaParser::Asterisk: {
-                  setState(54);
-                  markedUpLineElements();
-                  break;
-                }
+              switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 2, _ctx)) {
+              case 1: {
+                setState(52);
+                textFragment();
+                break;
+              }
 
-                case zoiaParser::At:
-                case zoiaParser::Backslash:
-                case zoiaParser::Space:
-                case zoiaParser::Word: {
-                  setState(55);
-                  regularLineElements();
-                  break;
-                }
+              case 2: {
+                setState(53);
+                alias();
+                break;
+              }
+
+              case 3: {
+                setState(54);
+                command();
+                break;
+              }
+
+              case 4: {
+                setState(55);
+                em1LineElement();
+                break;
+              }
+
+              case 5: {
+                setState(56);
+                em2LineElement();
+                break;
+              }
+
+              case 6: {
+                setState(57);
+                em3LineElement();
+                break;
+              }
 
               default:
-                throw NoViableAltException(this);
+                break;
               }
               break;
             }
@@ -321,7 +374,7 @@ zoiaParser::LineElementsContext* zoiaParser::lineElements() {
       default:
         throw NoViableAltException(this);
       }
-      setState(58);
+      setState(60);
       _errHandler->sync(this);
       alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 3, _ctx);
     } while (alt != 2 && alt != atn::ATN::INVALID_ALT_NUMBER);
@@ -336,36 +389,53 @@ zoiaParser::LineElementsContext* zoiaParser::lineElements() {
   return _localctx;
 }
 
-//----------------- RegularLineElementsContext ------------------------------------------------------------------
+//----------------- LineElementsInnerContext ------------------------------------------------------------------
 
-zoiaParser::RegularLineElementsContext::RegularLineElementsContext(ParserRuleContext *parent, size_t invokingState)
+zoiaParser::LineElementsInnerContext::LineElementsInnerContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-std::vector<zoiaParser::LineElementContext *> zoiaParser::RegularLineElementsContext::lineElement() {
-  return getRuleContexts<zoiaParser::LineElementContext>();
+std::vector<zoiaParser::TextFragmentReqContext *> zoiaParser::LineElementsInnerContext::textFragmentReq() {
+  return getRuleContexts<zoiaParser::TextFragmentReqContext>();
 }
 
-zoiaParser::LineElementContext* zoiaParser::RegularLineElementsContext::lineElement(size_t i) {
-  return getRuleContext<zoiaParser::LineElementContext>(i);
+zoiaParser::TextFragmentReqContext* zoiaParser::LineElementsInnerContext::textFragmentReq(size_t i) {
+  return getRuleContext<zoiaParser::TextFragmentReqContext>(i);
+}
+
+std::vector<zoiaParser::AliasContext *> zoiaParser::LineElementsInnerContext::alias() {
+  return getRuleContexts<zoiaParser::AliasContext>();
+}
+
+zoiaParser::AliasContext* zoiaParser::LineElementsInnerContext::alias(size_t i) {
+  return getRuleContext<zoiaParser::AliasContext>(i);
+}
+
+std::vector<zoiaParser::CommandContext *> zoiaParser::LineElementsInnerContext::command() {
+  return getRuleContexts<zoiaParser::CommandContext>();
+}
+
+zoiaParser::CommandContext* zoiaParser::LineElementsInnerContext::command(size_t i) {
+  return getRuleContext<zoiaParser::CommandContext>(i);
 }
 
 
-size_t zoiaParser::RegularLineElementsContext::getRuleIndex() const {
-  return zoiaParser::RuleRegularLineElements;
+size_t zoiaParser::LineElementsInnerContext::getRuleIndex() const {
+  return zoiaParser::RuleLineElementsInner;
 }
 
 
-antlrcpp::Any zoiaParser::RegularLineElementsContext::accept(tree::ParseTreeVisitor *visitor) {
+antlrcpp::Any zoiaParser::LineElementsInnerContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<zoiaVisitor*>(visitor))
-    return parserVisitor->visitRegularLineElements(this);
+    return parserVisitor->visitLineElementsInner(this);
   else
     return visitor->visitChildren(this);
 }
 
-zoiaParser::RegularLineElementsContext* zoiaParser::regularLineElements() {
-  RegularLineElementsContext *_localctx = _tracker.createInstance<RegularLineElementsContext>(_ctx, getState());
-  enterRule(_localctx, 8, zoiaParser::RuleRegularLineElements);
+zoiaParser::LineElementsInnerContext* zoiaParser::lineElementsInner() {
+  LineElementsInnerContext *_localctx = _tracker.createInstance<LineElementsInnerContext>(_ctx, getState());
+  enterRule(_localctx, 8, zoiaParser::RuleLineElementsInner);
+  size_t _la = 0;
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -375,26 +445,44 @@ zoiaParser::RegularLineElementsContext* zoiaParser::regularLineElements() {
     exitRule();
   });
   try {
-    size_t alt;
     enterOuterAlt(_localctx, 1);
-    setState(61);
+    setState(65);
     _errHandler->sync(this);
-    alt = 1;
+    _la = _input->LA(1);
     do {
-      switch (alt) {
-        case 1: {
-              setState(60);
-              lineElement();
-              break;
-            }
+      setState(65);
+      _errHandler->sync(this);
+      switch (_input->LA(1)) {
+        case zoiaParser::Spaces:
+        case zoiaParser::Word: {
+          setState(62);
+          textFragmentReq();
+          break;
+        }
+
+        case zoiaParser::At: {
+          setState(63);
+          alias();
+          break;
+        }
+
+        case zoiaParser::Backslash: {
+          setState(64);
+          command();
+          break;
+        }
 
       default:
         throw NoViableAltException(this);
       }
-      setState(63);
+      setState(67);
       _errHandler->sync(this);
-      alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 4, _ctx);
-    } while (alt != 2 && alt != atn::ATN::INVALID_ALT_NUMBER);
+      _la = _input->LA(1);
+    } while ((((_la & ~ 0x3fULL) == 0) &&
+      ((1ULL << _la) & ((1ULL << zoiaParser::At)
+      | (1ULL << zoiaParser::Backslash)
+      | (1ULL << zoiaParser::Spaces)
+      | (1ULL << zoiaParser::Word))) != 0));
 
   }
   catch (RecognitionException &e) {
@@ -406,203 +494,40 @@ zoiaParser::RegularLineElementsContext* zoiaParser::regularLineElements() {
   return _localctx;
 }
 
-//----------------- LineElementContext ------------------------------------------------------------------
+//----------------- Em3LineElementContext ------------------------------------------------------------------
 
-zoiaParser::LineElementContext::LineElementContext(ParserRuleContext *parent, size_t invokingState)
+zoiaParser::Em3LineElementContext::Em3LineElementContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-zoiaParser::TextFragmentContext* zoiaParser::LineElementContext::textFragment() {
-  return getRuleContext<zoiaParser::TextFragmentContext>(0);
-}
-
-zoiaParser::AliasContext* zoiaParser::LineElementContext::alias() {
-  return getRuleContext<zoiaParser::AliasContext>(0);
-}
-
-zoiaParser::CommandContext* zoiaParser::LineElementContext::command() {
-  return getRuleContext<zoiaParser::CommandContext>(0);
-}
-
-
-size_t zoiaParser::LineElementContext::getRuleIndex() const {
-  return zoiaParser::RuleLineElement;
-}
-
-
-antlrcpp::Any zoiaParser::LineElementContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<zoiaVisitor*>(visitor))
-    return parserVisitor->visitLineElement(this);
-  else
-    return visitor->visitChildren(this);
-}
-
-zoiaParser::LineElementContext* zoiaParser::lineElement() {
-  LineElementContext *_localctx = _tracker.createInstance<LineElementContext>(_ctx, getState());
-  enterRule(_localctx, 10, zoiaParser::RuleLineElement);
-
-#if __cplusplus > 201703L
-  auto onExit = finally([=, this] {
-#else
-  auto onExit = finally([=] {
-#endif
-    exitRule();
-  });
-  try {
-    setState(68);
-    _errHandler->sync(this);
-    switch (_input->LA(1)) {
-      case zoiaParser::Space:
-      case zoiaParser::Word: {
-        enterOuterAlt(_localctx, 1);
-        setState(65);
-        textFragment();
-        break;
-      }
-
-      case zoiaParser::At: {
-        enterOuterAlt(_localctx, 2);
-        setState(66);
-        alias();
-        break;
-      }
-
-      case zoiaParser::Backslash: {
-        enterOuterAlt(_localctx, 3);
-        setState(67);
-        command();
-        break;
-      }
-
-    default:
-      throw NoViableAltException(this);
-    }
-
-  }
-  catch (RecognitionException &e) {
-    _errHandler->reportError(this, e);
-    _localctx->exception = std::current_exception();
-    _errHandler->recover(this, _localctx->exception);
-  }
-
-  return _localctx;
-}
-
-//----------------- MarkedUpLineElementsContext ------------------------------------------------------------------
-
-zoiaParser::MarkedUpLineElementsContext::MarkedUpLineElementsContext(ParserRuleContext *parent, size_t invokingState)
-  : ParserRuleContext(parent, invokingState) {
-}
-
-zoiaParser::BoldItalicLineElementsContext* zoiaParser::MarkedUpLineElementsContext::boldItalicLineElements() {
-  return getRuleContext<zoiaParser::BoldItalicLineElementsContext>(0);
-}
-
-zoiaParser::BoldLineElementsContext* zoiaParser::MarkedUpLineElementsContext::boldLineElements() {
-  return getRuleContext<zoiaParser::BoldLineElementsContext>(0);
-}
-
-zoiaParser::ItalicLineElementsContext* zoiaParser::MarkedUpLineElementsContext::italicLineElements() {
-  return getRuleContext<zoiaParser::ItalicLineElementsContext>(0);
-}
-
-
-size_t zoiaParser::MarkedUpLineElementsContext::getRuleIndex() const {
-  return zoiaParser::RuleMarkedUpLineElements;
-}
-
-
-antlrcpp::Any zoiaParser::MarkedUpLineElementsContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<zoiaVisitor*>(visitor))
-    return parserVisitor->visitMarkedUpLineElements(this);
-  else
-    return visitor->visitChildren(this);
-}
-
-zoiaParser::MarkedUpLineElementsContext* zoiaParser::markedUpLineElements() {
-  MarkedUpLineElementsContext *_localctx = _tracker.createInstance<MarkedUpLineElementsContext>(_ctx, getState());
-  enterRule(_localctx, 12, zoiaParser::RuleMarkedUpLineElements);
-
-#if __cplusplus > 201703L
-  auto onExit = finally([=, this] {
-#else
-  auto onExit = finally([=] {
-#endif
-    exitRule();
-  });
-  try {
-    setState(73);
-    _errHandler->sync(this);
-    switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 6, _ctx)) {
-    case 1: {
-      enterOuterAlt(_localctx, 1);
-      setState(70);
-      boldItalicLineElements();
-      break;
-    }
-
-    case 2: {
-      enterOuterAlt(_localctx, 2);
-      setState(71);
-      boldLineElements();
-      break;
-    }
-
-    case 3: {
-      enterOuterAlt(_localctx, 3);
-      setState(72);
-      italicLineElements();
-      break;
-    }
-
-    default:
-      break;
-    }
-
-  }
-  catch (RecognitionException &e) {
-    _errHandler->reportError(this, e);
-    _localctx->exception = std::current_exception();
-    _errHandler->recover(this, _localctx->exception);
-  }
-
-  return _localctx;
-}
-
-//----------------- BoldItalicLineElementsContext ------------------------------------------------------------------
-
-zoiaParser::BoldItalicLineElementsContext::BoldItalicLineElementsContext(ParserRuleContext *parent, size_t invokingState)
-  : ParserRuleContext(parent, invokingState) {
-}
-
-std::vector<tree::TerminalNode *> zoiaParser::BoldItalicLineElementsContext::Asterisk() {
+std::vector<tree::TerminalNode *> zoiaParser::Em3LineElementContext::Asterisk() {
   return getTokens(zoiaParser::Asterisk);
 }
 
-tree::TerminalNode* zoiaParser::BoldItalicLineElementsContext::Asterisk(size_t i) {
+tree::TerminalNode* zoiaParser::Em3LineElementContext::Asterisk(size_t i) {
   return getToken(zoiaParser::Asterisk, i);
 }
 
-zoiaParser::RegularLineElementsContext* zoiaParser::BoldItalicLineElementsContext::regularLineElements() {
-  return getRuleContext<zoiaParser::RegularLineElementsContext>(0);
+zoiaParser::LineElementsInnerContext* zoiaParser::Em3LineElementContext::lineElementsInner() {
+  return getRuleContext<zoiaParser::LineElementsInnerContext>(0);
 }
 
 
-size_t zoiaParser::BoldItalicLineElementsContext::getRuleIndex() const {
-  return zoiaParser::RuleBoldItalicLineElements;
+size_t zoiaParser::Em3LineElementContext::getRuleIndex() const {
+  return zoiaParser::RuleEm3LineElement;
 }
 
 
-antlrcpp::Any zoiaParser::BoldItalicLineElementsContext::accept(tree::ParseTreeVisitor *visitor) {
+antlrcpp::Any zoiaParser::Em3LineElementContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<zoiaVisitor*>(visitor))
-    return parserVisitor->visitBoldItalicLineElements(this);
+    return parserVisitor->visitEm3LineElement(this);
   else
     return visitor->visitChildren(this);
 }
 
-zoiaParser::BoldItalicLineElementsContext* zoiaParser::boldItalicLineElements() {
-  BoldItalicLineElementsContext *_localctx = _tracker.createInstance<BoldItalicLineElementsContext>(_ctx, getState());
-  enterRule(_localctx, 14, zoiaParser::RuleBoldItalicLineElements);
+zoiaParser::Em3LineElementContext* zoiaParser::em3LineElement() {
+  Em3LineElementContext *_localctx = _tracker.createInstance<Em3LineElementContext>(_ctx, getState());
+  enterRule(_localctx, 10, zoiaParser::RuleEm3LineElement);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -613,16 +538,81 @@ zoiaParser::BoldItalicLineElementsContext* zoiaParser::boldItalicLineElements() 
   });
   try {
     enterOuterAlt(_localctx, 1);
+    setState(69);
+    match(zoiaParser::Asterisk);
+    setState(70);
+    match(zoiaParser::Asterisk);
+    setState(71);
+    match(zoiaParser::Asterisk);
+    setState(72);
+    lineElementsInner();
+    setState(73);
+    match(zoiaParser::Asterisk);
+    setState(74);
+    match(zoiaParser::Asterisk);
     setState(75);
     match(zoiaParser::Asterisk);
-    setState(76);
-    match(zoiaParser::Asterisk);
+
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- Em2LineElementContext ------------------------------------------------------------------
+
+zoiaParser::Em2LineElementContext::Em2LineElementContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+std::vector<tree::TerminalNode *> zoiaParser::Em2LineElementContext::Asterisk() {
+  return getTokens(zoiaParser::Asterisk);
+}
+
+tree::TerminalNode* zoiaParser::Em2LineElementContext::Asterisk(size_t i) {
+  return getToken(zoiaParser::Asterisk, i);
+}
+
+zoiaParser::LineElementsInnerContext* zoiaParser::Em2LineElementContext::lineElementsInner() {
+  return getRuleContext<zoiaParser::LineElementsInnerContext>(0);
+}
+
+
+size_t zoiaParser::Em2LineElementContext::getRuleIndex() const {
+  return zoiaParser::RuleEm2LineElement;
+}
+
+
+antlrcpp::Any zoiaParser::Em2LineElementContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<zoiaVisitor*>(visitor))
+    return parserVisitor->visitEm2LineElement(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+zoiaParser::Em2LineElementContext* zoiaParser::em2LineElement() {
+  Em2LineElementContext *_localctx = _tracker.createInstance<Em2LineElementContext>(_ctx, getState());
+  enterRule(_localctx, 12, zoiaParser::RuleEm2LineElement);
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
     setState(77);
     match(zoiaParser::Asterisk);
     setState(78);
-    regularLineElements();
-    setState(79);
     match(zoiaParser::Asterisk);
+    setState(79);
+    lineElementsInner();
     setState(80);
     match(zoiaParser::Asterisk);
     setState(81);
@@ -638,40 +628,40 @@ zoiaParser::BoldItalicLineElementsContext* zoiaParser::boldItalicLineElements() 
   return _localctx;
 }
 
-//----------------- BoldLineElementsContext ------------------------------------------------------------------
+//----------------- Em1LineElementContext ------------------------------------------------------------------
 
-zoiaParser::BoldLineElementsContext::BoldLineElementsContext(ParserRuleContext *parent, size_t invokingState)
+zoiaParser::Em1LineElementContext::Em1LineElementContext(ParserRuleContext *parent, size_t invokingState)
   : ParserRuleContext(parent, invokingState) {
 }
 
-std::vector<tree::TerminalNode *> zoiaParser::BoldLineElementsContext::Asterisk() {
+std::vector<tree::TerminalNode *> zoiaParser::Em1LineElementContext::Asterisk() {
   return getTokens(zoiaParser::Asterisk);
 }
 
-tree::TerminalNode* zoiaParser::BoldLineElementsContext::Asterisk(size_t i) {
+tree::TerminalNode* zoiaParser::Em1LineElementContext::Asterisk(size_t i) {
   return getToken(zoiaParser::Asterisk, i);
 }
 
-zoiaParser::RegularLineElementsContext* zoiaParser::BoldLineElementsContext::regularLineElements() {
-  return getRuleContext<zoiaParser::RegularLineElementsContext>(0);
+zoiaParser::LineElementsInnerContext* zoiaParser::Em1LineElementContext::lineElementsInner() {
+  return getRuleContext<zoiaParser::LineElementsInnerContext>(0);
 }
 
 
-size_t zoiaParser::BoldLineElementsContext::getRuleIndex() const {
-  return zoiaParser::RuleBoldLineElements;
+size_t zoiaParser::Em1LineElementContext::getRuleIndex() const {
+  return zoiaParser::RuleEm1LineElement;
 }
 
 
-antlrcpp::Any zoiaParser::BoldLineElementsContext::accept(tree::ParseTreeVisitor *visitor) {
+antlrcpp::Any zoiaParser::Em1LineElementContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<zoiaVisitor*>(visitor))
-    return parserVisitor->visitBoldLineElements(this);
+    return parserVisitor->visitEm1LineElement(this);
   else
     return visitor->visitChildren(this);
 }
 
-zoiaParser::BoldLineElementsContext* zoiaParser::boldLineElements() {
-  BoldLineElementsContext *_localctx = _tracker.createInstance<BoldLineElementsContext>(_ctx, getState());
-  enterRule(_localctx, 16, zoiaParser::RuleBoldLineElements);
+zoiaParser::Em1LineElementContext* zoiaParser::em1LineElement() {
+  Em1LineElementContext *_localctx = _tracker.createInstance<Em1LineElementContext>(_ctx, getState());
+  enterRule(_localctx, 14, zoiaParser::RuleEm1LineElement);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -685,73 +675,8 @@ zoiaParser::BoldLineElementsContext* zoiaParser::boldLineElements() {
     setState(83);
     match(zoiaParser::Asterisk);
     setState(84);
-    match(zoiaParser::Asterisk);
+    lineElementsInner();
     setState(85);
-    regularLineElements();
-    setState(86);
-    match(zoiaParser::Asterisk);
-    setState(87);
-    match(zoiaParser::Asterisk);
-
-  }
-  catch (RecognitionException &e) {
-    _errHandler->reportError(this, e);
-    _localctx->exception = std::current_exception();
-    _errHandler->recover(this, _localctx->exception);
-  }
-
-  return _localctx;
-}
-
-//----------------- ItalicLineElementsContext ------------------------------------------------------------------
-
-zoiaParser::ItalicLineElementsContext::ItalicLineElementsContext(ParserRuleContext *parent, size_t invokingState)
-  : ParserRuleContext(parent, invokingState) {
-}
-
-std::vector<tree::TerminalNode *> zoiaParser::ItalicLineElementsContext::Asterisk() {
-  return getTokens(zoiaParser::Asterisk);
-}
-
-tree::TerminalNode* zoiaParser::ItalicLineElementsContext::Asterisk(size_t i) {
-  return getToken(zoiaParser::Asterisk, i);
-}
-
-zoiaParser::RegularLineElementsContext* zoiaParser::ItalicLineElementsContext::regularLineElements() {
-  return getRuleContext<zoiaParser::RegularLineElementsContext>(0);
-}
-
-
-size_t zoiaParser::ItalicLineElementsContext::getRuleIndex() const {
-  return zoiaParser::RuleItalicLineElements;
-}
-
-
-antlrcpp::Any zoiaParser::ItalicLineElementsContext::accept(tree::ParseTreeVisitor *visitor) {
-  if (auto parserVisitor = dynamic_cast<zoiaVisitor*>(visitor))
-    return parserVisitor->visitItalicLineElements(this);
-  else
-    return visitor->visitChildren(this);
-}
-
-zoiaParser::ItalicLineElementsContext* zoiaParser::italicLineElements() {
-  ItalicLineElementsContext *_localctx = _tracker.createInstance<ItalicLineElementsContext>(_ctx, getState());
-  enterRule(_localctx, 18, zoiaParser::RuleItalicLineElements);
-
-#if __cplusplus > 201703L
-  auto onExit = finally([=, this] {
-#else
-  auto onExit = finally([=] {
-#endif
-    exitRule();
-  });
-  try {
-    enterOuterAlt(_localctx, 1);
-    setState(89);
-    match(zoiaParser::Asterisk);
-    setState(90);
-    regularLineElements();
-    setState(91);
     match(zoiaParser::Asterisk);
 
   }
@@ -770,20 +695,12 @@ zoiaParser::TextFragmentContext::TextFragmentContext(ParserRuleContext *parent, 
   : ParserRuleContext(parent, invokingState) {
 }
 
-std::vector<tree::TerminalNode *> zoiaParser::TextFragmentContext::Word() {
-  return getTokens(zoiaParser::Word);
+tree::TerminalNode* zoiaParser::TextFragmentContext::Word() {
+  return getToken(zoiaParser::Word, 0);
 }
 
-tree::TerminalNode* zoiaParser::TextFragmentContext::Word(size_t i) {
-  return getToken(zoiaParser::Word, i);
-}
-
-std::vector<tree::TerminalNode *> zoiaParser::TextFragmentContext::Space() {
-  return getTokens(zoiaParser::Space);
-}
-
-tree::TerminalNode* zoiaParser::TextFragmentContext::Space(size_t i) {
-  return getToken(zoiaParser::Space, i);
+tree::TerminalNode* zoiaParser::TextFragmentContext::Spaces() {
+  return getToken(zoiaParser::Spaces, 0);
 }
 
 
@@ -801,7 +718,7 @@ antlrcpp::Any zoiaParser::TextFragmentContext::accept(tree::ParseTreeVisitor *vi
 
 zoiaParser::TextFragmentContext* zoiaParser::textFragment() {
   TextFragmentContext *_localctx = _tracker.createInstance<TextFragmentContext>(_ctx, getState());
-  enterRule(_localctx, 20, zoiaParser::RuleTextFragment);
+  enterRule(_localctx, 16, zoiaParser::RuleTextFragment);
   size_t _la = 0;
 
 #if __cplusplus > 201703L
@@ -812,35 +729,97 @@ zoiaParser::TextFragmentContext* zoiaParser::textFragment() {
     exitRule();
   });
   try {
-    size_t alt;
     enterOuterAlt(_localctx, 1);
+    setState(87);
+    _la = _input->LA(1);
+    if (!(_la == zoiaParser::Spaces
+
+    || _la == zoiaParser::Word)) {
+    _errHandler->recoverInline(this);
+    }
+    else {
+      _errHandler->reportMatch(this);
+      consume();
+    }
+
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- TextFragmentReqContext ------------------------------------------------------------------
+
+zoiaParser::TextFragmentReqContext::TextFragmentReqContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+tree::TerminalNode* zoiaParser::TextFragmentReqContext::Word() {
+  return getToken(zoiaParser::Word, 0);
+}
+
+std::vector<tree::TerminalNode *> zoiaParser::TextFragmentReqContext::Spaces() {
+  return getTokens(zoiaParser::Spaces);
+}
+
+tree::TerminalNode* zoiaParser::TextFragmentReqContext::Spaces(size_t i) {
+  return getToken(zoiaParser::Spaces, i);
+}
+
+
+size_t zoiaParser::TextFragmentReqContext::getRuleIndex() const {
+  return zoiaParser::RuleTextFragmentReq;
+}
+
+
+antlrcpp::Any zoiaParser::TextFragmentReqContext::accept(tree::ParseTreeVisitor *visitor) {
+  if (auto parserVisitor = dynamic_cast<zoiaVisitor*>(visitor))
+    return parserVisitor->visitTextFragmentReq(this);
+  else
+    return visitor->visitChildren(this);
+}
+
+zoiaParser::TextFragmentReqContext* zoiaParser::textFragmentReq() {
+  TextFragmentReqContext *_localctx = _tracker.createInstance<TextFragmentReqContext>(_ctx, getState());
+  enterRule(_localctx, 18, zoiaParser::RuleTextFragmentReq);
+  size_t _la = 0;
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(90);
+    _errHandler->sync(this);
+
+    _la = _input->LA(1);
+    if (_la == zoiaParser::Spaces) {
+      setState(89);
+      match(zoiaParser::Spaces);
+    }
+    setState(92);
+    match(zoiaParser::Word);
     setState(94);
     _errHandler->sync(this);
-    alt = 1;
-    do {
-      switch (alt) {
-        case 1: {
-              setState(93);
-              _la = _input->LA(1);
-              if (!(_la == zoiaParser::Space
 
-              || _la == zoiaParser::Word)) {
-              _errHandler->recoverInline(this);
-              }
-              else {
-                _errHandler->reportMatch(this);
-                consume();
-              }
-              break;
-            }
+    switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 7, _ctx)) {
+    case 1: {
+      setState(93);
+      match(zoiaParser::Spaces);
+      break;
+    }
 
-      default:
-        throw NoViableAltException(this);
-      }
-      setState(96);
-      _errHandler->sync(this);
-      alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 7, _ctx);
-    } while (alt != 2 && alt != atn::ATN::INVALID_ALT_NUMBER);
+    default:
+      break;
+    }
 
   }
   catch (RecognitionException &e) {
@@ -881,7 +860,7 @@ antlrcpp::Any zoiaParser::AliasContext::accept(tree::ParseTreeVisitor *visitor) 
 
 zoiaParser::AliasContext* zoiaParser::alias() {
   AliasContext *_localctx = _tracker.createInstance<AliasContext>(_ctx, getState());
-  enterRule(_localctx, 22, zoiaParser::RuleAlias);
+  enterRule(_localctx, 20, zoiaParser::RuleAlias);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -892,9 +871,9 @@ zoiaParser::AliasContext* zoiaParser::alias() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(98);
+    setState(96);
     match(zoiaParser::At);
-    setState(99);
+    setState(97);
     match(zoiaParser::Word);
 
   }
@@ -944,7 +923,7 @@ antlrcpp::Any zoiaParser::CommandContext::accept(tree::ParseTreeVisitor *visitor
 
 zoiaParser::CommandContext* zoiaParser::command() {
   CommandContext *_localctx = _tracker.createInstance<CommandContext>(_ctx, getState());
-  enterRule(_localctx, 24, zoiaParser::RuleCommand);
+  enterRule(_localctx, 22, zoiaParser::RuleCommand);
   size_t _la = 0;
 
 #if __cplusplus > 201703L
@@ -956,24 +935,24 @@ zoiaParser::CommandContext* zoiaParser::command() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(101);
+    setState(99);
     match(zoiaParser::Backslash);
-    setState(102);
+    setState(100);
     match(zoiaParser::Word);
-    setState(104);
+    setState(102);
     _errHandler->sync(this);
 
     _la = _input->LA(1);
     if (_la == zoiaParser::BracketsOpen) {
-      setState(103);
+      setState(101);
       arguments();
     }
-    setState(107);
+    setState(105);
     _errHandler->sync(this);
 
     _la = _input->LA(1);
     if (_la == zoiaParser::Bar) {
-      setState(106);
+      setState(104);
       match(zoiaParser::Bar);
     }
 
@@ -1040,7 +1019,7 @@ antlrcpp::Any zoiaParser::ArgumentsContext::accept(tree::ParseTreeVisitor *visit
 
 zoiaParser::ArgumentsContext* zoiaParser::arguments() {
   ArgumentsContext *_localctx = _tracker.createInstance<ArgumentsContext>(_ctx, getState());
-  enterRule(_localctx, 26, zoiaParser::RuleArguments);
+  enterRule(_localctx, 24, zoiaParser::RuleArguments);
   size_t _la = 0;
 
 #if __cplusplus > 201703L
@@ -1053,69 +1032,69 @@ zoiaParser::ArgumentsContext* zoiaParser::arguments() {
   try {
     size_t alt;
     enterOuterAlt(_localctx, 1);
-    setState(109);
+    setState(107);
     match(zoiaParser::BracketsOpen);
-    setState(113);
+    setState(109);
     _errHandler->sync(this);
-    alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 10, _ctx);
-    while (alt != 2 && alt != atn::ATN::INVALID_ALT_NUMBER) {
-      if (alt == 1) {
-        setState(110);
-        whitespace();
-      }
-      setState(115);
-      _errHandler->sync(this);
-      alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 10, _ctx);
+
+    switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 10, _ctx)) {
+    case 1: {
+      setState(108);
+      whitespace();
+      break;
     }
-    setState(116);
+
+    default:
+      break;
+    }
+    setState(111);
     argument();
-    setState(127);
+    setState(119);
     _errHandler->sync(this);
     alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 12, _ctx);
     while (alt != 1 && alt != atn::ATN::INVALID_ALT_NUMBER) {
       if (alt == 1 + 1) {
-        setState(117);
+        setState(112);
         match(zoiaParser::Semicolon);
-        setState(121);
+        setState(114);
         _errHandler->sync(this);
-        alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 11, _ctx);
-        while (alt != 2 && alt != atn::ATN::INVALID_ALT_NUMBER) {
-          if (alt == 1) {
-            setState(118);
-            whitespace();
-          }
-          setState(123);
-          _errHandler->sync(this);
-          alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 11, _ctx);
+
+        switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 11, _ctx)) {
+        case 1: {
+          setState(113);
+          whitespace();
+          break;
         }
-        setState(124);
+
+        default:
+          break;
+        }
+        setState(116);
         argument();
       }
-      setState(129);
+      setState(121);
       _errHandler->sync(this);
       alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 12, _ctx);
     }
-    setState(131);
+    setState(123);
     _errHandler->sync(this);
 
     _la = _input->LA(1);
     if (_la == zoiaParser::Semicolon) {
-      setState(130);
+      setState(122);
       match(zoiaParser::Semicolon);
     }
-    setState(136);
+    setState(126);
     _errHandler->sync(this);
-    _la = _input->LA(1);
-    while (_la == zoiaParser::Newline
 
-    || _la == zoiaParser::Space) {
-      setState(133);
+    _la = _input->LA(1);
+    if (_la == zoiaParser::Newline
+
+    || _la == zoiaParser::Spaces) {
+      setState(125);
       whitespace();
-      setState(138);
-      _errHandler->sync(this);
-      _la = _input->LA(1);
     }
-    setState(139);
+    setState(128);
     match(zoiaParser::BracketsClose);
 
   }
@@ -1157,7 +1136,7 @@ antlrcpp::Any zoiaParser::ArgumentContext::accept(tree::ParseTreeVisitor *visito
 
 zoiaParser::ArgumentContext* zoiaParser::argument() {
   ArgumentContext *_localctx = _tracker.createInstance<ArgumentContext>(_ctx, getState());
-  enterRule(_localctx, 28, zoiaParser::RuleArgument);
+  enterRule(_localctx, 26, zoiaParser::RuleArgument);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -1167,19 +1146,19 @@ zoiaParser::ArgumentContext* zoiaParser::argument() {
     exitRule();
   });
   try {
-    setState(143);
+    setState(132);
     _errHandler->sync(this);
     switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 15, _ctx)) {
     case 1: {
       enterOuterAlt(_localctx, 1);
-      setState(141);
+      setState(130);
       kwdArgument();
       break;
     }
 
     case 2: {
       enterOuterAlt(_localctx, 2);
-      setState(142);
+      setState(131);
       stdArgument();
       break;
     }
@@ -1216,12 +1195,12 @@ zoiaParser::LineElementsContext* zoiaParser::KwdArgumentContext::lineElements() 
   return getRuleContext<zoiaParser::LineElementsContext>(0);
 }
 
-std::vector<tree::TerminalNode *> zoiaParser::KwdArgumentContext::Space() {
-  return getTokens(zoiaParser::Space);
+std::vector<tree::TerminalNode *> zoiaParser::KwdArgumentContext::Spaces() {
+  return getTokens(zoiaParser::Spaces);
 }
 
-tree::TerminalNode* zoiaParser::KwdArgumentContext::Space(size_t i) {
-  return getToken(zoiaParser::Space, i);
+tree::TerminalNode* zoiaParser::KwdArgumentContext::Spaces(size_t i) {
+  return getToken(zoiaParser::Spaces, i);
 }
 
 
@@ -1239,7 +1218,7 @@ antlrcpp::Any zoiaParser::KwdArgumentContext::accept(tree::ParseTreeVisitor *vis
 
 zoiaParser::KwdArgumentContext* zoiaParser::kwdArgument() {
   KwdArgumentContext *_localctx = _tracker.createInstance<KwdArgumentContext>(_ctx, getState());
-  enterRule(_localctx, 30, zoiaParser::RuleKwdArgument);
+  enterRule(_localctx, 28, zoiaParser::RuleKwdArgument);
   size_t _la = 0;
 
 #if __cplusplus > 201703L
@@ -1250,35 +1229,33 @@ zoiaParser::KwdArgumentContext* zoiaParser::kwdArgument() {
     exitRule();
   });
   try {
-    size_t alt;
     enterOuterAlt(_localctx, 1);
-    setState(145);
+    setState(134);
     match(zoiaParser::Word);
-    setState(149);
+    setState(136);
     _errHandler->sync(this);
+
     _la = _input->LA(1);
-    while (_la == zoiaParser::Space) {
-      setState(146);
-      match(zoiaParser::Space);
-      setState(151);
-      _errHandler->sync(this);
-      _la = _input->LA(1);
+    if (_la == zoiaParser::Spaces) {
+      setState(135);
+      match(zoiaParser::Spaces);
     }
-    setState(152);
+    setState(138);
     match(zoiaParser::Equals);
-    setState(156);
+    setState(140);
     _errHandler->sync(this);
-    alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 17, _ctx);
-    while (alt != 2 && alt != atn::ATN::INVALID_ALT_NUMBER) {
-      if (alt == 1) {
-        setState(153);
-        match(zoiaParser::Space);
-      }
-      setState(158);
-      _errHandler->sync(this);
-      alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 17, _ctx);
+
+    switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 17, _ctx)) {
+    case 1: {
+      setState(139);
+      match(zoiaParser::Spaces);
+      break;
     }
-    setState(159);
+
+    default:
+      break;
+    }
+    setState(142);
     lineElements();
 
   }
@@ -1316,7 +1293,7 @@ antlrcpp::Any zoiaParser::StdArgumentContext::accept(tree::ParseTreeVisitor *vis
 
 zoiaParser::StdArgumentContext* zoiaParser::stdArgument() {
   StdArgumentContext *_localctx = _tracker.createInstance<StdArgumentContext>(_ctx, getState());
-  enterRule(_localctx, 32, zoiaParser::RuleStdArgument);
+  enterRule(_localctx, 30, zoiaParser::RuleStdArgument);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -1327,7 +1304,7 @@ zoiaParser::StdArgumentContext* zoiaParser::stdArgument() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(161);
+    setState(144);
     lineElements();
 
   }
@@ -1354,12 +1331,12 @@ tree::TerminalNode* zoiaParser::WhitespaceContext::Newline(size_t i) {
   return getToken(zoiaParser::Newline, i);
 }
 
-std::vector<tree::TerminalNode *> zoiaParser::WhitespaceContext::Space() {
-  return getTokens(zoiaParser::Space);
+std::vector<tree::TerminalNode *> zoiaParser::WhitespaceContext::Spaces() {
+  return getTokens(zoiaParser::Spaces);
 }
 
-tree::TerminalNode* zoiaParser::WhitespaceContext::Space(size_t i) {
-  return getToken(zoiaParser::Space, i);
+tree::TerminalNode* zoiaParser::WhitespaceContext::Spaces(size_t i) {
+  return getToken(zoiaParser::Spaces, i);
 }
 
 
@@ -1377,7 +1354,7 @@ antlrcpp::Any zoiaParser::WhitespaceContext::accept(tree::ParseTreeVisitor *visi
 
 zoiaParser::WhitespaceContext* zoiaParser::whitespace() {
   WhitespaceContext *_localctx = _tracker.createInstance<WhitespaceContext>(_ctx, getState());
-  enterRule(_localctx, 34, zoiaParser::RuleWhitespace);
+  enterRule(_localctx, 32, zoiaParser::RuleWhitespace);
   size_t _la = 0;
 
 #if __cplusplus > 201703L
@@ -1390,17 +1367,17 @@ zoiaParser::WhitespaceContext* zoiaParser::whitespace() {
   try {
     size_t alt;
     enterOuterAlt(_localctx, 1);
-    setState(164);
+    setState(147);
     _errHandler->sync(this);
     alt = 1;
     do {
       switch (alt) {
         case 1: {
-              setState(163);
+              setState(146);
               _la = _input->LA(1);
               if (!(_la == zoiaParser::Newline
 
-              || _la == zoiaParser::Space)) {
+              || _la == zoiaParser::Spaces)) {
               _errHandler->recoverInline(this);
               }
               else {
@@ -1413,7 +1390,7 @@ zoiaParser::WhitespaceContext* zoiaParser::whitespace() {
       default:
         throw NoViableAltException(this);
       }
-      setState(166);
+      setState(149);
       _errHandler->sync(this);
       alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 18, _ctx);
     } while (alt != 2 && alt != atn::ATN::INVALID_ALT_NUMBER);
@@ -1437,10 +1414,10 @@ atn::ATN zoiaParser::_atn;
 std::vector<uint16_t> zoiaParser::_serializedATN;
 
 std::vector<std::string> zoiaParser::_ruleNames = {
-  "zoiaFile", "header", "line", "lineElements", "regularLineElements", "lineElement",
-  "markedUpLineElements", "boldItalicLineElements", "boldLineElements",
-  "italicLineElements", "textFragment", "alias", "command", "arguments",
-  "argument", "kwdArgument", "stdArgument", "whitespace"
+  "zoiaFile", "header", "line", "lineElements", "lineElementsInner", "em3LineElement",
+  "em2LineElement", "em1LineElement", "textFragment", "textFragmentReq",
+  "alias", "command", "arguments", "argument", "kwdArgument", "stdArgument",
+  "whitespace"
 };
 
 std::vector<std::string> zoiaParser::_literalNames = {
@@ -1450,7 +1427,8 @@ std::vector<std::string> zoiaParser::_literalNames = {
 
 std::vector<std::string> zoiaParser::_symbolicNames = {
   "", "COMMENT", "Asterisk", "At", "Backslash", "Bar", "BracketsClose",
-  "BracketsOpen", "Equals", "Header", "Newline", "Semicolon", "Space", "Word"
+  "BracketsOpen", "Equals", "Header", "Newline", "Semicolon", "Spaces",
+  "Word"
 };
 
 dfa::Vocabulary zoiaParser::_vocabulary(_literalNames, _symbolicNames);
@@ -1473,120 +1451,111 @@ zoiaParser::Initializer::Initializer() {
 
   static const uint16_t serializedATNSegment0[] = {
     0x3, 0x608b, 0xa72a, 0x8133, 0xb9ed, 0x417c, 0x3be7, 0x7786, 0x5964,
-       0x3, 0xf, 0xab, 0x4, 0x2, 0x9, 0x2, 0x4, 0x3, 0x9, 0x3, 0x4, 0x4,
+       0x3, 0xf, 0x9a, 0x4, 0x2, 0x9, 0x2, 0x4, 0x3, 0x9, 0x3, 0x4, 0x4,
        0x9, 0x4, 0x4, 0x5, 0x9, 0x5, 0x4, 0x6, 0x9, 0x6, 0x4, 0x7, 0x9,
        0x7, 0x4, 0x8, 0x9, 0x8, 0x4, 0x9, 0x9, 0x9, 0x4, 0xa, 0x9, 0xa,
        0x4, 0xb, 0x9, 0xb, 0x4, 0xc, 0x9, 0xc, 0x4, 0xd, 0x9, 0xd, 0x4,
        0xe, 0x9, 0xe, 0x4, 0xf, 0x9, 0xf, 0x4, 0x10, 0x9, 0x10, 0x4, 0x11,
-       0x9, 0x11, 0x4, 0x12, 0x9, 0x12, 0x4, 0x13, 0x9, 0x13, 0x3, 0x2,
-       0x3, 0x2, 0x7, 0x2, 0x29, 0xa, 0x2, 0xc, 0x2, 0xe, 0x2, 0x2c, 0xb,
-       0x2, 0x3, 0x2, 0x3, 0x2, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3,
-       0x3, 0x4, 0x5, 0x4, 0x35, 0xa, 0x4, 0x3, 0x4, 0x3, 0x4, 0x3, 0x5,
-       0x3, 0x5, 0x6, 0x5, 0x3b, 0xa, 0x5, 0xd, 0x5, 0xe, 0x5, 0x3c, 0x3,
-       0x6, 0x6, 0x6, 0x40, 0xa, 0x6, 0xd, 0x6, 0xe, 0x6, 0x41, 0x3, 0x7,
-       0x3, 0x7, 0x3, 0x7, 0x5, 0x7, 0x47, 0xa, 0x7, 0x3, 0x8, 0x3, 0x8,
-       0x3, 0x8, 0x5, 0x8, 0x4c, 0xa, 0x8, 0x3, 0x9, 0x3, 0x9, 0x3, 0x9,
-       0x3, 0x9, 0x3, 0x9, 0x3, 0x9, 0x3, 0x9, 0x3, 0x9, 0x3, 0xa, 0x3,
-       0xa, 0x3, 0xa, 0x3, 0xa, 0x3, 0xa, 0x3, 0xa, 0x3, 0xb, 0x3, 0xb,
-       0x3, 0xb, 0x3, 0xb, 0x3, 0xc, 0x6, 0xc, 0x61, 0xa, 0xc, 0xd, 0xc,
-       0xe, 0xc, 0x62, 0x3, 0xd, 0x3, 0xd, 0x3, 0xd, 0x3, 0xe, 0x3, 0xe,
-       0x3, 0xe, 0x5, 0xe, 0x6b, 0xa, 0xe, 0x3, 0xe, 0x5, 0xe, 0x6e, 0xa,
-       0xe, 0x3, 0xf, 0x3, 0xf, 0x7, 0xf, 0x72, 0xa, 0xf, 0xc, 0xf, 0xe,
-       0xf, 0x75, 0xb, 0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 0xf, 0x7, 0xf, 0x7a,
-       0xa, 0xf, 0xc, 0xf, 0xe, 0xf, 0x7d, 0xb, 0xf, 0x3, 0xf, 0x7, 0xf,
-       0x80, 0xa, 0xf, 0xc, 0xf, 0xe, 0xf, 0x83, 0xb, 0xf, 0x3, 0xf, 0x5,
-       0xf, 0x86, 0xa, 0xf, 0x3, 0xf, 0x7, 0xf, 0x89, 0xa, 0xf, 0xc, 0xf,
-       0xe, 0xf, 0x8c, 0xb, 0xf, 0x3, 0xf, 0x3, 0xf, 0x3, 0x10, 0x3, 0x10,
-       0x5, 0x10, 0x92, 0xa, 0x10, 0x3, 0x11, 0x3, 0x11, 0x7, 0x11, 0x96,
-       0xa, 0x11, 0xc, 0x11, 0xe, 0x11, 0x99, 0xb, 0x11, 0x3, 0x11, 0x3,
-       0x11, 0x7, 0x11, 0x9d, 0xa, 0x11, 0xc, 0x11, 0xe, 0x11, 0xa0, 0xb,
-       0x11, 0x3, 0x11, 0x3, 0x11, 0x3, 0x12, 0x3, 0x12, 0x3, 0x13, 0x6,
-       0x13, 0xa7, 0xa, 0x13, 0xd, 0x13, 0xe, 0x13, 0xa8, 0x3, 0x13, 0x3,
-       0x81, 0x2, 0x14, 0x2, 0x4, 0x6, 0x8, 0xa, 0xc, 0xe, 0x10, 0x12, 0x14,
-       0x16, 0x18, 0x1a, 0x1c, 0x1e, 0x20, 0x22, 0x24, 0x2, 0x4, 0x3, 0x2,
-       0xe, 0xf, 0x4, 0x2, 0xc, 0xc, 0xe, 0xe, 0x2, 0xad, 0x2, 0x26, 0x3,
-       0x2, 0x2, 0x2, 0x4, 0x2f, 0x3, 0x2, 0x2, 0x2, 0x6, 0x34, 0x3, 0x2,
-       0x2, 0x2, 0x8, 0x3a, 0x3, 0x2, 0x2, 0x2, 0xa, 0x3f, 0x3, 0x2, 0x2,
-       0x2, 0xc, 0x46, 0x3, 0x2, 0x2, 0x2, 0xe, 0x4b, 0x3, 0x2, 0x2, 0x2,
-       0x10, 0x4d, 0x3, 0x2, 0x2, 0x2, 0x12, 0x55, 0x3, 0x2, 0x2, 0x2, 0x14,
-       0x5b, 0x3, 0x2, 0x2, 0x2, 0x16, 0x60, 0x3, 0x2, 0x2, 0x2, 0x18, 0x64,
-       0x3, 0x2, 0x2, 0x2, 0x1a, 0x67, 0x3, 0x2, 0x2, 0x2, 0x1c, 0x6f, 0x3,
-       0x2, 0x2, 0x2, 0x1e, 0x91, 0x3, 0x2, 0x2, 0x2, 0x20, 0x93, 0x3, 0x2,
-       0x2, 0x2, 0x22, 0xa3, 0x3, 0x2, 0x2, 0x2, 0x24, 0xa6, 0x3, 0x2, 0x2,
-       0x2, 0x26, 0x2a, 0x5, 0x4, 0x3, 0x2, 0x27, 0x29, 0x5, 0x6, 0x4, 0x2,
-       0x28, 0x27, 0x3, 0x2, 0x2, 0x2, 0x29, 0x2c, 0x3, 0x2, 0x2, 0x2, 0x2a,
-       0x28, 0x3, 0x2, 0x2, 0x2, 0x2a, 0x2b, 0x3, 0x2, 0x2, 0x2, 0x2b, 0x2d,
-       0x3, 0x2, 0x2, 0x2, 0x2c, 0x2a, 0x3, 0x2, 0x2, 0x2, 0x2d, 0x2e, 0x7,
-       0x2, 0x2, 0x3, 0x2e, 0x3, 0x3, 0x2, 0x2, 0x2, 0x2f, 0x30, 0x7, 0xb,
-       0x2, 0x2, 0x30, 0x31, 0x5, 0x1c, 0xf, 0x2, 0x31, 0x32, 0x7, 0xc,
-       0x2, 0x2, 0x32, 0x5, 0x3, 0x2, 0x2, 0x2, 0x33, 0x35, 0x5, 0x8, 0x5,
-       0x2, 0x34, 0x33, 0x3, 0x2, 0x2, 0x2, 0x34, 0x35, 0x3, 0x2, 0x2, 0x2,
-       0x35, 0x36, 0x3, 0x2, 0x2, 0x2, 0x36, 0x37, 0x7, 0xc, 0x2, 0x2, 0x37,
-       0x7, 0x3, 0x2, 0x2, 0x2, 0x38, 0x3b, 0x5, 0xe, 0x8, 0x2, 0x39, 0x3b,
-       0x5, 0xa, 0x6, 0x2, 0x3a, 0x38, 0x3, 0x2, 0x2, 0x2, 0x3a, 0x39, 0x3,
-       0x2, 0x2, 0x2, 0x3b, 0x3c, 0x3, 0x2, 0x2, 0x2, 0x3c, 0x3a, 0x3, 0x2,
-       0x2, 0x2, 0x3c, 0x3d, 0x3, 0x2, 0x2, 0x2, 0x3d, 0x9, 0x3, 0x2, 0x2,
-       0x2, 0x3e, 0x40, 0x5, 0xc, 0x7, 0x2, 0x3f, 0x3e, 0x3, 0x2, 0x2, 0x2,
-       0x40, 0x41, 0x3, 0x2, 0x2, 0x2, 0x41, 0x3f, 0x3, 0x2, 0x2, 0x2, 0x41,
-       0x42, 0x3, 0x2, 0x2, 0x2, 0x42, 0xb, 0x3, 0x2, 0x2, 0x2, 0x43, 0x47,
-       0x5, 0x16, 0xc, 0x2, 0x44, 0x47, 0x5, 0x18, 0xd, 0x2, 0x45, 0x47,
-       0x5, 0x1a, 0xe, 0x2, 0x46, 0x43, 0x3, 0x2, 0x2, 0x2, 0x46, 0x44,
-       0x3, 0x2, 0x2, 0x2, 0x46, 0x45, 0x3, 0x2, 0x2, 0x2, 0x47, 0xd, 0x3,
-       0x2, 0x2, 0x2, 0x48, 0x4c, 0x5, 0x10, 0x9, 0x2, 0x49, 0x4c, 0x5,
-       0x12, 0xa, 0x2, 0x4a, 0x4c, 0x5, 0x14, 0xb, 0x2, 0x4b, 0x48, 0x3,
-       0x2, 0x2, 0x2, 0x4b, 0x49, 0x3, 0x2, 0x2, 0x2, 0x4b, 0x4a, 0x3, 0x2,
-       0x2, 0x2, 0x4c, 0xf, 0x3, 0x2, 0x2, 0x2, 0x4d, 0x4e, 0x7, 0x4, 0x2,
-       0x2, 0x4e, 0x4f, 0x7, 0x4, 0x2, 0x2, 0x4f, 0x50, 0x7, 0x4, 0x2, 0x2,
-       0x50, 0x51, 0x5, 0xa, 0x6, 0x2, 0x51, 0x52, 0x7, 0x4, 0x2, 0x2, 0x52,
-       0x53, 0x7, 0x4, 0x2, 0x2, 0x53, 0x54, 0x7, 0x4, 0x2, 0x2, 0x54, 0x11,
-       0x3, 0x2, 0x2, 0x2, 0x55, 0x56, 0x7, 0x4, 0x2, 0x2, 0x56, 0x57, 0x7,
-       0x4, 0x2, 0x2, 0x57, 0x58, 0x5, 0xa, 0x6, 0x2, 0x58, 0x59, 0x7, 0x4,
-       0x2, 0x2, 0x59, 0x5a, 0x7, 0x4, 0x2, 0x2, 0x5a, 0x13, 0x3, 0x2, 0x2,
-       0x2, 0x5b, 0x5c, 0x7, 0x4, 0x2, 0x2, 0x5c, 0x5d, 0x5, 0xa, 0x6, 0x2,
-       0x5d, 0x5e, 0x7, 0x4, 0x2, 0x2, 0x5e, 0x15, 0x3, 0x2, 0x2, 0x2, 0x5f,
-       0x61, 0x9, 0x2, 0x2, 0x2, 0x60, 0x5f, 0x3, 0x2, 0x2, 0x2, 0x61, 0x62,
-       0x3, 0x2, 0x2, 0x2, 0x62, 0x60, 0x3, 0x2, 0x2, 0x2, 0x62, 0x63, 0x3,
-       0x2, 0x2, 0x2, 0x63, 0x17, 0x3, 0x2, 0x2, 0x2, 0x64, 0x65, 0x7, 0x5,
-       0x2, 0x2, 0x65, 0x66, 0x7, 0xf, 0x2, 0x2, 0x66, 0x19, 0x3, 0x2, 0x2,
-       0x2, 0x67, 0x68, 0x7, 0x6, 0x2, 0x2, 0x68, 0x6a, 0x7, 0xf, 0x2, 0x2,
-       0x69, 0x6b, 0x5, 0x1c, 0xf, 0x2, 0x6a, 0x69, 0x3, 0x2, 0x2, 0x2,
-       0x6a, 0x6b, 0x3, 0x2, 0x2, 0x2, 0x6b, 0x6d, 0x3, 0x2, 0x2, 0x2, 0x6c,
-       0x6e, 0x7, 0x7, 0x2, 0x2, 0x6d, 0x6c, 0x3, 0x2, 0x2, 0x2, 0x6d, 0x6e,
-       0x3, 0x2, 0x2, 0x2, 0x6e, 0x1b, 0x3, 0x2, 0x2, 0x2, 0x6f, 0x73, 0x7,
-       0x9, 0x2, 0x2, 0x70, 0x72, 0x5, 0x24, 0x13, 0x2, 0x71, 0x70, 0x3,
-       0x2, 0x2, 0x2, 0x72, 0x75, 0x3, 0x2, 0x2, 0x2, 0x73, 0x71, 0x3, 0x2,
-       0x2, 0x2, 0x73, 0x74, 0x3, 0x2, 0x2, 0x2, 0x74, 0x76, 0x3, 0x2, 0x2,
-       0x2, 0x75, 0x73, 0x3, 0x2, 0x2, 0x2, 0x76, 0x81, 0x5, 0x1e, 0x10,
-       0x2, 0x77, 0x7b, 0x7, 0xd, 0x2, 0x2, 0x78, 0x7a, 0x5, 0x24, 0x13,
-       0x2, 0x79, 0x78, 0x3, 0x2, 0x2, 0x2, 0x7a, 0x7d, 0x3, 0x2, 0x2, 0x2,
-       0x7b, 0x79, 0x3, 0x2, 0x2, 0x2, 0x7b, 0x7c, 0x3, 0x2, 0x2, 0x2, 0x7c,
-       0x7e, 0x3, 0x2, 0x2, 0x2, 0x7d, 0x7b, 0x3, 0x2, 0x2, 0x2, 0x7e, 0x80,
-       0x5, 0x1e, 0x10, 0x2, 0x7f, 0x77, 0x3, 0x2, 0x2, 0x2, 0x80, 0x83,
-       0x3, 0x2, 0x2, 0x2, 0x81, 0x82, 0x3, 0x2, 0x2, 0x2, 0x81, 0x7f, 0x3,
-       0x2, 0x2, 0x2, 0x82, 0x85, 0x3, 0x2, 0x2, 0x2, 0x83, 0x81, 0x3, 0x2,
-       0x2, 0x2, 0x84, 0x86, 0x7, 0xd, 0x2, 0x2, 0x85, 0x84, 0x3, 0x2, 0x2,
-       0x2, 0x85, 0x86, 0x3, 0x2, 0x2, 0x2, 0x86, 0x8a, 0x3, 0x2, 0x2, 0x2,
-       0x87, 0x89, 0x5, 0x24, 0x13, 0x2, 0x88, 0x87, 0x3, 0x2, 0x2, 0x2,
-       0x89, 0x8c, 0x3, 0x2, 0x2, 0x2, 0x8a, 0x88, 0x3, 0x2, 0x2, 0x2, 0x8a,
-       0x8b, 0x3, 0x2, 0x2, 0x2, 0x8b, 0x8d, 0x3, 0x2, 0x2, 0x2, 0x8c, 0x8a,
-       0x3, 0x2, 0x2, 0x2, 0x8d, 0x8e, 0x7, 0x8, 0x2, 0x2, 0x8e, 0x1d, 0x3,
-       0x2, 0x2, 0x2, 0x8f, 0x92, 0x5, 0x20, 0x11, 0x2, 0x90, 0x92, 0x5,
-       0x22, 0x12, 0x2, 0x91, 0x8f, 0x3, 0x2, 0x2, 0x2, 0x91, 0x90, 0x3,
-       0x2, 0x2, 0x2, 0x92, 0x1f, 0x3, 0x2, 0x2, 0x2, 0x93, 0x97, 0x7, 0xf,
-       0x2, 0x2, 0x94, 0x96, 0x7, 0xe, 0x2, 0x2, 0x95, 0x94, 0x3, 0x2, 0x2,
-       0x2, 0x96, 0x99, 0x3, 0x2, 0x2, 0x2, 0x97, 0x95, 0x3, 0x2, 0x2, 0x2,
-       0x97, 0x98, 0x3, 0x2, 0x2, 0x2, 0x98, 0x9a, 0x3, 0x2, 0x2, 0x2, 0x99,
-       0x97, 0x3, 0x2, 0x2, 0x2, 0x9a, 0x9e, 0x7, 0xa, 0x2, 0x2, 0x9b, 0x9d,
-       0x7, 0xe, 0x2, 0x2, 0x9c, 0x9b, 0x3, 0x2, 0x2, 0x2, 0x9d, 0xa0, 0x3,
-       0x2, 0x2, 0x2, 0x9e, 0x9c, 0x3, 0x2, 0x2, 0x2, 0x9e, 0x9f, 0x3, 0x2,
-       0x2, 0x2, 0x9f, 0xa1, 0x3, 0x2, 0x2, 0x2, 0xa0, 0x9e, 0x3, 0x2, 0x2,
-       0x2, 0xa1, 0xa2, 0x5, 0x8, 0x5, 0x2, 0xa2, 0x21, 0x3, 0x2, 0x2, 0x2,
-       0xa3, 0xa4, 0x5, 0x8, 0x5, 0x2, 0xa4, 0x23, 0x3, 0x2, 0x2, 0x2, 0xa5,
-       0xa7, 0x9, 0x3, 0x2, 0x2, 0xa6, 0xa5, 0x3, 0x2, 0x2, 0x2, 0xa7, 0xa8,
-       0x3, 0x2, 0x2, 0x2, 0xa8, 0xa6, 0x3, 0x2, 0x2, 0x2, 0xa8, 0xa9, 0x3,
-       0x2, 0x2, 0x2, 0xa9, 0x25, 0x3, 0x2, 0x2, 0x2, 0x15, 0x2a, 0x34,
-       0x3a, 0x3c, 0x41, 0x46, 0x4b, 0x62, 0x6a, 0x6d, 0x73, 0x7b, 0x81,
-       0x85, 0x8a, 0x91, 0x97, 0x9e, 0xa8,
+       0x9, 0x11, 0x4, 0x12, 0x9, 0x12, 0x3, 0x2, 0x3, 0x2, 0x7, 0x2, 0x27,
+       0xa, 0x2, 0xc, 0x2, 0xe, 0x2, 0x2a, 0xb, 0x2, 0x3, 0x2, 0x3, 0x2,
+       0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x3, 0x4, 0x5, 0x4, 0x33,
+       0xa, 0x4, 0x3, 0x4, 0x3, 0x4, 0x3, 0x5, 0x3, 0x5, 0x3, 0x5, 0x3,
+       0x5, 0x3, 0x5, 0x3, 0x5, 0x6, 0x5, 0x3d, 0xa, 0x5, 0xd, 0x5, 0xe,
+       0x5, 0x3e, 0x3, 0x6, 0x3, 0x6, 0x3, 0x6, 0x6, 0x6, 0x44, 0xa, 0x6,
+       0xd, 0x6, 0xe, 0x6, 0x45, 0x3, 0x7, 0x3, 0x7, 0x3, 0x7, 0x3, 0x7,
+       0x3, 0x7, 0x3, 0x7, 0x3, 0x7, 0x3, 0x7, 0x3, 0x8, 0x3, 0x8, 0x3,
+       0x8, 0x3, 0x8, 0x3, 0x8, 0x3, 0x8, 0x3, 0x9, 0x3, 0x9, 0x3, 0x9,
+       0x3, 0x9, 0x3, 0xa, 0x3, 0xa, 0x3, 0xb, 0x5, 0xb, 0x5d, 0xa, 0xb,
+       0x3, 0xb, 0x3, 0xb, 0x5, 0xb, 0x61, 0xa, 0xb, 0x3, 0xc, 0x3, 0xc,
+       0x3, 0xc, 0x3, 0xd, 0x3, 0xd, 0x3, 0xd, 0x5, 0xd, 0x69, 0xa, 0xd,
+       0x3, 0xd, 0x5, 0xd, 0x6c, 0xa, 0xd, 0x3, 0xe, 0x3, 0xe, 0x5, 0xe,
+       0x70, 0xa, 0xe, 0x3, 0xe, 0x3, 0xe, 0x3, 0xe, 0x5, 0xe, 0x75, 0xa,
+       0xe, 0x3, 0xe, 0x7, 0xe, 0x78, 0xa, 0xe, 0xc, 0xe, 0xe, 0xe, 0x7b,
+       0xb, 0xe, 0x3, 0xe, 0x5, 0xe, 0x7e, 0xa, 0xe, 0x3, 0xe, 0x5, 0xe,
+       0x81, 0xa, 0xe, 0x3, 0xe, 0x3, 0xe, 0x3, 0xf, 0x3, 0xf, 0x5, 0xf,
+       0x87, 0xa, 0xf, 0x3, 0x10, 0x3, 0x10, 0x5, 0x10, 0x8b, 0xa, 0x10,
+       0x3, 0x10, 0x3, 0x10, 0x5, 0x10, 0x8f, 0xa, 0x10, 0x3, 0x10, 0x3,
+       0x10, 0x3, 0x11, 0x3, 0x11, 0x3, 0x12, 0x6, 0x12, 0x96, 0xa, 0x12,
+       0xd, 0x12, 0xe, 0x12, 0x97, 0x3, 0x12, 0x3, 0x79, 0x2, 0x13, 0x2,
+       0x4, 0x6, 0x8, 0xa, 0xc, 0xe, 0x10, 0x12, 0x14, 0x16, 0x18, 0x1a,
+       0x1c, 0x1e, 0x20, 0x22, 0x2, 0x4, 0x3, 0x2, 0xe, 0xf, 0x4, 0x2, 0xc,
+       0xc, 0xe, 0xe, 0x2, 0xa0, 0x2, 0x24, 0x3, 0x2, 0x2, 0x2, 0x4, 0x2d,
+       0x3, 0x2, 0x2, 0x2, 0x6, 0x32, 0x3, 0x2, 0x2, 0x2, 0x8, 0x3c, 0x3,
+       0x2, 0x2, 0x2, 0xa, 0x43, 0x3, 0x2, 0x2, 0x2, 0xc, 0x47, 0x3, 0x2,
+       0x2, 0x2, 0xe, 0x4f, 0x3, 0x2, 0x2, 0x2, 0x10, 0x55, 0x3, 0x2, 0x2,
+       0x2, 0x12, 0x59, 0x3, 0x2, 0x2, 0x2, 0x14, 0x5c, 0x3, 0x2, 0x2, 0x2,
+       0x16, 0x62, 0x3, 0x2, 0x2, 0x2, 0x18, 0x65, 0x3, 0x2, 0x2, 0x2, 0x1a,
+       0x6d, 0x3, 0x2, 0x2, 0x2, 0x1c, 0x86, 0x3, 0x2, 0x2, 0x2, 0x1e, 0x88,
+       0x3, 0x2, 0x2, 0x2, 0x20, 0x92, 0x3, 0x2, 0x2, 0x2, 0x22, 0x95, 0x3,
+       0x2, 0x2, 0x2, 0x24, 0x28, 0x5, 0x4, 0x3, 0x2, 0x25, 0x27, 0x5, 0x6,
+       0x4, 0x2, 0x26, 0x25, 0x3, 0x2, 0x2, 0x2, 0x27, 0x2a, 0x3, 0x2, 0x2,
+       0x2, 0x28, 0x26, 0x3, 0x2, 0x2, 0x2, 0x28, 0x29, 0x3, 0x2, 0x2, 0x2,
+       0x29, 0x2b, 0x3, 0x2, 0x2, 0x2, 0x2a, 0x28, 0x3, 0x2, 0x2, 0x2, 0x2b,
+       0x2c, 0x7, 0x2, 0x2, 0x3, 0x2c, 0x3, 0x3, 0x2, 0x2, 0x2, 0x2d, 0x2e,
+       0x7, 0xb, 0x2, 0x2, 0x2e, 0x2f, 0x5, 0x1a, 0xe, 0x2, 0x2f, 0x30,
+       0x7, 0xc, 0x2, 0x2, 0x30, 0x5, 0x3, 0x2, 0x2, 0x2, 0x31, 0x33, 0x5,
+       0x8, 0x5, 0x2, 0x32, 0x31, 0x3, 0x2, 0x2, 0x2, 0x32, 0x33, 0x3, 0x2,
+       0x2, 0x2, 0x33, 0x34, 0x3, 0x2, 0x2, 0x2, 0x34, 0x35, 0x7, 0xc, 0x2,
+       0x2, 0x35, 0x7, 0x3, 0x2, 0x2, 0x2, 0x36, 0x3d, 0x5, 0x12, 0xa, 0x2,
+       0x37, 0x3d, 0x5, 0x16, 0xc, 0x2, 0x38, 0x3d, 0x5, 0x18, 0xd, 0x2,
+       0x39, 0x3d, 0x5, 0x10, 0x9, 0x2, 0x3a, 0x3d, 0x5, 0xe, 0x8, 0x2,
+       0x3b, 0x3d, 0x5, 0xc, 0x7, 0x2, 0x3c, 0x36, 0x3, 0x2, 0x2, 0x2, 0x3c,
+       0x37, 0x3, 0x2, 0x2, 0x2, 0x3c, 0x38, 0x3, 0x2, 0x2, 0x2, 0x3c, 0x39,
+       0x3, 0x2, 0x2, 0x2, 0x3c, 0x3a, 0x3, 0x2, 0x2, 0x2, 0x3c, 0x3b, 0x3,
+       0x2, 0x2, 0x2, 0x3d, 0x3e, 0x3, 0x2, 0x2, 0x2, 0x3e, 0x3c, 0x3, 0x2,
+       0x2, 0x2, 0x3e, 0x3f, 0x3, 0x2, 0x2, 0x2, 0x3f, 0x9, 0x3, 0x2, 0x2,
+       0x2, 0x40, 0x44, 0x5, 0x14, 0xb, 0x2, 0x41, 0x44, 0x5, 0x16, 0xc,
+       0x2, 0x42, 0x44, 0x5, 0x18, 0xd, 0x2, 0x43, 0x40, 0x3, 0x2, 0x2,
+       0x2, 0x43, 0x41, 0x3, 0x2, 0x2, 0x2, 0x43, 0x42, 0x3, 0x2, 0x2, 0x2,
+       0x44, 0x45, 0x3, 0x2, 0x2, 0x2, 0x45, 0x43, 0x3, 0x2, 0x2, 0x2, 0x45,
+       0x46, 0x3, 0x2, 0x2, 0x2, 0x46, 0xb, 0x3, 0x2, 0x2, 0x2, 0x47, 0x48,
+       0x7, 0x4, 0x2, 0x2, 0x48, 0x49, 0x7, 0x4, 0x2, 0x2, 0x49, 0x4a, 0x7,
+       0x4, 0x2, 0x2, 0x4a, 0x4b, 0x5, 0xa, 0x6, 0x2, 0x4b, 0x4c, 0x7, 0x4,
+       0x2, 0x2, 0x4c, 0x4d, 0x7, 0x4, 0x2, 0x2, 0x4d, 0x4e, 0x7, 0x4, 0x2,
+       0x2, 0x4e, 0xd, 0x3, 0x2, 0x2, 0x2, 0x4f, 0x50, 0x7, 0x4, 0x2, 0x2,
+       0x50, 0x51, 0x7, 0x4, 0x2, 0x2, 0x51, 0x52, 0x5, 0xa, 0x6, 0x2, 0x52,
+       0x53, 0x7, 0x4, 0x2, 0x2, 0x53, 0x54, 0x7, 0x4, 0x2, 0x2, 0x54, 0xf,
+       0x3, 0x2, 0x2, 0x2, 0x55, 0x56, 0x7, 0x4, 0x2, 0x2, 0x56, 0x57, 0x5,
+       0xa, 0x6, 0x2, 0x57, 0x58, 0x7, 0x4, 0x2, 0x2, 0x58, 0x11, 0x3, 0x2,
+       0x2, 0x2, 0x59, 0x5a, 0x9, 0x2, 0x2, 0x2, 0x5a, 0x13, 0x3, 0x2, 0x2,
+       0x2, 0x5b, 0x5d, 0x7, 0xe, 0x2, 0x2, 0x5c, 0x5b, 0x3, 0x2, 0x2, 0x2,
+       0x5c, 0x5d, 0x3, 0x2, 0x2, 0x2, 0x5d, 0x5e, 0x3, 0x2, 0x2, 0x2, 0x5e,
+       0x60, 0x7, 0xf, 0x2, 0x2, 0x5f, 0x61, 0x7, 0xe, 0x2, 0x2, 0x60, 0x5f,
+       0x3, 0x2, 0x2, 0x2, 0x60, 0x61, 0x3, 0x2, 0x2, 0x2, 0x61, 0x15, 0x3,
+       0x2, 0x2, 0x2, 0x62, 0x63, 0x7, 0x5, 0x2, 0x2, 0x63, 0x64, 0x7, 0xf,
+       0x2, 0x2, 0x64, 0x17, 0x3, 0x2, 0x2, 0x2, 0x65, 0x66, 0x7, 0x6, 0x2,
+       0x2, 0x66, 0x68, 0x7, 0xf, 0x2, 0x2, 0x67, 0x69, 0x5, 0x1a, 0xe,
+       0x2, 0x68, 0x67, 0x3, 0x2, 0x2, 0x2, 0x68, 0x69, 0x3, 0x2, 0x2, 0x2,
+       0x69, 0x6b, 0x3, 0x2, 0x2, 0x2, 0x6a, 0x6c, 0x7, 0x7, 0x2, 0x2, 0x6b,
+       0x6a, 0x3, 0x2, 0x2, 0x2, 0x6b, 0x6c, 0x3, 0x2, 0x2, 0x2, 0x6c, 0x19,
+       0x3, 0x2, 0x2, 0x2, 0x6d, 0x6f, 0x7, 0x9, 0x2, 0x2, 0x6e, 0x70, 0x5,
+       0x22, 0x12, 0x2, 0x6f, 0x6e, 0x3, 0x2, 0x2, 0x2, 0x6f, 0x70, 0x3,
+       0x2, 0x2, 0x2, 0x70, 0x71, 0x3, 0x2, 0x2, 0x2, 0x71, 0x79, 0x5, 0x1c,
+       0xf, 0x2, 0x72, 0x74, 0x7, 0xd, 0x2, 0x2, 0x73, 0x75, 0x5, 0x22,
+       0x12, 0x2, 0x74, 0x73, 0x3, 0x2, 0x2, 0x2, 0x74, 0x75, 0x3, 0x2,
+       0x2, 0x2, 0x75, 0x76, 0x3, 0x2, 0x2, 0x2, 0x76, 0x78, 0x5, 0x1c,
+       0xf, 0x2, 0x77, 0x72, 0x3, 0x2, 0x2, 0x2, 0x78, 0x7b, 0x3, 0x2, 0x2,
+       0x2, 0x79, 0x7a, 0x3, 0x2, 0x2, 0x2, 0x79, 0x77, 0x3, 0x2, 0x2, 0x2,
+       0x7a, 0x7d, 0x3, 0x2, 0x2, 0x2, 0x7b, 0x79, 0x3, 0x2, 0x2, 0x2, 0x7c,
+       0x7e, 0x7, 0xd, 0x2, 0x2, 0x7d, 0x7c, 0x3, 0x2, 0x2, 0x2, 0x7d, 0x7e,
+       0x3, 0x2, 0x2, 0x2, 0x7e, 0x80, 0x3, 0x2, 0x2, 0x2, 0x7f, 0x81, 0x5,
+       0x22, 0x12, 0x2, 0x80, 0x7f, 0x3, 0x2, 0x2, 0x2, 0x80, 0x81, 0x3,
+       0x2, 0x2, 0x2, 0x81, 0x82, 0x3, 0x2, 0x2, 0x2, 0x82, 0x83, 0x7, 0x8,
+       0x2, 0x2, 0x83, 0x1b, 0x3, 0x2, 0x2, 0x2, 0x84, 0x87, 0x5, 0x1e,
+       0x10, 0x2, 0x85, 0x87, 0x5, 0x20, 0x11, 0x2, 0x86, 0x84, 0x3, 0x2,
+       0x2, 0x2, 0x86, 0x85, 0x3, 0x2, 0x2, 0x2, 0x87, 0x1d, 0x3, 0x2, 0x2,
+       0x2, 0x88, 0x8a, 0x7, 0xf, 0x2, 0x2, 0x89, 0x8b, 0x7, 0xe, 0x2, 0x2,
+       0x8a, 0x89, 0x3, 0x2, 0x2, 0x2, 0x8a, 0x8b, 0x3, 0x2, 0x2, 0x2, 0x8b,
+       0x8c, 0x3, 0x2, 0x2, 0x2, 0x8c, 0x8e, 0x7, 0xa, 0x2, 0x2, 0x8d, 0x8f,
+       0x7, 0xe, 0x2, 0x2, 0x8e, 0x8d, 0x3, 0x2, 0x2, 0x2, 0x8e, 0x8f, 0x3,
+       0x2, 0x2, 0x2, 0x8f, 0x90, 0x3, 0x2, 0x2, 0x2, 0x90, 0x91, 0x5, 0x8,
+       0x5, 0x2, 0x91, 0x1f, 0x3, 0x2, 0x2, 0x2, 0x92, 0x93, 0x5, 0x8, 0x5,
+       0x2, 0x93, 0x21, 0x3, 0x2, 0x2, 0x2, 0x94, 0x96, 0x9, 0x3, 0x2, 0x2,
+       0x95, 0x94, 0x3, 0x2, 0x2, 0x2, 0x96, 0x97, 0x3, 0x2, 0x2, 0x2, 0x97,
+       0x95, 0x3, 0x2, 0x2, 0x2, 0x97, 0x98, 0x3, 0x2, 0x2, 0x2, 0x98, 0x23,
+       0x3, 0x2, 0x2, 0x2, 0x15, 0x28, 0x32, 0x3c, 0x3e, 0x43, 0x45, 0x5c,
+       0x60, 0x68, 0x6b, 0x6f, 0x74, 0x79, 0x7d, 0x80, 0x86, 0x8a, 0x8e,
+       0x97,
   };
 
   _serializedATN.insert(_serializedATN.end(), serializedATNSegment0,

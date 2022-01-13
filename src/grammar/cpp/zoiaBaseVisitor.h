@@ -31,31 +31,27 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitRegularLineElements(zoiaParser::RegularLineElementsContext *ctx) override {
+  virtual antlrcpp::Any visitLineElementsInner(zoiaParser::LineElementsInnerContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitLineElement(zoiaParser::LineElementContext *ctx) override {
+  virtual antlrcpp::Any visitEm3LineElement(zoiaParser::Em3LineElementContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitMarkedUpLineElements(zoiaParser::MarkedUpLineElementsContext *ctx) override {
+  virtual antlrcpp::Any visitEm2LineElement(zoiaParser::Em2LineElementContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitBoldItalicLineElements(zoiaParser::BoldItalicLineElementsContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitBoldLineElements(zoiaParser::BoldLineElementsContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitItalicLineElements(zoiaParser::ItalicLineElementsContext *ctx) override {
+  virtual antlrcpp::Any visitEm1LineElement(zoiaParser::Em1LineElementContext *ctx) override {
     return visitChildren(ctx);
   }
 
   virtual antlrcpp::Any visitTextFragment(zoiaParser::TextFragmentContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitTextFragmentReq(zoiaParser::TextFragmentReqContext *ctx) override {
     return visitChildren(ctx);
   }
 

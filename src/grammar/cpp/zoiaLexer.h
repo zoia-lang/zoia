@@ -14,7 +14,7 @@ public:
   enum {
     COMMENT = 1, Asterisk = 2, At = 3, Backslash = 4, Bar = 5, BracketsClose = 6,
     BracketsOpen = 7, Equals = 8, Header = 9, Newline = 10, Semicolon = 11,
-    Space = 12, Word = 13
+    Spaces = 12, Word = 13
   };
 
   explicit zoiaLexer(antlr4::CharStream *input);

@@ -16,13 +16,12 @@ class SA_zoiaTranslator : public zoiaBaseVisitor {
     PyObject *HeaderContext_cls = NULL;
     PyObject *LineContext_cls = NULL;
     PyObject *LineElementsContext_cls = NULL;
-    PyObject *RegularLineElementsContext_cls = NULL;
-    PyObject *LineElementContext_cls = NULL;
-    PyObject *MarkedUpLineElementsContext_cls = NULL;
-    PyObject *BoldItalicLineElementsContext_cls = NULL;
-    PyObject *BoldLineElementsContext_cls = NULL;
-    PyObject *ItalicLineElementsContext_cls = NULL;
+    PyObject *LineElementsInnerContext_cls = NULL;
+    PyObject *Em3LineElementContext_cls = NULL;
+    PyObject *Em2LineElementContext_cls = NULL;
+    PyObject *Em1LineElementContext_cls = NULL;
     PyObject *TextFragmentContext_cls = NULL;
+    PyObject *TextFragmentReqContext_cls = NULL;
     PyObject *AliasContext_cls = NULL;
     PyObject *CommandContext_cls = NULL;
     PyObject *ArgumentsContext_cls = NULL;
@@ -42,19 +41,17 @@ class SA_zoiaTranslator : public zoiaBaseVisitor {
 
     antlrcpp::Any visitLineElements(zoiaParser::LineElementsContext *ctx);
 
-    antlrcpp::Any visitRegularLineElements(zoiaParser::RegularLineElementsContext *ctx);
+    antlrcpp::Any visitLineElementsInner(zoiaParser::LineElementsInnerContext *ctx);
 
-    antlrcpp::Any visitLineElement(zoiaParser::LineElementContext *ctx);
+    antlrcpp::Any visitEm3LineElement(zoiaParser::Em3LineElementContext *ctx);
 
-    antlrcpp::Any visitMarkedUpLineElements(zoiaParser::MarkedUpLineElementsContext *ctx);
+    antlrcpp::Any visitEm2LineElement(zoiaParser::Em2LineElementContext *ctx);
 
-    antlrcpp::Any visitBoldItalicLineElements(zoiaParser::BoldItalicLineElementsContext *ctx);
-
-    antlrcpp::Any visitBoldLineElements(zoiaParser::BoldLineElementsContext *ctx);
-
-    antlrcpp::Any visitItalicLineElements(zoiaParser::ItalicLineElementsContext *ctx);
+    antlrcpp::Any visitEm1LineElement(zoiaParser::Em1LineElementContext *ctx);
 
     antlrcpp::Any visitTextFragment(zoiaParser::TextFragmentContext *ctx);
+
+    antlrcpp::Any visitTextFragmentReq(zoiaParser::TextFragmentReqContext *ctx);
 
     antlrcpp::Any visitAlias(zoiaParser::AliasContext *ctx);
 

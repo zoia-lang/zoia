@@ -19,14 +19,17 @@
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # =============================================================================
-"""Implements the AST node for bold line elements."""
+"""Implements the AST node for emphasized line elements. Separate to avoid
+circular dependencies."""
 from dataclasses import dataclass
 
-from ast_nodes.marked_up_line_elements import MarkedUpLineElementsNode
+from ast_nodes.line_element import LineElementNode
+from ast_nodes.line_elements import LineElementsNode
 
 @dataclass(slots=True)
-class BoldLineElementsNode(MarkedUpLineElementsNode):
-    """AST node for bold line elements."""
+class _EmLineElementNode(LineElementNode):
+    """Base AST node for emphasized line elements."""
+    elements: LineElementsNode
 
     def canonical(self) -> str:
-        return f'**{super(BoldLineElementsNode, self).canonical()}**'
+        return self.elements.canonical()
