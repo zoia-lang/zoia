@@ -40,8 +40,10 @@ textFragment: Word | Spaces;
 // Version of textFragment that may not evaluate to pure whitespace.
 textFragmentReq: Spaces? Word Spaces?;
 
-// An at sign followed by a word.
-alias: At Word;
+// An at sign followed by a word. May optionally be ended by a
+// vertical bar (this is necessary when an alias is followed by
+// something other than whitespace, for example a comma).
+alias: At Word Bar?;
 
 // A backslash and a word, followed optionally by an argument list.
 // May optionally be ended by a vertical bar (this is necessary when

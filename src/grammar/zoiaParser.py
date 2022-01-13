@@ -12,7 +12,7 @@ else:
 def serializedATN():
     with StringIO() as buf:
         buf.write("\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\17")
-        buf.write("\u009a\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7")
+        buf.write("\u009c\4\2\t\2\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7")
         buf.write("\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t\13\4\f\t\f\4\r\t\r\4\16")
         buf.write("\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22\3\2\3\2")
         buf.write("\7\2\'\n\2\f\2\16\2*\13\2\3\2\3\2\3\3\3\3\3\3\3\3\3\4")
@@ -20,52 +20,53 @@ def serializedATN():
         buf.write("\5\16\5>\3\6\3\6\3\6\6\6D\n\6\r\6\16\6E\3\7\3\7\3\7\3")
         buf.write("\7\3\7\3\7\3\7\3\7\3\b\3\b\3\b\3\b\3\b\3\b\3\t\3\t\3\t")
         buf.write("\3\t\3\n\3\n\3\13\5\13]\n\13\3\13\3\13\5\13a\n\13\3\f")
-        buf.write("\3\f\3\f\3\r\3\r\3\r\5\ri\n\r\3\r\5\rl\n\r\3\16\3\16\5")
-        buf.write("\16p\n\16\3\16\3\16\3\16\5\16u\n\16\3\16\7\16x\n\16\f")
-        buf.write("\16\16\16{\13\16\3\16\5\16~\n\16\3\16\5\16\u0081\n\16")
-        buf.write("\3\16\3\16\3\17\3\17\5\17\u0087\n\17\3\20\3\20\5\20\u008b")
-        buf.write("\n\20\3\20\3\20\5\20\u008f\n\20\3\20\3\20\3\21\3\21\3")
-        buf.write("\22\6\22\u0096\n\22\r\22\16\22\u0097\3\22\3y\2\23\2\4")
-        buf.write("\6\b\n\f\16\20\22\24\26\30\32\34\36 \"\2\4\3\2\16\17\4")
-        buf.write("\2\f\f\16\16\2\u00a0\2$\3\2\2\2\4-\3\2\2\2\6\62\3\2\2")
-        buf.write("\2\b<\3\2\2\2\nC\3\2\2\2\fG\3\2\2\2\16O\3\2\2\2\20U\3")
-        buf.write("\2\2\2\22Y\3\2\2\2\24\\\3\2\2\2\26b\3\2\2\2\30e\3\2\2")
-        buf.write("\2\32m\3\2\2\2\34\u0086\3\2\2\2\36\u0088\3\2\2\2 \u0092")
-        buf.write("\3\2\2\2\"\u0095\3\2\2\2$(\5\4\3\2%\'\5\6\4\2&%\3\2\2")
-        buf.write("\2\'*\3\2\2\2(&\3\2\2\2()\3\2\2\2)+\3\2\2\2*(\3\2\2\2")
-        buf.write("+,\7\2\2\3,\3\3\2\2\2-.\7\13\2\2./\5\32\16\2/\60\7\f\2")
-        buf.write("\2\60\5\3\2\2\2\61\63\5\b\5\2\62\61\3\2\2\2\62\63\3\2")
-        buf.write("\2\2\63\64\3\2\2\2\64\65\7\f\2\2\65\7\3\2\2\2\66=\5\22")
-        buf.write("\n\2\67=\5\26\f\28=\5\30\r\29=\5\20\t\2:=\5\16\b\2;=\5")
-        buf.write("\f\7\2<\66\3\2\2\2<\67\3\2\2\2<8\3\2\2\2<9\3\2\2\2<:\3")
-        buf.write("\2\2\2<;\3\2\2\2=>\3\2\2\2><\3\2\2\2>?\3\2\2\2?\t\3\2")
-        buf.write("\2\2@D\5\24\13\2AD\5\26\f\2BD\5\30\r\2C@\3\2\2\2CA\3\2")
-        buf.write("\2\2CB\3\2\2\2DE\3\2\2\2EC\3\2\2\2EF\3\2\2\2F\13\3\2\2")
-        buf.write("\2GH\7\4\2\2HI\7\4\2\2IJ\7\4\2\2JK\5\n\6\2KL\7\4\2\2L")
-        buf.write("M\7\4\2\2MN\7\4\2\2N\r\3\2\2\2OP\7\4\2\2PQ\7\4\2\2QR\5")
-        buf.write("\n\6\2RS\7\4\2\2ST\7\4\2\2T\17\3\2\2\2UV\7\4\2\2VW\5\n")
-        buf.write("\6\2WX\7\4\2\2X\21\3\2\2\2YZ\t\2\2\2Z\23\3\2\2\2[]\7\16")
-        buf.write("\2\2\\[\3\2\2\2\\]\3\2\2\2]^\3\2\2\2^`\7\17\2\2_a\7\16")
-        buf.write("\2\2`_\3\2\2\2`a\3\2\2\2a\25\3\2\2\2bc\7\5\2\2cd\7\17")
-        buf.write("\2\2d\27\3\2\2\2ef\7\6\2\2fh\7\17\2\2gi\5\32\16\2hg\3")
-        buf.write("\2\2\2hi\3\2\2\2ik\3\2\2\2jl\7\7\2\2kj\3\2\2\2kl\3\2\2")
-        buf.write("\2l\31\3\2\2\2mo\7\t\2\2np\5\"\22\2on\3\2\2\2op\3\2\2")
-        buf.write("\2pq\3\2\2\2qy\5\34\17\2rt\7\r\2\2su\5\"\22\2ts\3\2\2")
-        buf.write("\2tu\3\2\2\2uv\3\2\2\2vx\5\34\17\2wr\3\2\2\2x{\3\2\2\2")
-        buf.write("yz\3\2\2\2yw\3\2\2\2z}\3\2\2\2{y\3\2\2\2|~\7\r\2\2}|\3")
-        buf.write("\2\2\2}~\3\2\2\2~\u0080\3\2\2\2\177\u0081\5\"\22\2\u0080")
-        buf.write("\177\3\2\2\2\u0080\u0081\3\2\2\2\u0081\u0082\3\2\2\2\u0082")
-        buf.write("\u0083\7\b\2\2\u0083\33\3\2\2\2\u0084\u0087\5\36\20\2")
-        buf.write("\u0085\u0087\5 \21\2\u0086\u0084\3\2\2\2\u0086\u0085\3")
-        buf.write("\2\2\2\u0087\35\3\2\2\2\u0088\u008a\7\17\2\2\u0089\u008b")
-        buf.write("\7\16\2\2\u008a\u0089\3\2\2\2\u008a\u008b\3\2\2\2\u008b")
-        buf.write("\u008c\3\2\2\2\u008c\u008e\7\n\2\2\u008d\u008f\7\16\2")
-        buf.write("\2\u008e\u008d\3\2\2\2\u008e\u008f\3\2\2\2\u008f\u0090")
-        buf.write("\3\2\2\2\u0090\u0091\5\b\5\2\u0091\37\3\2\2\2\u0092\u0093")
-        buf.write("\5\b\5\2\u0093!\3\2\2\2\u0094\u0096\t\3\2\2\u0095\u0094")
-        buf.write("\3\2\2\2\u0096\u0097\3\2\2\2\u0097\u0095\3\2\2\2\u0097")
-        buf.write("\u0098\3\2\2\2\u0098#\3\2\2\2\25(\62<>CE\\`hkoty}\u0080")
-        buf.write("\u0086\u008a\u008e\u0097")
+        buf.write("\3\f\3\f\5\ff\n\f\3\r\3\r\3\r\5\rk\n\r\3\r\5\rn\n\r\3")
+        buf.write("\16\3\16\5\16r\n\16\3\16\3\16\3\16\5\16w\n\16\3\16\7\16")
+        buf.write("z\n\16\f\16\16\16}\13\16\3\16\5\16\u0080\n\16\3\16\5\16")
+        buf.write("\u0083\n\16\3\16\3\16\3\17\3\17\5\17\u0089\n\17\3\20\3")
+        buf.write("\20\5\20\u008d\n\20\3\20\3\20\5\20\u0091\n\20\3\20\3\20")
+        buf.write("\3\21\3\21\3\22\6\22\u0098\n\22\r\22\16\22\u0099\3\22")
+        buf.write("\3{\2\23\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \"\2\4")
+        buf.write("\3\2\16\17\4\2\f\f\16\16\2\u00a3\2$\3\2\2\2\4-\3\2\2\2")
+        buf.write("\6\62\3\2\2\2\b<\3\2\2\2\nC\3\2\2\2\fG\3\2\2\2\16O\3\2")
+        buf.write("\2\2\20U\3\2\2\2\22Y\3\2\2\2\24\\\3\2\2\2\26b\3\2\2\2")
+        buf.write("\30g\3\2\2\2\32o\3\2\2\2\34\u0088\3\2\2\2\36\u008a\3\2")
+        buf.write("\2\2 \u0094\3\2\2\2\"\u0097\3\2\2\2$(\5\4\3\2%\'\5\6\4")
+        buf.write("\2&%\3\2\2\2\'*\3\2\2\2(&\3\2\2\2()\3\2\2\2)+\3\2\2\2")
+        buf.write("*(\3\2\2\2+,\7\2\2\3,\3\3\2\2\2-.\7\13\2\2./\5\32\16\2")
+        buf.write("/\60\7\f\2\2\60\5\3\2\2\2\61\63\5\b\5\2\62\61\3\2\2\2")
+        buf.write("\62\63\3\2\2\2\63\64\3\2\2\2\64\65\7\f\2\2\65\7\3\2\2")
+        buf.write("\2\66=\5\22\n\2\67=\5\26\f\28=\5\30\r\29=\5\20\t\2:=\5")
+        buf.write("\16\b\2;=\5\f\7\2<\66\3\2\2\2<\67\3\2\2\2<8\3\2\2\2<9")
+        buf.write("\3\2\2\2<:\3\2\2\2<;\3\2\2\2=>\3\2\2\2><\3\2\2\2>?\3\2")
+        buf.write("\2\2?\t\3\2\2\2@D\5\24\13\2AD\5\26\f\2BD\5\30\r\2C@\3")
+        buf.write("\2\2\2CA\3\2\2\2CB\3\2\2\2DE\3\2\2\2EC\3\2\2\2EF\3\2\2")
+        buf.write("\2F\13\3\2\2\2GH\7\4\2\2HI\7\4\2\2IJ\7\4\2\2JK\5\n\6\2")
+        buf.write("KL\7\4\2\2LM\7\4\2\2MN\7\4\2\2N\r\3\2\2\2OP\7\4\2\2PQ")
+        buf.write("\7\4\2\2QR\5\n\6\2RS\7\4\2\2ST\7\4\2\2T\17\3\2\2\2UV\7")
+        buf.write("\4\2\2VW\5\n\6\2WX\7\4\2\2X\21\3\2\2\2YZ\t\2\2\2Z\23\3")
+        buf.write("\2\2\2[]\7\16\2\2\\[\3\2\2\2\\]\3\2\2\2]^\3\2\2\2^`\7")
+        buf.write("\17\2\2_a\7\16\2\2`_\3\2\2\2`a\3\2\2\2a\25\3\2\2\2bc\7")
+        buf.write("\5\2\2ce\7\17\2\2df\7\7\2\2ed\3\2\2\2ef\3\2\2\2f\27\3")
+        buf.write("\2\2\2gh\7\6\2\2hj\7\17\2\2ik\5\32\16\2ji\3\2\2\2jk\3")
+        buf.write("\2\2\2km\3\2\2\2ln\7\7\2\2ml\3\2\2\2mn\3\2\2\2n\31\3\2")
+        buf.write("\2\2oq\7\t\2\2pr\5\"\22\2qp\3\2\2\2qr\3\2\2\2rs\3\2\2")
+        buf.write("\2s{\5\34\17\2tv\7\r\2\2uw\5\"\22\2vu\3\2\2\2vw\3\2\2")
+        buf.write("\2wx\3\2\2\2xz\5\34\17\2yt\3\2\2\2z}\3\2\2\2{|\3\2\2\2")
+        buf.write("{y\3\2\2\2|\177\3\2\2\2}{\3\2\2\2~\u0080\7\r\2\2\177~")
+        buf.write("\3\2\2\2\177\u0080\3\2\2\2\u0080\u0082\3\2\2\2\u0081\u0083")
+        buf.write("\5\"\22\2\u0082\u0081\3\2\2\2\u0082\u0083\3\2\2\2\u0083")
+        buf.write("\u0084\3\2\2\2\u0084\u0085\7\b\2\2\u0085\33\3\2\2\2\u0086")
+        buf.write("\u0089\5\36\20\2\u0087\u0089\5 \21\2\u0088\u0086\3\2\2")
+        buf.write("\2\u0088\u0087\3\2\2\2\u0089\35\3\2\2\2\u008a\u008c\7")
+        buf.write("\17\2\2\u008b\u008d\7\16\2\2\u008c\u008b\3\2\2\2\u008c")
+        buf.write("\u008d\3\2\2\2\u008d\u008e\3\2\2\2\u008e\u0090\7\n\2\2")
+        buf.write("\u008f\u0091\7\16\2\2\u0090\u008f\3\2\2\2\u0090\u0091")
+        buf.write("\3\2\2\2\u0091\u0092\3\2\2\2\u0092\u0093\5\b\5\2\u0093")
+        buf.write("\37\3\2\2\2\u0094\u0095\5\b\5\2\u0095!\3\2\2\2\u0096\u0098")
+        buf.write("\t\3\2\2\u0097\u0096\3\2\2\2\u0098\u0099\3\2\2\2\u0099")
+        buf.write("\u0097\3\2\2\2\u0099\u009a\3\2\2\2\u009a#\3\2\2\2\26(")
+        buf.write("\62<>CE\\`ejmqv{\177\u0082\u0088\u008c\u0090\u0099")
         return buf.getvalue()
 
 
@@ -790,6 +791,9 @@ class zoiaParser ( Parser ):
         def Word(self):
             return self.getToken(zoiaParser.Word, 0)
 
+        def Bar(self):
+            return self.getToken(zoiaParser.Bar, 0)
+
         def getRuleIndex(self):
             return zoiaParser.RULE_alias
 
@@ -806,12 +810,21 @@ class zoiaParser ( Parser ):
 
         localctx = zoiaParser.AliasContext(self, self._ctx, self.state)
         self.enterRule(localctx, 20, self.RULE_alias)
+        self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
             self.state = 96
             self.match(zoiaParser.At)
             self.state = 97
             self.match(zoiaParser.Word)
+            self.state = 99
+            self._errHandler.sync(self)
+            _la = self._input.LA(1)
+            if _la==zoiaParser.Bar:
+                self.state = 98
+                self.match(zoiaParser.Bar)
+
+
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -860,23 +873,23 @@ class zoiaParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 99
+            self.state = 101
             self.match(zoiaParser.Backslash)
-            self.state = 100
-            self.match(zoiaParser.Word)
             self.state = 102
+            self.match(zoiaParser.Word)
+            self.state = 104
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             if _la==zoiaParser.BracketsOpen:
-                self.state = 101
+                self.state = 103
                 self.arguments()
 
 
-            self.state = 105
+            self.state = 107
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             if _la==zoiaParser.Bar:
-                self.state = 104
+                self.state = 106
                 self.match(zoiaParser.Bar)
 
 
@@ -941,56 +954,56 @@ class zoiaParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 107
-            self.match(zoiaParser.BracketsOpen)
             self.state = 109
+            self.match(zoiaParser.BracketsOpen)
+            self.state = 111
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input,10,self._ctx)
+            la_ = self._interp.adaptivePredict(self._input,11,self._ctx)
             if la_ == 1:
-                self.state = 108
+                self.state = 110
                 self.whitespace()
 
 
-            self.state = 111
+            self.state = 113
             self.argument()
-            self.state = 119
+            self.state = 121
             self._errHandler.sync(self)
-            _alt = self._interp.adaptivePredict(self._input,12,self._ctx)
+            _alt = self._interp.adaptivePredict(self._input,13,self._ctx)
             while _alt!=1 and _alt!=ATN.INVALID_ALT_NUMBER:
                 if _alt==1+1:
-                    self.state = 112
-                    self.match(zoiaParser.Semicolon)
                     self.state = 114
+                    self.match(zoiaParser.Semicolon)
+                    self.state = 116
                     self._errHandler.sync(self)
-                    la_ = self._interp.adaptivePredict(self._input,11,self._ctx)
+                    la_ = self._interp.adaptivePredict(self._input,12,self._ctx)
                     if la_ == 1:
-                        self.state = 113
+                        self.state = 115
                         self.whitespace()
 
 
-                    self.state = 116
+                    self.state = 118
                     self.argument()
-                self.state = 121
+                self.state = 123
                 self._errHandler.sync(self)
-                _alt = self._interp.adaptivePredict(self._input,12,self._ctx)
+                _alt = self._interp.adaptivePredict(self._input,13,self._ctx)
 
-            self.state = 123
+            self.state = 125
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             if _la==zoiaParser.Semicolon:
-                self.state = 122
+                self.state = 124
                 self.match(zoiaParser.Semicolon)
 
 
-            self.state = 126
+            self.state = 128
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             if _la==zoiaParser.Newline or _la==zoiaParser.Spaces:
-                self.state = 125
+                self.state = 127
                 self.whitespace()
 
 
-            self.state = 128
+            self.state = 130
             self.match(zoiaParser.BracketsClose)
         except RecognitionException as re:
             localctx.exception = re
@@ -1033,18 +1046,18 @@ class zoiaParser ( Parser ):
         localctx = zoiaParser.ArgumentContext(self, self._ctx, self.state)
         self.enterRule(localctx, 26, self.RULE_argument)
         try:
-            self.state = 132
+            self.state = 134
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input,15,self._ctx)
+            la_ = self._interp.adaptivePredict(self._input,16,self._ctx)
             if la_ == 1:
                 self.enterOuterAlt(localctx, 1)
-                self.state = 130
+                self.state = 132
                 self.kwdArgument()
                 pass
 
             elif la_ == 2:
                 self.enterOuterAlt(localctx, 2)
-                self.state = 131
+                self.state = 133
                 self.stdArgument()
                 pass
 
@@ -1100,27 +1113,27 @@ class zoiaParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 134
-            self.match(zoiaParser.Word)
             self.state = 136
+            self.match(zoiaParser.Word)
+            self.state = 138
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             if _la==zoiaParser.Spaces:
-                self.state = 135
+                self.state = 137
                 self.match(zoiaParser.Spaces)
 
 
-            self.state = 138
-            self.match(zoiaParser.Equals)
             self.state = 140
+            self.match(zoiaParser.Equals)
+            self.state = 142
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input,17,self._ctx)
+            la_ = self._interp.adaptivePredict(self._input,18,self._ctx)
             if la_ == 1:
-                self.state = 139
+                self.state = 141
                 self.match(zoiaParser.Spaces)
 
 
-            self.state = 142
+            self.state = 144
             self.lineElements()
         except RecognitionException as re:
             localctx.exception = re
@@ -1160,7 +1173,7 @@ class zoiaParser ( Parser ):
         self.enterRule(localctx, 30, self.RULE_stdArgument)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 144
+            self.state = 146
             self.lineElements()
         except RecognitionException as re:
             localctx.exception = re
@@ -1209,12 +1222,12 @@ class zoiaParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 147
+            self.state = 149
             self._errHandler.sync(self)
             _alt = 1
             while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
                 if _alt == 1:
-                    self.state = 146
+                    self.state = 148
                     _la = self._input.LA(1)
                     if not(_la==zoiaParser.Newline or _la==zoiaParser.Spaces):
                         self._errHandler.recoverInline(self)
@@ -1224,9 +1237,9 @@ class zoiaParser ( Parser ):
 
                 else:
                     raise NoViableAltException(self)
-                self.state = 149
+                self.state = 151
                 self._errHandler.sync(self)
-                _alt = self._interp.adaptivePredict(self._input,18,self._ctx)
+                _alt = self._interp.adaptivePredict(self._input,19,self._ctx)
 
         except RecognitionException as re:
             localctx.exception = re

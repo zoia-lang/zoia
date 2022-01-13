@@ -80,12 +80,21 @@ class TestTextFragmentCR(_ATestCanonicalRepr):
     _test_rep = _mkr('This   is a text  fragment')
 
 class TestAliasCR(_ATestCanonicalRepr):
-    """Aliases should be reproduced verbatim. Spaces are not required to
-    separate them (and may in fact be unwanted for some alias usages). The
-    two spaces below become text fragments and are hence reproduced verbatim as
-    well."""
+    """Aliases should be reproduced verbatim, barring the added vertical bar
+    terminator at the end (which is optional for aliases, see test below).
+    Spaces are not required to separate them (and may in fact be unwanted for
+    some alias usages). The two spaces below become text fragments and are
+    hence reproduced verbatim as well."""
     _test_src = _mks('@foo@bar  @qux')
-    _test_rep = _mkr('@foo@bar  @qux')
+    _test_rep = _mkr('@foo|@bar|  @qux|')
+
+class TestAliasBar(_ATestCanonicalRepr):
+    """The optional vertical bar terminator for aliases should be handled
+    and reproduced correctly - note the comma after @C becoming part of the
+    alias (since a comma is perfectly valid as part of a word and hence
+    perfectly valid as part of an alias name too)."""
+    _test_src = _mks('@A ran into @B|, @C, and @D|.')
+    _test_rep = _mkr('@A| ran into @B|, @C,| and @D|.')
 
 class TestCommandNoArgCR(_ATestCanonicalRepr):
     """Commands without arguments should receive the vertical bar as a
@@ -175,14 +184,14 @@ class TestBoldItalic(_ATestCanonicalRepr):
 class TestItalicComplex(_ATestCanonicalRepr):
     """Aliases and commands in italic text should be handled correctly."""
     _test_src = _mks('*Italic with @aliases and \\commands*')
-    _test_rep = _mkr('*Italic with @aliases and \\commands|*')
+    _test_rep = _mkr('*Italic with @aliases| and \\commands|*')
 
 class TestBoldComplex(_ATestCanonicalRepr):
     """Aliases and commands in bold text should be handled correctly."""
     _test_src = _mks('**Bold with @aliases and \\commands**')
-    _test_rep = _mkr('**Bold with @aliases and \\commands|**')
+    _test_rep = _mkr('**Bold with @aliases| and \\commands|**')
 
 class TestBoldItalicComplex(_ATestCanonicalRepr):
     """Aliases and commands in bold-italic text should be handled correctly."""
     _test_src = _mks('***Bold-italic with @aliases and \\commands***')
-    _test_rep = _mkr('***Bold-italic with @aliases and \\commands|***')
+    _test_rep = _mkr('***Bold-italic with @aliases| and \\commands|***')

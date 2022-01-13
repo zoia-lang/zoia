@@ -220,6 +220,7 @@ public:
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *At();
     antlr4::tree::TerminalNode *Word();
+    antlr4::tree::TerminalNode *Bar();
 
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
