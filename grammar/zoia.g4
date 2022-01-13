@@ -18,7 +18,7 @@ zoiaFile: header line* EOF;
 
 // The special 'header' command. Must come first (barring whitespace
 // and comments).
-header: '\\header' arguments Newline;
+header: Header arguments Newline;
 
 // An arbitrary combination of text fragments, aliases and commands.
 // Must be ended by a newline, may be marked up with asterisks.
@@ -40,13 +40,10 @@ boldLineElements: Asterisk Asterisk
 italicLineElements: Asterisk regularLineElements Asterisk;
 
 // An arbitrary combination of words and spaces.
-textFragment: (word | Space)+;
+textFragment: (Word | Space)+;
 
-// One or more characters.
-word: Char+;
-
-// An at sign followed by a word.
-alias: '@' word;
+// An at sign followed by a Word.
+alias: At Word;
 
 // A backslash and a word, followed optionally by an argument list.
 // May optionally be ended by a vertical bar (this is necessary when
@@ -54,19 +51,20 @@ alias: '@' word;
 // For example, '\atmyHandle' would be parsed as a single command
 // named 'atMyHandle', which doesn't exist. '\at|myHandle' would be
 // parsed as a command named 'at' and a text fragment 'myHandle'.
-command: '\\' word arguments? '|'?;
+command: Backslash Word arguments? Bar?;
 
 // One or more arguments. Multiple arguments must be separated by
 // semicolons. Trailing semicolons are allowed.
 // The whitespace handling here is ugly grammar-wise, but should be
 // fairly intuitive when actually using the language.
-arguments: '[' whitespace* argument (';' whitespace* argument)*? ';'?
-           whitespace* ']';
+arguments: BracketsOpen whitespace* argument
+           (Semicolon whitespace* argument)*? Semicolon?
+           whitespace* BracketsClose;
 
 // Either a text fragment or a word, an equals sign and a text
 // fragment.
 argument: kwdArgument | stdArgument;
-kwdArgument: word Space* '=' Space* lineElements;
+kwdArgument: Word Space* Equals Space* lineElements;
 stdArgument: lineElements;
 
 // Any kind of whitespace: newlines, spaces, tabs, etc.
@@ -76,9 +74,19 @@ whitespace: (Newline | Space)+;
 // Skip all comments.
 COMMENT: '#' ~[\r\n]* -> skip;
 
-// Tokens
+// Regular tokens
 Asterisk: '*';
+At: '@';
+Backslash: '\\';
+Bar: '|';
+BracketsClose: ']';
+BracketsOpen: '[';
+Equals: '=';
+Header: '\\header';
 Newline: ('\r\n' | '\r' | '\n');
+Semicolon: ';';
+
 // See https://unicode.org/reports/tr44/#General_Category_Values
 Space: [\p{Z}];
-Char: [\p{L}\p{M}\p{N}\p{P}\p{S}\p{C}];
+// Everything that isn't one of the tokens above.
+Word: ~[\r\n@\\|[\];=*#\p{Z}]+;

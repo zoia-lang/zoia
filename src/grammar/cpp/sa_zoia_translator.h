@@ -23,7 +23,6 @@ class SA_zoiaTranslator : public zoiaBaseVisitor {
     PyObject *BoldLineElementsContext_cls = NULL;
     PyObject *ItalicLineElementsContext_cls = NULL;
     PyObject *TextFragmentContext_cls = NULL;
-    PyObject *WordContext_cls = NULL;
     PyObject *AliasContext_cls = NULL;
     PyObject *CommandContext_cls = NULL;
     PyObject *ArgumentsContext_cls = NULL;
@@ -56,8 +55,6 @@ class SA_zoiaTranslator : public zoiaBaseVisitor {
     antlrcpp::Any visitItalicLineElements(zoiaParser::ItalicLineElementsContext *ctx);
 
     antlrcpp::Any visitTextFragment(zoiaParser::TextFragmentContext *ctx);
-
-    antlrcpp::Any visitWord(zoiaParser::WordContext *ctx);
 
     antlrcpp::Any visitAlias(zoiaParser::AliasContext *ctx);
 

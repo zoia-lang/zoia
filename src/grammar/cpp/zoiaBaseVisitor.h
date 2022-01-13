@@ -59,10 +59,6 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitWord(zoiaParser::WordContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
   virtual antlrcpp::Any visitAlias(zoiaParser::AliasContext *ctx) override {
     return visitChildren(ctx);
   }

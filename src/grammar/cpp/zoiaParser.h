@@ -12,17 +12,17 @@
 class  zoiaParser : public antlr4::Parser {
 public:
   enum {
-    T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7,
-    T__7 = 8, COMMENT = 9, Asterisk = 10, Newline = 11, Space = 12, Char = 13
+    COMMENT = 1, Asterisk = 2, At = 3, Backslash = 4, Bar = 5, BracketsClose = 6,
+    BracketsOpen = 7, Equals = 8, Header = 9, Newline = 10, Semicolon = 11,
+    Space = 12, Word = 13
   };
 
   enum {
     RuleZoiaFile = 0, RuleHeader = 1, RuleLine = 2, RuleLineElements = 3,
     RuleRegularLineElements = 4, RuleLineElement = 5, RuleMarkedUpLineElements = 6,
     RuleBoldItalicLineElements = 7, RuleBoldLineElements = 8, RuleItalicLineElements = 9,
-    RuleTextFragment = 10, RuleWord = 11, RuleAlias = 12, RuleCommand = 13,
-    RuleArguments = 14, RuleArgument = 15, RuleKwdArgument = 16, RuleStdArgument = 17,
-    RuleWhitespace = 18
+    RuleTextFragment = 10, RuleAlias = 11, RuleCommand = 12, RuleArguments = 13,
+    RuleArgument = 14, RuleKwdArgument = 15, RuleStdArgument = 16, RuleWhitespace = 17
   };
 
   explicit zoiaParser(antlr4::TokenStream *input);
@@ -46,7 +46,6 @@ public:
   class BoldLineElementsContext;
   class ItalicLineElementsContext;
   class TextFragmentContext;
-  class WordContext;
   class AliasContext;
   class CommandContext;
   class ArgumentsContext;
@@ -75,6 +74,7 @@ public:
   public:
     HeaderContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *Header();
     ArgumentsContext *arguments();
     antlr4::tree::TerminalNode *Newline();
 
@@ -208,8 +208,8 @@ public:
   public:
     TextFragmentContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    std::vector<WordContext *> word();
-    WordContext* word(size_t i);
+    std::vector<antlr4::tree::TerminalNode *> Word();
+    antlr4::tree::TerminalNode* Word(size_t i);
     std::vector<antlr4::tree::TerminalNode *> Space();
     antlr4::tree::TerminalNode* Space(size_t i);
 
@@ -220,25 +220,12 @@ public:
 
   TextFragmentContext* textFragment();
 
-  class  WordContext : public antlr4::ParserRuleContext {
-  public:
-    WordContext(antlr4::ParserRuleContext *parent, size_t invokingState);
-    virtual size_t getRuleIndex() const override;
-    std::vector<antlr4::tree::TerminalNode *> Char();
-    antlr4::tree::TerminalNode* Char(size_t i);
-
-
-    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
-  };
-
-  WordContext* word();
-
   class  AliasContext : public antlr4::ParserRuleContext {
   public:
     AliasContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    WordContext *word();
+    antlr4::tree::TerminalNode *At();
+    antlr4::tree::TerminalNode *Word();
 
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
@@ -251,8 +238,10 @@ public:
   public:
     CommandContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    WordContext *word();
+    antlr4::tree::TerminalNode *Backslash();
+    antlr4::tree::TerminalNode *Word();
     ArgumentsContext *arguments();
+    antlr4::tree::TerminalNode *Bar();
 
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
@@ -265,10 +254,14 @@ public:
   public:
     ArgumentsContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *BracketsOpen();
     std::vector<ArgumentContext *> argument();
     ArgumentContext* argument(size_t i);
+    antlr4::tree::TerminalNode *BracketsClose();
     std::vector<WhitespaceContext *> whitespace();
     WhitespaceContext* whitespace(size_t i);
+    std::vector<antlr4::tree::TerminalNode *> Semicolon();
+    antlr4::tree::TerminalNode* Semicolon(size_t i);
 
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
@@ -295,7 +288,8 @@ public:
   public:
     KwdArgumentContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    WordContext *word();
+    antlr4::tree::TerminalNode *Word();
+    antlr4::tree::TerminalNode *Equals();
     LineElementsContext *lineElements();
     std::vector<antlr4::tree::TerminalNode *> Space();
     antlr4::tree::TerminalNode* Space(size_t i);

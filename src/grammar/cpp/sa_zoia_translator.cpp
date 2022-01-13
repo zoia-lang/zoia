@@ -22,7 +22,6 @@ SA_zoiaTranslator::~SA_zoiaTranslator() {
     Py_XDECREF(BoldLineElementsContext_cls);
     Py_XDECREF(ItalicLineElementsContext_cls);
     Py_XDECREF(TextFragmentContext_cls);
-    Py_XDECREF(WordContext_cls);
     Py_XDECREF(AliasContext_cls);
     Py_XDECREF(CommandContext_cls);
     Py_XDECREF(ArgumentsContext_cls);
@@ -96,12 +95,6 @@ antlrcpp::Any SA_zoiaTranslator::visitItalicLineElements(zoiaParser::ItalicLineE
 antlrcpp::Any SA_zoiaTranslator::visitTextFragment(zoiaParser::TextFragmentContext *ctx){
     if(!TextFragmentContext_cls) TextFragmentContext_cls = PyObject_GetAttrString(translator->parser_cls, "TextFragmentContext");
     PyObject *py_ctx = translator->convert_ctx(this, ctx, TextFragmentContext_cls);
-    return py_ctx;
-}
-
-antlrcpp::Any SA_zoiaTranslator::visitWord(zoiaParser::WordContext *ctx){
-    if(!WordContext_cls) WordContext_cls = PyObject_GetAttrString(translator->parser_cls, "WordContext");
-    PyObject *py_ctx = translator->convert_ctx(this, ctx, WordContext_cls);
     return py_ctx;
 }
 

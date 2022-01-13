@@ -33,6 +33,9 @@ from exception import ASTConversionError
 from grammar import zoiaParser, zoiaVisitor
 from src_pos import SourcePos
 
+# The token child types that can occur in text fragment
+_text_fragment_children = {zoiaParser.Space, zoiaParser.Word}
+
 # Currently, PyCharm seems to have a problem with kw_only fields in
 # dataclasses. It reports all the src_pos arguments as 'Unexpected argument'
 # warnings. Until that's fixed:
@@ -142,10 +145,8 @@ class ASTConverter(zoiaVisitor):
             -> TextFragmentNode:
         s = StringIO()
         for tf_child in ctx.children:
-            if isinstance(tf_child, zoiaParser.WordContext):
-                s.write(self.visitWord(tf_child))
-            elif (isinstance(tf_child, TerminalNodeImpl) and
-                  tf_child.symbol.type == zoiaParser.Space):
+            if (isinstance(tf_child, TerminalNodeImpl) and
+                  tf_child.symbol.type in _text_fragment_children):
                 s.write(tf_child.getText())
             else:
                 raise ASTConversionError(self.make_pos(ctx),
@@ -153,15 +154,12 @@ class ASTConverter(zoiaVisitor):
                                          f"'{ctx.getText()}'")
         return TextFragmentNode(s.getvalue(), src_pos=self.make_pos(ctx))
 
-    def visitWord(self, ctx: zoiaParser.WordContext) -> str:
-        return ctx.getText()
-
     def visitAlias(self, ctx: zoiaParser.AliasContext) -> AliasNode:
-        return AliasNode(self.visitWord(ctx.word()),
+        return AliasNode(ctx.Word().getText(),
                          src_pos=self.make_pos(ctx))
 
     def visitCommand(self, ctx: zoiaParser.CommandContext) -> CommandNode:
-        cmd_name = self.visitWord(ctx.word())
+        cmd_name = ctx.Word().getText()
         arguments = self.visitArguments(ctx.arguments())
         return CommandNode(cmd_name, arguments, src_pos=self.make_pos(ctx))
 
@@ -185,7 +183,7 @@ class ASTConverter(zoiaVisitor):
 
     def visitKwdArgument(self, ctx: zoiaParser.KwdArgumentContext) \
             -> KwdArgumentNode:
-        kwd_name = self.visitWord(ctx.word())
+        kwd_name = ctx.Word().getText()
         arg_value = self.visitLineElements(ctx.lineElements())
         # Reverse order due to dataclass inheritance
         return KwdArgumentNode(arg_value, kwd_name, src_pos=self.make_pos(ctx))

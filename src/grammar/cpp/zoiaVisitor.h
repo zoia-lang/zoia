@@ -41,8 +41,6 @@ public:
 
     virtual antlrcpp::Any visitTextFragment(zoiaParser::TextFragmentContext *context) = 0;
 
-    virtual antlrcpp::Any visitWord(zoiaParser::WordContext *context) = 0;
-
     virtual antlrcpp::Any visitAlias(zoiaParser::AliasContext *context) = 0;
 
     virtual antlrcpp::Any visitCommand(zoiaParser::CommandContext *context) = 0;

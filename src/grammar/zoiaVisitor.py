@@ -64,11 +64,6 @@ class zoiaVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by zoiaParser#word.
-    def visitWord(self, ctx:zoiaParser.WordContext):
-        return self.visitChildren(ctx)
-
-
     # Visit a parse tree produced by zoiaParser#alias.
     def visitAlias(self, ctx:zoiaParser.AliasContext):
         return self.visitChildren(ctx)
