@@ -1,5 +1,6 @@
 #!/bin/bash
 # This script generates and builds the Zoia parser using ANTLR.
+set -e
 
 if [ ! -f scripts/antlr.jar ]
 then

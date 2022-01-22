@@ -1,5 +1,6 @@
 #!/bin/bash
 # This script downloads all build prerequisites for wizparse.
+set -e
 
 ANTLR_VER='4.9.3'
 
