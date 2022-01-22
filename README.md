@@ -16,7 +16,7 @@ A language for writing fiction.
 - [x] Experiment with AO3 (the primary output target) drafts:
   - [x] What's the nicest output format? One file, multiple files? -> multiple HTML files
   - [x] What about summaries and author notes? -> separate files per chapter
-  - [x] And all the other stuff (warnings, tags, etc.)? -> useful because we want to be independent from AO3 - also, a newline-separated list of tags is much nicer than a gigantic single comma-separated line
+  - [x] And all the other stuff (warnings, tags, etc.)? -> useful because we want to be independent of AO3 - also, a newline-separated list of tags is much nicer than a gigantic single comma-separated line
   - [ ] Revisit later: What about work summaries/notes? E.g. [this fic](https://archiveofourown.org/works/24293356/chapters/58558123) has:
     - A work summary
     - Author notes at the beginning of the work

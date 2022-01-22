@@ -25,13 +25,13 @@ jobs:
         run: ./scripts/build.sh
       - name: Check that diff is empty
         run: git diff --quiet
-  test:
+  check:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         # TODO: waiting for coverage.py 6.3
         python-version: [ '3.10' ] #, '3.11-dev' ]
-    name: Run Zoia Tests on Python ${{ matrix.python-version }}
+    name: Runs checks on Python ${{ matrix.python-version }}
     steps:
       - name: Checkout commit
         uses: actions/checkout@v2
@@ -39,6 +39,8 @@ jobs:
         uses: ./.github/actions/setup-deps
         with:
           python-version: ${{ matrix.python-version }}
+      - name: Lint Zoia
+        run: python -m pylint
       - name: Test Zoia
         run: coverage run -m pytest
       - name: Upload coverage data to coveralls.io
