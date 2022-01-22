@@ -40,7 +40,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Lint Zoia
-        run: python -m pylint
+        run: python -m pylint src
       - name: Test Zoia
         run: coverage run -m pytest
       - name: Upload coverage data to coveralls.io
