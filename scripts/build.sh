@@ -18,21 +18,34 @@ java org.antlr.v4.Tool -Dlanguage=Python3 -o src -visitor -no-listener grammar/z
 # === Generate the C++ parser
 java org.antlr.v4.Tool -Dlanguage=Cpp -o src/grammar/cpp -visitor -no-listener grammar/zoia.g4
 
-# Stupid ANTLR places these incorrectly
-mv src/grammar/cpp/grammar/* src/grammar/cpp
-rmdir src/grammar/cpp/grammar
+if [ -d src/grammar/cpp/grammar ]
+then
+    # On Linux, ANTLR puts an extra /grammar into the output path
+    mv src/grammar/cpp/grammar/* src/grammar/cpp
+    rmdir src/grammar/cpp/grammar
+else
+    # On Windows (with a bash interpreter), it doesn't - so move them there
+    mv src/zoiaLexer.py src/grammar/zoiaLexer.py
+    mv src/zoiaParser.py src/grammar/zoiaParser.py
+    mv src/zoiaVisitor.py src/grammar/zoiaVisitor.py
+fi
 
 # === Generate the Python module
-if [ -f .venv/bin/activate ]
+if [ -f .venv/bin/activate ] # Linux
 then
     # shellcheck source=/dev/null
     source .venv/bin/activate
+    echo "Using virtual environment."
+elif [ -f .venv/Scripts/activate ] # Windows
+then
+    # shellcheck source=/dev/null
+    source .venv/Scripts/activate
     echo "Using virtual environment."
 else
     echo "Virtual environment not found, using system interpreter instead."
     echo "This is not recommended."
 fi
-python3 <<EOF
+python <<EOF
 from speedy_antlr_tool import generate
 
 generate(
@@ -44,8 +57,8 @@ EOF
 
 # === Cleanup
 # Delete the interp/tokens files, we don't need them
-find src/grammar -name "*.interp" -delete
-find src/grammar -name "*.tokens" -delete
+find src -name "*.interp" -delete
+find src -name "*.tokens" -delete
 
 # Trim trailing whitespace, ANTLR does not clean it up
 find src/grammar -type f -exec sed -i 's/[ \t]*$//' {} \;
