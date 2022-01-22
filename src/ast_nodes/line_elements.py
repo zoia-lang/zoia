@@ -22,11 +22,11 @@
 """Implements the AST node for collections of line elements."""
 from dataclasses import dataclass
 
-from ast_nodes.base import ASTNode
+from ast_nodes.base import _ASTNode
 from ast_nodes.line_element import LineElementNode
 
 @dataclass(slots=True)
-class LineElementsNode(ASTNode):
+class LineElementsNode(_ASTNode):
     """AST node for collections of line elements."""
     elements: list[LineElementNode]
 

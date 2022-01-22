@@ -31,7 +31,7 @@ jobs:
       matrix:
         # TODO: waiting for coverage.py 6.3
         python-version: [ '3.10' ] #, '3.11-dev' ]
-    name: Runs checks on Python ${{ matrix.python-version }}
+    name: Run checks on Python ${{ matrix.python-version }}
     steps:
       - name: Checkout commit
         uses: actions/checkout@v2

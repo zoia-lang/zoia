@@ -32,13 +32,18 @@ from paths import ZPath
 from src_pos import SourcePos
 
 class _RaiseErrorListener(SA_ErrorListener):
+    # No point in pylint complaining about this - it's inherited from generated
+    # source code, so we can't fix it
+    # pylint: disable=arguments-renamed,too-many-arguments
     def syntaxError(self, input_stream: InputStream, offending_symbol: Token,
                     char_index: int, line: int, column: int, msg: str):
         try:
             origin_file = offending_symbol.source[1].fileName
         except (AttributeError, KeyError, TypeError):
             origin_file = '<unknown file>'
-        raise ParsingError(SourcePos(origin_file, line, column), msg)
+        # 'from None' to hide the pointless, messageless error that we're in
+        # the middle of handling while this gets called
+        raise ParsingError(SourcePos(origin_file, line, column), msg) from None
 
 _REL_INSTANCE = _RaiseErrorListener()
 
@@ -49,3 +54,11 @@ def process_zoia_file(zoia_path: ZPath) -> ZoiaFileNode:
     ins = FileStream(zoia_path, encoding='utf-8')
     parse_tree = parse(ins, 'zoiaFile', sa_err_listener=_REL_INSTANCE)
     return ASTConverter(ins.fileName).visit(parse_tree)
+
+def process_zoia_string(zoia_src: str, src_name: str) -> ZoiaFileNode:
+    """Parses the specified string representation of a Zoia file and converts
+    it into a Zoia AST. src_name specifies the name of the source to use in
+    errors etc."""
+    ins = InputStream(zoia_src)
+    parse_tree = parse(ins, 'zoiaFile', sa_err_listener=_REL_INSTANCE)
+    return ASTConverter(src_name).visit(parse_tree)

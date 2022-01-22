@@ -38,6 +38,7 @@ def _print_legal_verbs(*, illegal_verb: str = ''):
         print(f' - {verb}', file=sys.stderr)
 
 def main(args):
+    """The main method. Starts the Zoia CLI."""
     log.init()
     if len(args) < 1:
         print('Usage: zoia <verb>', file=sys.stderr)
@@ -59,10 +60,10 @@ def _log_boot_info():
     log.info('This is free software licensed under the GPLv3. See the LICENSE '
              'file included with this program for more information.')
 
-_zoia_version = '0.1'
+_ZOIA_VERSION = '0.1'
 def _log_version():
     """Prints the version of this Zoia implementation to the log."""
-    log.info(f'Version {_zoia_version}')
+    log.info(f'Version {_ZOIA_VERSION}')
 
 class _Verb:
     """Base class for verbs."""

@@ -30,7 +30,7 @@ class KwdArgumentNode(ArgumentNode):
     kwd_name: str
 
     def canonical(self) -> str:
-        # This is necessary because @dataclass with slots=True creates a new
-        # class. That breaks argument-less super().
+        # @dataclass with slots=True breaks argument-less super
+        # pylint: disable=super-with-arguments
         args_canonical = super(KwdArgumentNode, self).canonical()
         return f'{self.kwd_name} = {args_canonical}'

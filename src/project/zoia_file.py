@@ -32,8 +32,8 @@ from zoia_processor import process_zoia_file
 
 # FIXME finish
 class FileType(Enum):
+    """Represents the various header types that Zoia files can have."""
     ALIASES = 0
-
 
 @dataclass(slots=True)
 @total_ordering

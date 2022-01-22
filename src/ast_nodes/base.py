@@ -21,15 +21,31 @@
 # =============================================================================
 """Implements the base class for all Zoia AST nodes."""
 from dataclasses import dataclass, field
+from io import StringIO
 
 from exception import AbstractError
 from src_pos import SourcePos
 
 @dataclass(slots=True)
-class ASTNode:
+class _ASTNode:
     """Base class for all Zoia AST nodes."""
     src_pos: SourcePos = field(kw_only=True)
 
     def canonical(self) -> str:
         """Returns a canonical string representation of this node."""
         raise AbstractError(self.canonical)
+
+def _write_arguments(s: StringIO, arguments: list[_ASTNode]) -> None:
+    """Helper method for writing out a list of nodes as arguments to a
+    command, including the brackets used to open and close the command (or a
+    vertical bar as a terminator, if the command does not have any
+    arguments)."""
+    if arguments:
+        s.write('[\n')
+        for a in arguments:
+            s.write('    ')
+            s.write(a.canonical())
+            s.write(';\n')
+        s.write(']')
+    else:
+        s.write('|')

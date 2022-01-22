@@ -21,8 +21,9 @@
 # =============================================================================
 """This module houses the parse tree visitor that generates an AST from the
 ANTLR parse tree."""
-from antlr4.tree.Tree import TerminalNodeImpl
 from io import StringIO
+
+from antlr4.tree.Tree import TerminalNodeImpl
 
 from ast_nodes import AliasNode, CommandNode, HeaderNode, KwdArgumentNode, \
     LineNode, StdArgumentNode, TextFragmentNode, ZoiaFileNode, \
@@ -101,10 +102,10 @@ class ASTConverter(zoiaVisitor):
         for le_child in ctx.children:
             try:
                 visit_method = visit_lookup[le_child.__class__]
-            except KeyError:
+            except KeyError as e:
                 raise ASTConversionError(self.make_pos(le_child),
-                                         f"Unknown or invalid line "
-                                         f"element '{le_child.getText()}'")
+                                         f"Unknown or invalid line element "
+                                         f"'{le_child.getText()}'") from e
             elements.append(visit_method(le_child))
         return LineElementsNode(elements, src_pos=self.make_pos(ctx))
 
@@ -143,7 +144,7 @@ class ASTConverter(zoiaVisitor):
         s = StringIO()
         for tf_child in ctx.children:
             if (isinstance(tf_child, TerminalNodeImpl) and
-                  tf_child.symbol.type in _text_fragment_children):
+                    tf_child.symbol.type in _text_fragment_children):
                 s.write(tf_child.getText())
             else:
                 raise ASTConversionError(self.make_pos(ctx),

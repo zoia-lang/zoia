@@ -20,16 +20,19 @@
 #
 # =============================================================================
 """This module houses tests related to the Zoia parser."""
-import pytest
-from antlr4.error.Errors import ParseCancellationException
-
 from test.base import ATestParser
+
+import pytest
+
+from exception import ParsingError
 
 # ==== Expect-Success Tests ===================================================
 class _ATestParserPass(ATestParser):
     """Base class for parser tests that are expected to succeed."""
     def test_parser(self) -> None:
-        assert self._make_parser().zoiaFile()
+        """Runs the actual test, ensuring that the Zoia source specified in
+        this class' _test_src field is parsed successfully."""
+        assert self._parse_src()
 
 class TestAcceptsHeader(_ATestParserPass):
     """A simple header should be accepted."""
@@ -103,13 +106,12 @@ class TestAcceptsMarkupComplex(_ATestParserPass):
 class _ATestParserFail(ATestParser):
     """Base class for parser tests that are expected to fail."""
     def test_parser(self) -> None:
+        """Runs the actual test, ensuring that parsing the Zoia source
+        specified in this class' _test_src variable fails."""
         try:
-            parser = self._make_parser()
-            # We're expecting to fail, don't print to stdout
-            parser.removeErrorListeners()
-            parser.zoiaFile()
+            self._parse_src()
             pytest.fail('Parsing was supposed to fail, but succeeded instead')
-        except ParseCancellationException:
+        except ParsingError:
             pass
 
 class TestRejectsNoHeader(_ATestParserFail):

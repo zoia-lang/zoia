@@ -20,7 +20,6 @@
 #
 # =============================================================================
 """This module houses tests related to canonical representations."""
-from ast_converter import ASTConverter
 from test.base import ATestParser
 
 class _ATestCanonicalRepr(ATestParser):
@@ -29,9 +28,7 @@ class _ATestCanonicalRepr(ATestParser):
     _test_rep: str
 
     def _get_canonical(self, test_src: str) -> str:
-        parse_tree = self._make_parser(test_src).zoiaFile()
-        zoia_conv = ASTConverter(f"<test '{self.__class__.__name__}'>")
-        return zoia_conv.visit(parse_tree).canonical()
+        return self._parse_src(test_src).canonical()
 
     def test_parse_src(self) -> None:
         """Parsing the source should produce the canonical representation."""
@@ -49,8 +46,8 @@ def _mk_shared(*lines) -> str:
     end."""
     return '\n'.join(lines) + '\n'
 
-_common_s = _mk_shared('\\header[foo]') + '\n'
-_common_r = _mk_shared('\\header[',
+_COMMON_S = _mk_shared('\\header[foo]') + '\n'
+_COMMON_R = _mk_shared('\\header[',
                        '    foo;',
                        ']',
                        '')
@@ -58,11 +55,11 @@ _common_r = _mk_shared('\\header[',
 def _mks(*lines):
     """Makes a source 'file' using the specified lines (with a header
     prepended)."""
-    return _common_s + _mk_shared(*lines)
+    return _COMMON_S + _mk_shared(*lines)
 def _mkr(*lines):
     """Makes a canonical representation 'file' using the specified lines (with
     a header prepended)."""
-    return _common_r + _mk_shared(*lines)
+    return _COMMON_R + _mk_shared(*lines)
 
 class TestHeaderCR(_ATestCanonicalRepr):
     """Headers should be formatted like commands (see TestCommandWithArgCR)."""
@@ -152,7 +149,7 @@ class TestCommandNested(_ATestCanonicalRepr):
                      '        \\qux;',
                      '    ];'
                      ']')
-    ##: This is ugly, should somehow come up with a way to fix it
+    # TODO This is ugly, should somehow come up with a way to fix it
     _test_rep = _mkr('\\foo[',
                      '    \\bar[',
                      '    \\qux|;',

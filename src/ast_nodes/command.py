@@ -24,6 +24,7 @@ from dataclasses import dataclass
 from io import StringIO
 
 from ast_nodes.argument import ArgumentNode
+from ast_nodes.base import _write_arguments
 from ast_nodes.line_element import LineElementNode
 
 @dataclass(slots=True)
@@ -36,13 +37,5 @@ class CommandNode(LineElementNode):
         s = StringIO()
         s.write('\\')
         s.write(self.cmd_name)
-        if self.arguments:
-            s.write('[\n')
-            for a in self.arguments:
-                s.write('    ')
-                s.write(a.canonical())
-                s.write(';\n')
-            s.write(']')
-        else:
-            s.write('|')
+        _write_arguments(s, self.arguments)
         return s.getvalue()

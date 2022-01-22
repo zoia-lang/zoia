@@ -23,11 +23,11 @@
 from dataclasses import dataclass
 from typing import Optional
 
-from ast_nodes.base import ASTNode
+from ast_nodes.base import _ASTNode
 from ast_nodes.line_elements import LineElementsNode
 
 @dataclass(slots=True)
-class LineNode(ASTNode):
+class LineNode(_ASTNode):
     """AST node for lines."""
     elements: Optional[LineElementsNode]
 

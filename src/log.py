@@ -50,26 +50,35 @@ characters are processed the same way as in the two-character case.
 """
 import os
 import sys
+from enum import Enum
+from io import StringIO
 
 from colorama import Back, Fore, Style
 from colorama.initialise import wrap_stream
-from enum import Enum
-from io import StringIO
 
 # NO LOCAL IMPORTS! This has to be importable from any module/package.
 
 # TODO This module needs to create an output log in build/, where detailed logs
 #  go (including debug messages, timestamps, etc.)
 
+# Disable some pylint warnings for this file only:
+#  - consider-using-with: We're opening os.devnull, no need to worry about
+#    closing it.
+#  - global-statement: This is a global logging framework that has to
+#    explicitly be initialized via init() call to avoid messing with tests etc.
+#  - invalid-name: Those aren't constants, they're global variables. Yeah,
+#    spooky.
+# pylint: disable=consider-using-with,global-statement,invalid-name
+
 # Discard all output until init() is called
-wrapped_stdout = open(os.devnull, 'w')
+_wrapped_stdout = open(os.devnull, 'w', encoding='utf-8')
 
 def init() -> None:
     """Initializes the logging module. Without this method having been called
     beforehand, all functions in this module will discard their output."""
-    global wrapped_stdout
-    wrapped_stdout = wrap_stream(sys.stdout, autoreset=True, convert=None,
-                                 strip=None, wrap=True)
+    global _wrapped_stdout
+    _wrapped_stdout = wrap_stream(sys.stdout, autoreset=True, convert=None,
+                                  strip=None, wrap=True)
 
 def _colorize_line(line: str) -> str:
     """Parses the specified line for color syntax and replaces it with the
@@ -111,10 +120,10 @@ def _parse_cmd(cmd: str) -> str:
         if cmd[2] != 'l':
             raise SyntaxError(f"Invalid log command: Last character of "
                               f"three-character command sequence must be an "
-                              f"'l'")
+                              f"'l', not {cmd[2]}")
         if cmd[1] == 'T':
-            raise SyntaxError(f'Invalid log command: There is no light '
-                              f'version of the color reset command')
+            raise SyntaxError('Invalid log command: There is no light '
+                              'version of the color reset command')
         return _parse_color(cmd[:2], light=True)
     if len(cmd) == 2:
         return _parse_color(cmd)
@@ -123,7 +132,7 @@ def _parse_cmd(cmd: str) -> str:
             return _char_to_style[cmd[0]]
         except KeyError:
             raise SyntaxError(f"Invalid log command: Unknown style code "
-                              f"'{cmd[0]}'")
+                              f"'{cmd[0]}'") from None
     else:
         raise SyntaxError(f'Invalid log command: must have length 1-3, but '
                           f'has length {len(cmd)}')
@@ -134,12 +143,12 @@ def _parse_color(color: str, *, light: bool = False) -> str:
         target_loc = _char_to_location[color[0]]
     except KeyError:
         raise SyntaxError(f"Invalid log command: Unknown color location "
-                          f"'{color[0]}'")
+                          f"'{color[0]}'") from None
     try:
         color_name = _char_to_color[color[1]]
     except KeyError:
         raise SyntaxError(f"Invalid log command: Unknown color code "
-                          f"'{color[1]}'")
+                          f"'{color[1]}'") from None
     if light:
         color_name = f'LIGHT{color_name}_EX'
     return getattr(target_loc, color_name)
@@ -160,17 +169,19 @@ class _Level(Enum):
 _num_warnings = 0
 _num_errors = 0
 
+# FIXME Use the severity argument
+# pylint: disable=unused-argument
 def _do_log(s: str, *, severity: _Level) -> None:
     """The method that actually handles parsing and printing of a single log
     line."""
-    print(_colorize_line(s), file=wrapped_stdout)
+    print(_colorize_line(s), file=_wrapped_stdout)
 
 def debug(s: str) -> None:
     """Logs a message with severity level of DEBUG. This will not print
     anything to stdout and only print to the log, if that is enabled. Intended
     for debugging messages that an end-user usually doesn't need to see."""
     # TODO see other TODO above
-    #_do_log(s, severity=_Level.DEBUG)
+    _do_log(s, severity=_Level.DEBUG)
 
 def info(s: str) -> None:
     """Logs a message with severity level of INFO. The most common usage.
@@ -204,7 +215,7 @@ def log_stats() -> None:
         info('$fGl$No warnings or errors occurred$R$')
     else:
         if _num_warnings == 1:
-            warning(f'1 total warning', count_warning=False)
+            warning('1 total warning', count_warning=False)
         elif _num_warnings > 1:
             warning(f'{_num_warnings} total warnings', count_warning=False)
         if _num_errors == 1:

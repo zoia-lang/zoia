@@ -23,12 +23,12 @@
 from dataclasses import dataclass
 from io import StringIO
 
-from ast_nodes.base import ASTNode
+from ast_nodes.base import _ASTNode
 from ast_nodes.header import HeaderNode
 from ast_nodes.line import LineNode
 
 @dataclass(slots=True)
-class ZoiaFileNode(ASTNode):
+class ZoiaFileNode(_ASTNode):
     """AST node for Zoia files."""
     header: HeaderNode
     lines: list[LineNode]

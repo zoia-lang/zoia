@@ -20,32 +20,25 @@
 #
 # =============================================================================
 """This module houses code shared by multiple test files."""
-from antlr4 import BailErrorStrategy, CommonTokenStream, InputStream
+from ast_nodes import ZoiaFileNode
+from zoia_processor import process_zoia_string
 
-from grammar import zoiaLexer, zoiaParser
-
-_default_header = '\\header[fragment]\n\n'
+_DEFAULT_HEADER = '\\header[fragment]\n\n'
 
 class ATestParser:
     """Base class for all tests that need to parse Zoia code."""
     _test_src: str
     _do_fixups: bool = True
 
-    def _make_parser(self, test_src: str = None) -> zoiaParser:
+    def _parse_src(self, test_src: str = None) -> ZoiaFileNode:
         """Creates a new zoiaParser instance with the specified source code
         (falling back to self._test_src if it is None)."""
         if test_src is None:
             test_src = self._test_src
         # For convenience, the \header part can be elided in tests
         if self._do_fixups and '\\header' not in test_src:
-            test_src = _default_header + test_src
+            test_src = _DEFAULT_HEADER + test_src
         # For convenience, an ending \n can be elided in tests
         if self._do_fixups and not test_src.endswith('\n'):
             test_src += '\n'
-        ins = InputStream(test_src)
-        lexer = zoiaLexer(ins)
-        tokens = CommonTokenStream(lexer)
-        parser = zoiaParser(tokens)
-        # Ugh, why isn't there an API for this?
-        parser._errHandler = BailErrorStrategy()
-        return parser
+        return process_zoia_string(test_src, f"<{self.__class__.__name__}>")

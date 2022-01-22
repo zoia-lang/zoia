@@ -29,4 +29,6 @@ class Em3LineElementNode(_EmLineElementNode):
     """AST node for level 3 emphasized line elements."""
 
     def canonical(self) -> str:
+        # @dataclass with slots=True breaks argument-less super
+        # pylint: disable=super-with-arguments
         return f'***{super(Em3LineElementNode, self).canonical()}***'
