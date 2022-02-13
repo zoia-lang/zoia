@@ -21,18 +21,18 @@
 # =============================================================================
 """This module runs tests that check whether project structures are being
 parsed correctly."""
+from pathlib import Path
+
 import pytest
 
 from exception import ProjectStructureError
-from paths import ZPath
 from project import Series
-from utils import is_fs_case_sensitive
 
 # Utilities
-def _get_src_path(test_name: str) -> ZPath:
+def _get_src_path(test_name: str) -> Path:
     """Retrieves the full path to the 'src' folder for the test with the
     specified directory name."""
-    return ZPath(__file__).parent.resolve(strict=True) / test_name / 'src'
+    return Path(__file__).parent.resolve(strict=True) / test_name / 'src'
 
 class _ATestProject:
     _test_name: str
@@ -82,14 +82,6 @@ class TestIncontiguousWorks(_ATestProjectFailing):
     _test_name = 'incontiguous_works'
     _exp_error = 'Work indices must form a contiguous sequence'
 
-@pytest.mark.skipif(
-    not is_fs_case_sensitive(_get_src_path('multiple_main_files')),
-    reason='Irrelevant on case-insensitive file systems')
-class TestMultipleMainFiles(_ATestProjectFailing):
-    """A chapter with multiple main files should be rejected."""
-    _test_name = 'multiple_main_files'
-    _exp_error = "There may only be one 'main.zoia' file per chapter"
-
 class TestNoIndex1Chapter(_ATestProjectFailing):
     """A work without a chapter with index should be rejected."""
     _test_name = 'no_index_1_chapter'
@@ -110,6 +102,26 @@ class TestNoSrc(_ATestProjectFailing):
     rejected."""
     _test_name = 'no_src'
     _exp_error = "No 'src' folder found"
+
+class TestUpperChapter(_ATestProjectFailing):
+    """A project with a non-lowercased chapter folder should be rejected."""
+    _test_name = 'upper_chapter'
+    _exp_error = "'Ch1' is not lowercased"
+
+class TestUpperFile(_ATestProjectFailing):
+    """A project with a non-lowercased chapter folder should be rejected."""
+    _test_name = 'upper_file'
+    _exp_error = "'Main.zoia' is not lowercased"
+
+class TestUpperSrc(_ATestProjectFailing):
+    """A project with a non-lowercased 'src' folder should be rejected."""
+    _test_name = 'upper_src'
+    _exp_error = "No 'src' folder found"
+
+class TestUpperWork(_ATestProjectFailing):
+    """A project with a non-lowercased work folder should be rejected."""
+    _test_name = 'upper_work'
+    _exp_error = "'Work1' is not lowercased"
 
 # Passing tests begin here
 class TestSimpleStructure(_ATestProjectPassing):

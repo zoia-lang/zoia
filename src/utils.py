@@ -23,7 +23,6 @@
 from itertools import groupby
 from os import PathLike
 from pathlib import Path
-from shutil import rmtree
 
 import log
 from exception import ProjectStructureError
@@ -34,18 +33,6 @@ def is_contiguous(l: list[int]) -> bool:
     n + 1 must have value v + 1."""
     return len(list(groupby(enumerate(l), key=lambda x: x[0] - x[1]))) == 1
 
-def is_fs_case_sensitive(test_path: Path) -> bool:
-    """Returns True if the file system used at the specified path is
-    case-sensitive."""
-    temp_path = test_path / 'temp'
-    temp_path.mkdir()
-    try:
-        (temp_path / 'foo.txt').touch()
-        (temp_path / 'Foo.txt').touch()
-        return len(list(temp_path.iterdir())) != 1
-    finally:
-        rmtree(temp_path)
-
 def ps_error(msg: str, relevant_path: PathLike, raise_errors: bool):
     """Prints or raises a project structure error, depending on whether
     raise_errors is True or not."""
@@ -55,3 +42,16 @@ def ps_error(msg: str, relevant_path: PathLike, raise_errors: bool):
         log.error(f'Invalid project structure at $fWl${relevant_path}$fT$: '
                   f'$fRl${msg}$fT$')
         return None
+
+def dir_case_is_valid(dir_path: Path, rel_dir_path: Path,
+                      raise_errors: bool) -> bool:
+    """Checks that the contents of the specified directory are all entirely in
+    lowercase and return True. If not, calls ps_error (see above) with an error
+    message and returns False."""
+    case_valid = True
+    for f in dir_path.iterdir():
+        if f.name != f.name.lower():
+            ps_error(f"'{f.name}' is not lowercased", rel_dir_path,
+                     raise_errors)
+            case_valid = False
+    return case_valid

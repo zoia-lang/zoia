@@ -23,11 +23,11 @@
 from dataclasses import dataclass
 from enum import Enum
 from functools import total_ordering
+from pathlib import Path
 
 import log
 from ast_nodes import ZoiaFileNode
 from exception import ASTConversionError, ParsingError
-from paths import ZPath
 from zoia_processor import process_zoia_file
 
 # FIXME finish
@@ -40,12 +40,12 @@ class FileType(Enum):
 class ZoiaFile:
     """A Zoia file is a file with the .zoia extension, following the layout
     specified by the Zoia grammar."""
-    file_path: ZPath
+    file_path: Path
     file_ast: ZoiaFileNode
 
     def is_main_file(self) -> bool:
         """Checks if this is a main.zoia file."""
-        return self.file_path.cname == 'main.zoia'
+        return self.file_path.name == 'main.zoia'
 
     def __lt__(self, other) -> bool:
         if not isinstance(other, ZoiaFile):
@@ -53,7 +53,7 @@ class ZoiaFile:
         return self.file_path < other.file_path
 
     @classmethod
-    def parse_zoia_file(cls, file_path: ZPath, project_folder: ZPath,
+    def parse_zoia_file(cls, file_path: Path, project_folder: Path,
                         raise_errors: bool):
         """Parses a Zoia file at the specified path."""
         file_rel = file_path.relative_to(project_folder)

@@ -97,6 +97,9 @@ disable=raw-checker-failed,
         too-few-public-methods,
         # I often find this less readable than indenting
         no-else-raise, no-else-return,
+        # I prefer using a bunch of return statements over complicating the
+        # logic by using variables
+        too-many-return-statements,
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
@@ -317,7 +320,7 @@ ignore-comments=yes
 ignore-docstrings=yes
 
 # Imports are removed from the similarity computation
-ignore-imports=no
+ignore-imports=yes
 
 # Signatures are removed from the similarity computation
 ignore-signatures=no

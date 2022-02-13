@@ -21,11 +21,11 @@
 # =============================================================================
 """Implements series folders."""
 from dataclasses import dataclass
+from pathlib import Path
 
 import log
 from project.work import Work, match_work
-from paths import ZPath
-from utils import is_contiguous, ps_error
+from utils import is_contiguous, ps_error, dir_case_is_valid
 
 @dataclass(slots=True)
 class Series:
@@ -34,19 +34,20 @@ class Series:
     works: list[Work]
 
     @classmethod
-    def parse_series(cls, series_folder: ZPath, *, raise_errors: bool = False):
+    def parse_series(cls, series_folder: Path, *, raise_errors: bool = False):
         """Parses a series ('src' folder) at the specified path."""
         # Resolve the path first so all later operations can use full paths and
         # ensure it exists while we're at it
         try:
             series_folder = series_folder.resolve(strict=True)
         except FileNotFoundError:
-            return ps_error("No 'src' folder found", series_folder,
-                            raise_errors)
+            return ps_error("No 'src' folder found", Path(''), raise_errors)
         project_folder = series_folder.parent
         series_rel = series_folder.relative_to(project_folder)
         log.info(log.arrow(1, f'Found series at '
                               f'$fYl${series_rel}$R$'))
+        if not dir_case_is_valid(series_folder, series_rel, raise_errors):
+            return None
         works = [Work.parse_work(w, project_folder, raise_errors)
                  for w in series_folder.iterdir() if match_work(w.name)]
         if not all(works):
@@ -56,13 +57,13 @@ class Series:
             return None
         if not works:
             return ps_error("The 'src' folder must contain one or more works",
-                            series_folder, raise_errors)
+                            series_rel, raise_errors)
         works.sort() # Blows up on None
         work_indices = [w.work_index for w in works]
         if work_indices[0] != 1:
             return ps_error('The first work in a series must have index 1',
-                            series_folder, raise_errors)
+                            series_rel, raise_errors)
         if not is_contiguous(work_indices):
             return ps_error('Work indices must form a contiguous sequence',
-                            series_folder, raise_errors)
+                            series_rel, raise_errors)
         return cls(works)

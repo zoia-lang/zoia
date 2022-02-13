@@ -23,15 +23,15 @@
 import re
 from dataclasses import dataclass
 from functools import total_ordering
+from pathlib import Path
 
 import log
 from project.chapter import Chapter, match_chapter
-from paths import ZPath
-from utils import is_contiguous, ps_error
+from utils import is_contiguous, ps_error, dir_case_is_valid
 
 # Valid work folder names consist of the word 'work' followed by one or more
 # digits
-match_work = re.compile(r'work(\d+)', re.I).fullmatch
+match_work = re.compile(r'work(\d+)').fullmatch
 
 @dataclass(slots=True)
 @total_ordering
@@ -52,11 +52,13 @@ class Work:
         return self.work_index < other.work_index
 
     @classmethod
-    def parse_work(cls, work_folder: ZPath, project_folder: ZPath,
+    def parse_work(cls, work_folder: Path, project_folder: Path,
                    raise_errors: bool):
         """Parses a work folder at the specified path."""
         work_rel = work_folder.relative_to(project_folder)
         log.info(log.arrow(2, f'Found work at $fYl${work_rel}$R$'))
+        if not dir_case_is_valid(work_folder, work_rel, raise_errors):
+            return None
         chapters = [Chapter.parse_chapter(c, project_folder, raise_errors)
                     for c in work_folder.iterdir() if match_chapter(c.name)]
         if not all(chapters):
@@ -66,13 +68,13 @@ class Work:
             return None
         if not chapters:
             return ps_error('Work folders must contain one or more chapters',
-                            work_folder, raise_errors)
+                            work_rel, raise_errors)
         chapters.sort() # Blows up on None
         chapter_indices = [c.chapter_index for c in chapters]
         if chapter_indices[0] != 1:
             return ps_error('The first chapter in a work must have index 1',
-                            work_folder, raise_errors)
+                            work_rel, raise_errors)
         if not is_contiguous(chapter_indices):
             return ps_error('Chapter indices must form a contiguous sequence',
-                            work_folder, raise_errors)
+                            work_rel, raise_errors)
         return cls(work_folder.name, chapters)

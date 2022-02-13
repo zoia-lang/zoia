@@ -23,15 +23,15 @@
 import re
 from dataclasses import dataclass
 from functools import total_ordering
+from pathlib import Path
 
 import log
 from project.zoia_file import ZoiaFile
-from paths import ZPath
-from utils import ps_error
+from utils import ps_error, dir_case_is_valid
 
 # Valid chapter folder names consist of the word 'ch' followed by one or more
 # digits
-match_chapter = re.compile(r'ch(\d+)', re.I).fullmatch
+match_chapter = re.compile(r'ch(\d+)').fullmatch
 
 @dataclass(slots=True)
 @total_ordering
@@ -56,31 +56,28 @@ class Chapter:
         return self.chapter_index < other.chapter_index
 
     @classmethod
-    def parse_chapter(cls, chapter_folder: ZPath, project_folder: ZPath,
+    def parse_chapter(cls, chapter_folder: Path, project_folder: Path,
                       raise_errors: bool):
         """Parses a chapter folder at the specified path."""
         chapter_rel = chapter_folder.relative_to(project_folder)
         log.info(log.arrow(3, f'Found chapter at '
                               f'$fYl${chapter_rel}$R$'))
+        if not dir_case_is_valid(chapter_folder, chapter_rel, raise_errors):
+            return None
         aux_files = [ZoiaFile.parse_zoia_file(f, project_folder, raise_errors)
                      for f in chapter_folder.iterdir()
-                     if f.csuffix == '.zoia']
+                     if f.suffix == '.zoia']
         if not all(aux_files):
             # This is just a cascading effect of a real error
             log.warning('Failed to parse chapter due to errors when parsing '
                         'one or more Zoia files')
             return None
         aux_files.sort() # Blows up on None
-        # Ensure there is exactly one main file (on case-sensitive file
-        # systems, there can be >1 file with the case-insensitive name
-        # 'main.zoia')
+        # There can only be one
         main_files = [f for f in aux_files if f.is_main_file()]
         if not main_files:
             return ps_error("Each chapter must contain a 'main.zoia' file",
-                            chapter_folder, raise_errors)
-        if len(main_files) != 1:
-            return ps_error("There may only be one 'main.zoia' file per "
-                            "chapter", chapter_folder, raise_errors)
+                            chapter_rel, raise_errors)
         main_file = main_files[0]
         aux_files.remove(main_file)
         return cls(chapter_folder.name, main_file, aux_files)

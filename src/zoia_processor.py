@@ -22,13 +22,14 @@
 """High-level interface for parsing a Zoia file and converting it into an
 AST."""
 
+from pathlib import Path
+
 from antlr4 import FileStream, InputStream, Token
 
 from ast_converter import ASTConverter
 from ast_nodes import ZoiaFileNode
 from exception import ParsingError
 from grammar import parse, SA_ErrorListener
-from paths import ZPath
 from src_pos import SourcePos
 
 class _RaiseErrorListener(SA_ErrorListener):
@@ -47,7 +48,7 @@ class _RaiseErrorListener(SA_ErrorListener):
 
 _REL_INSTANCE = _RaiseErrorListener()
 
-def process_zoia_file(zoia_path: ZPath) -> ZoiaFileNode:
+def process_zoia_file(zoia_path: Path) -> ZoiaFileNode:
     """Parses the Zoia file at the specified path and converts it into a Zoia
     AST."""
     # UTF-8 required by specification, so this is fine

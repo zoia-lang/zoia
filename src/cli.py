@@ -22,10 +22,10 @@
 """This module is the main entry point for using Zoia from the command line."""
 import sys
 import time
+from pathlib import Path
 
 import log
 from exception import AbstractError
-from paths import ZPath
 from project import Series
 
 def _print_legal_verbs(*, illegal_verb: str = ''):
@@ -87,9 +87,9 @@ class _CommonVerb(_Verb):
 class _Build(_CommonVerb):
     """Verb that builds a project."""
     def _run_common(self, args: list[str]) -> None:
-        log.info(f'Working directory is $fWl${ZPath.cwd()}$R$')
+        log.info(f'Working directory is $fWl${Path.cwd()}$R$')
         start_time = time.time()
-        Series.parse_series(ZPath.cwd() / 'src')
+        Series.parse_series(Path.cwd() / 'src')
         duration = time.time() - start_time
         log.info(f'Build took {duration:.1f}s')
 

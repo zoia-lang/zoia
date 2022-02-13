@@ -214,14 +214,8 @@ def log_stats() -> None:
     if _num_warnings == _num_errors == 0:
         info('$fGl$No warnings or errors occurred$R$')
     else:
-        if _num_warnings == 1:
-            warning('1 total warning', count_warning=False)
-        elif _num_warnings > 1:
-            warning(f'{_num_warnings} total warnings', count_warning=False)
-        if _num_errors == 1:
-            error('1 total error', count_error=False)
-        elif _num_errors > 1:
-            error(f'{_num_errors} total errors', count_error=False)
+        warning(f'{_num_warnings} total warning(s)', count_warning=False)
+        error(f'{_num_errors} total error(s)', count_error=False)
 
 def reset_stats() -> None:
     """Resets the error and warning counters. See log_stats as well as error
