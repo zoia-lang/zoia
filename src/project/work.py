@@ -27,6 +27,7 @@ from pathlib import Path
 
 import log
 from project.chapter import Chapter, match_chapter
+from project.dir_base import _ADirBase
 from utils import is_contiguous, ps_error, dir_case_is_valid
 
 # Valid work folder names consist of the word 'work' followed by one or more
@@ -35,16 +36,10 @@ match_work = re.compile(r'work(\d+)').fullmatch
 
 @dataclass(slots=True)
 @total_ordering
-class Work:
+class Work(_ADirBase):
     """A work folder is a folder containing one or more chapters."""
     chapters: list[Chapter]
     work_index: int
-
-    def __init__(self, work_name: str, chapters: list[Chapter]) -> None:
-        self.chapters = chapters
-        # Extract the work index from the name of the work (we know the regex
-        # matches at this point)
-        self.work_index = int(match_work(work_name).group(1))
 
     def __lt__(self, other) -> bool:
         if not isinstance(other, Work):
@@ -59,6 +54,10 @@ class Work:
         log.info(log.arrow(2, f'Found work at $fYl${work_rel}$R$'))
         if not dir_case_is_valid(work_folder, work_rel, raise_errors):
             return None
+        aux_files = cls.parse_zoia_files(
+            work_folder, project_folder, raise_errors, arrow_level=3,
+            warning_msg='Failed to parse work due to errors when parsing '
+                        'one or more Zoia files')
         chapters = [Chapter.parse_chapter(c, project_folder, raise_errors)
                     for c in work_folder.iterdir() if match_chapter(c.name)]
         if not all(chapters):
@@ -77,4 +76,9 @@ class Work:
         if not is_contiguous(chapter_indices):
             return ps_error('Chapter indices must form a contiguous sequence',
                             work_rel, raise_errors)
-        return cls(work_folder.name, chapters)
+        # Extract the work index from the name of the work (we know the regex
+        # matches at this point)
+        wk_index = int(match_work(work_folder.name).group(1))
+        # See ast_converter.py for the reasoning
+        # noinspection PyArgumentList
+        return cls(chapters, wk_index, zoia_files=aux_files)

@@ -54,11 +54,11 @@ class ZoiaFile:
 
     @classmethod
     def parse_zoia_file(cls, file_path: Path, project_folder: Path,
-                        raise_errors: bool):
+                        raise_errors: bool, arrow_level: int):
         """Parses a Zoia file at the specified path."""
         file_rel = file_path.relative_to(project_folder)
-        log.info(log.arrow(4, f'Parsing Zoia file at '
-                              f'$fCl${file_rel}$R$'))
+        log.info(log.arrow(arrow_level, f'Parsing Zoia file at '
+                                        f'$fCl${file_rel}$R$'))
         try:
             processed_file = process_zoia_file(file_path)
         except ParsingError as e:

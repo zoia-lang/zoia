@@ -26,6 +26,7 @@ from functools import total_ordering
 from pathlib import Path
 
 import log
+from project.dir_base import _ADirBase
 from project.zoia_file import ZoiaFile
 from utils import ps_error, dir_case_is_valid
 
@@ -35,20 +36,11 @@ match_chapter = re.compile(r'ch(\d+)').fullmatch
 
 @dataclass(slots=True)
 @total_ordering
-class Chapter:
+class Chapter(_ADirBase):
     """A chapter is a folder containing a main file (main.zoia) and,
     optionally, any number of auxiliary files (*.zoia)."""
     main_file: ZoiaFile
-    aux_files: list[ZoiaFile]
     chapter_index: int
-
-    def __init__(self, chapter_name: str, main_file: ZoiaFile,
-                 aux_files: list[ZoiaFile]) -> None:
-        self.main_file = main_file
-        self.aux_files = aux_files
-        # Extract the chapter index from the name of the chapter (we know the
-        # regex matches at this point)
-        self.chapter_index = int(match_chapter(chapter_name).group(1))
 
     def __lt__(self, other) -> bool:
         if not isinstance(other, Chapter):
@@ -64,20 +56,21 @@ class Chapter:
                               f'$fYl${chapter_rel}$R$'))
         if not dir_case_is_valid(chapter_folder, chapter_rel, raise_errors):
             return None
-        aux_files = [ZoiaFile.parse_zoia_file(f, project_folder, raise_errors)
-                     for f in chapter_folder.iterdir()
-                     if f.suffix == '.zoia']
-        if not all(aux_files):
-            # This is just a cascading effect of a real error
-            log.warning('Failed to parse chapter due to errors when parsing '
+        aux_files = cls.parse_zoia_files(
+            chapter_folder, project_folder, raise_errors, arrow_level=4,
+            warning_msg='Failed to parse chapter due to errors when parsing '
                         'one or more Zoia files')
-            return None
-        aux_files.sort() # Blows up on None
-        # There can only be one
+        # There caaaan be only oooooooone
         main_files = [f for f in aux_files if f.is_main_file()]
         if not main_files:
             return ps_error("Each chapter must contain a 'main.zoia' file",
                             chapter_rel, raise_errors)
+        # There can't be >1 main file since we disallow non-lowercase names
         main_file = main_files[0]
         aux_files.remove(main_file)
-        return cls(chapter_folder.name, main_file, aux_files)
+        # Extract the chapter index from the name of the chapter (we know the
+        # regex matches at this point)
+        ch_index = int(match_chapter(chapter_folder.name).group(1))
+        # See ast_converter.py for the reasoning
+        # noinspection PyArgumentList
+        return cls(main_file, ch_index, zoia_files=aux_files)

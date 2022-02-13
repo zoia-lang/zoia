@@ -52,7 +52,7 @@ def process_zoia_file(zoia_path: Path) -> ZoiaFileNode:
     """Parses the Zoia file at the specified path and converts it into a Zoia
     AST."""
     # UTF-8 required by specification, so this is fine
-    ins = FileStream(zoia_path, encoding='utf-8')
+    ins = FileStream(str(zoia_path), encoding='utf-8')
     parse_tree = parse(ins, 'zoiaFile', sa_err_listener=_REL_INSTANCE)
     return ASTConverter(ins.fileName).visit(parse_tree)
 

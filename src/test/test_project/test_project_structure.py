@@ -124,6 +124,11 @@ class TestUpperWork(_ATestProjectFailing):
     _exp_error = "'Work1' is not lowercased"
 
 # Passing tests begin here
+class TestArbitraryZoiaFiles(_ATestProjectPassing):
+    """Zoia files should be accepted and parsed no matter which folder under
+    src they are placed in."""
+    _test_name = 'arbitrary_zoia_files'
+
 class TestSimpleStructure(_ATestProjectPassing):
     """A single work with a single chapter and a valid main.zoia file should be
     accepted."""

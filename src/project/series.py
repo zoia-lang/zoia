@@ -24,11 +24,12 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import log
+from project.dir_base import _ADirBase
 from project.work import Work, match_work
 from utils import is_contiguous, ps_error, dir_case_is_valid
 
 @dataclass(slots=True)
-class Series:
+class Series(_ADirBase):
     """A series is the main 'src' folder, containing one or more works in
     it."""
     works: list[Work]
@@ -48,6 +49,10 @@ class Series:
                               f'$fYl${series_rel}$R$'))
         if not dir_case_is_valid(series_folder, series_rel, raise_errors):
             return None
+        aux_files = cls.parse_zoia_files(
+            series_folder, project_folder, raise_errors, arrow_level=2,
+            warning_msg='Failed to parse series due to errors when parsing '
+                        'one or more Zoia files')
         works = [Work.parse_work(w, project_folder, raise_errors)
                  for w in series_folder.iterdir() if match_work(w.name)]
         if not all(works):
@@ -66,4 +71,6 @@ class Series:
         if not is_contiguous(work_indices):
             return ps_error('Work indices must form a contiguous sequence',
                             series_rel, raise_errors)
-        return cls(works)
+        # See ast_converter.py for the reasoning
+        # noinspection PyArgumentList
+        return cls(works, zoia_files=aux_files)
