@@ -17,6 +17,8 @@ This is a mockup for what the layout of a typical Zoia project would look like.
 │       ├── <a href="#notes_endhtml">notes_end.html</a>
 │       └── <a href="#summaryhtml">summary.html</a>
 ├── <a href="#src">src</a>
+│   ├── <a href="#aliaseszoia">aliases.zoia</a>
+│   ├── <a href="#dictzoia">dict.zoia</a>
 │   └── work1
 │       ├── ch1
 │       │   └── <a href="#mainzoia">main.zoia</a>
@@ -24,8 +26,6 @@ This is a mockup for what the layout of a typical Zoia project would look like.
 │           ├── <a href="#mainzoia">fight.zoia</a>
 │           ├── <a href="#mainzoia">kiss.zoia</a>
 │           └── <a href="#mainzoia">main.zoia</a>
-├── <a href="#aliaseszoia">aliases.zoia</a>
-├── <a href="#dictzoia">dict.zoia</a>
 └── <a href="#zoiatoml">zoia.toml</a>
 </pre>
 
