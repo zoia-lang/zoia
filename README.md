@@ -34,6 +34,7 @@ A language for writing fiction.
   - [ ] 2. Parse dict
   - [ ] 3. Insert fragments
   - [ ] 4. Resolve aliases (repeat until no more alias nodes left)
+  - At this point, we hand off to the separate backends
   - [ ] 5. Evaluate lines top to bottom, left to right.
            Commands get executed here, resolving either to text fragments
            or to nothing at all (in which case they probably have side effects).
