@@ -22,13 +22,16 @@
 """Implements the AST node for collections of line elements."""
 from dataclasses import dataclass
 
-from ast_nodes.base import _ASTNode
-from ast_nodes.line_element import LineElementNode
+from ast_nodes.base import AASTNode
+from ast_nodes.line_element import ALineElementNode
 
 @dataclass(slots=True)
-class LineElementsNode(_ASTNode):
+class LineElementsNode(AASTNode):
     """AST node for collections of line elements."""
-    elements: list[LineElementNode]
+    elements: list[ALineElementNode]
+
+    def accept(self, visitor):
+        return visitor.visit_line_elements(self)
 
     def canonical(self) -> str:
         return ''.join([e.canonical() for e in self.elements])

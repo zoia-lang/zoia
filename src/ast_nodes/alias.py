@@ -22,12 +22,15 @@
 """Implements the AST node for aliases."""
 from dataclasses import dataclass
 
-from ast_nodes.line_element import LineElementNode
+from ast_nodes.line_element import ALineElementNode
 
 @dataclass(slots=True)
-class AliasNode(LineElementNode):
+class AliasNode(ALineElementNode):
     """AST node for aliases."""
     alias_key: str
+
+    def accept(self, visitor):
+        return visitor.visit_alias(self)
 
     def canonical(self) -> str:
         return f'@{self.alias_key}|'

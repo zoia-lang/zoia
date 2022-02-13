@@ -22,12 +22,15 @@
 """Implements the AST node for keyword arguments."""
 from dataclasses import dataclass
 
-from ast_nodes.argument import ArgumentNode
+from ast_nodes.argument import AArgumentNode
 
 @dataclass(slots=True)
-class KwdArgumentNode(ArgumentNode):
+class KwdArgumentNode(AArgumentNode):
     """AST node for keyword arguments."""
     kwd_name: str
+
+    def accept(self, visitor):
+        return visitor.visit_kwd_argument(self)
 
     def canonical(self) -> str:
         # @dataclass with slots=True breaks argument-less super

@@ -23,10 +23,10 @@
 dependencies."""
 from dataclasses import dataclass
 
-from ast_nodes.base import _ASTNode
+from ast_nodes.base import AASTNode
 
 @dataclass(slots=True)
-class LineElementNode(_ASTNode):
+class ALineElementNode(AASTNode):
     """Base AST node for single line elements. See AliasNode, CommandNode,
     Em1LineElementNode, Em2LineElementNode, Em3LineElementNode and
     TextFragmentNode."""

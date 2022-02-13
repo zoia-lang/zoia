@@ -71,6 +71,6 @@ class Chapter(_ADirBase):
         # Extract the chapter index from the name of the chapter (we know the
         # regex matches at this point)
         ch_index = int(match_chapter(chapter_folder.name).group(1))
-        # See ast_converter.py for the reasoning
+        # See parse_converter.py for the reasoning
         # noinspection PyArgumentList
         return cls(main_file, ch_index, zoia_files=aux_files)

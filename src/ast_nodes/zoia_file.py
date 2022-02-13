@@ -23,15 +23,18 @@
 from dataclasses import dataclass
 from io import StringIO
 
-from ast_nodes.base import _ASTNode
+from ast_nodes.base import AASTNode
 from ast_nodes.header import HeaderNode
 from ast_nodes.line import LineNode
 
 @dataclass(slots=True)
-class ZoiaFileNode(_ASTNode):
+class ZoiaFileNode(AASTNode):
     """AST node for Zoia files."""
     header: HeaderNode
     lines: list[LineNode]
+
+    def accept(self, visitor):
+        visitor.visit_zoia_file(self)
 
     def canonical(self) -> str:
         s = StringIO()

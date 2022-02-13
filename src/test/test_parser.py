@@ -95,8 +95,8 @@ class TestAcceptsUnicode(_ATestParserPass):
     _test_src = '\\cömmänd[😀] 警告'
 
 class TestAcceptsMarkup(_ATestParserPass):
-    """Bold, italic and bold-italic markup should be accepted."""
-    _test_src = 'This is *italic*, **bold** and ***bold-italic*** text.'
+    """Emphasized markup should be accepted."""
+    _test_src = 'This is *em1*, **em2** and ***em3*** text.'
 
 class TestAcceptsMarkupComplex(_ATestParserPass):
     """Markup that contains aliases and commands should be accepted."""
@@ -136,31 +136,29 @@ class TestRejectsKwdArgWithoutValue2(_ATestParserFail):
     """Keyword arguments without a value after the '=' should be rejected."""
     _test_src = '\\cmd[a =; c]'
 
-class TestRejectsUnclosedBold(_ATestParserFail):
-    """Unclosed bold markup should be rejected."""
-    _test_src = '**this is bold markup'
+class TestRejectsUnclosedEm1(_ATestParserFail):
+    """Unclosed em1 markup should be rejected."""
+    _test_src = '*this is em1 markup'
 
-class TestRejectsPartiallyClosedBold(_ATestParserFail):
-    """Bold markup that is only closed with one asterisk should be rejected."""
-    _test_src = '**this is bold markup*'
+class TestRejectsUnclosedEm2(_ATestParserFail):
+    """Unclosed em2 markup should be rejected."""
+    _test_src = '**this is em2 markup'
 
-class TestRejectsUnclosedBoldItalic(_ATestParserFail):
-    """Unclosed bold-italic markup should be rejected."""
-    _test_src = '***this is bold-italic markup'
+class TestRejectsPartiallyClosedEm2(_ATestParserFail):
+    """Em2 markup that is only closed with one asterisk should be rejected."""
+    _test_src = '**this is em2 markup*'
 
-class TestRejectsPartiallyClosedBoldItalic1(_ATestParserFail):
-    """Bold-italic markup that is only closed with one asterisk should be
-    rejected."""
-    _test_src = '***this is bold-italic markup*'
+class TestRejectsUnclosedEm3(_ATestParserFail):
+    """Unclosed em3 markup should be rejected."""
+    _test_src = '***this is em3 markup'
 
-class TestRejectsPartiallyClosedBoldItalic2(_ATestParserFail):
-    """Bold-italic markup that is only closed with one asterisk should be
-    rejected."""
-    _test_src = '***this is bold-italic markup**'
+class TestRejectsPartiallyClosedEm31(_ATestParserFail):
+    """Em3 markup that is only closed with one asterisk should be rejected."""
+    _test_src = '***this is em3 markup*'
 
-class TestRejectsUnclosedItalic(_ATestParserFail):
-    """Unclosed italic markup should be rejected."""
-    _test_src = '*this is italic markup'
+class TestRejectsPartiallyClosedEm32(_ATestParserFail):
+    """Em3 markup that is only closed with two asterisks should be rejected."""
+    _test_src = '***this is em3 markup**'
 
 class TestRejectsKwdAlias(_ATestParserFail):
     """Aliases should be rejected when used as a keyword."""
@@ -175,14 +173,14 @@ class TestRejectsKwdTextFragment(_ATestParserFail):
     should be rejected when used as a keyword."""
     _test_src = '\\cmd[foo qux = bar]'
 
-class TestRejectsKwdItalic(_ATestParserFail):
-    """Italic text should be rejected when used as a keyword."""
+class TestRejectsKwdEm1(_ATestParserFail):
+    """Em1 text should be rejected when used as a keyword."""
     _test_src = '\\cmd[*foo* = bar]'
 
-class TestRejectsKwdBold(_ATestParserFail):
-    """Bold text should be rejected when used as a keyword."""
+class TestRejectsKwdEm2(_ATestParserFail):
+    """Em2 text should be rejected when used as a keyword."""
     _test_src = '\\cmd[**foo** = bar]'
 
-class TestRejectsKwdBoldItalic(_ATestParserFail):
-    """Bold-italic text should be rejected when used as a keyword."""
+class TestRejectsKwdEm3(_ATestParserFail):
+    """Em3 text should be rejected when used as a keyword."""
     _test_src = '\\cmd[***foo*** = bar]'

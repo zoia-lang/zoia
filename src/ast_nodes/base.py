@@ -27,15 +27,21 @@ from exception import AbstractError
 from src_pos import SourcePos
 
 @dataclass(slots=True)
-class _ASTNode:
+class AASTNode:
     """Base class for all Zoia AST nodes."""
     src_pos: SourcePos = field(kw_only=True)
+
+    def accept(self, visitor):
+        """Called by a visitor when it's about to visit this node. It should
+        call a specific method on the visitor that will then visit this
+        node."""
+        raise AbstractError(self.accept)
 
     def canonical(self) -> str:
         """Returns a canonical string representation of this node."""
         raise AbstractError(self.canonical)
 
-def _write_arguments(s: StringIO, arguments: list[_ASTNode]) -> None:
+def _write_arguments(s: StringIO, arguments: list[AASTNode]) -> None:
     """Helper method for writing out a list of nodes as arguments to a
     command, including the brackets used to open and close the command (or a
     vertical bar as a terminator, if the command does not have any

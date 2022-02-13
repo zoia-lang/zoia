@@ -39,8 +39,8 @@ class _SrcPosError(Exception):
         super().__init__(msg)
         self.src_pos = pos
 
-class ASTConversionError(_SrcPosError):
-    """An error that occurred during AST conversion."""
+class ParseConversionError(_SrcPosError):
+    """An error that occurred during parse-to-AST conversion."""
     def __init__(self, pos: SourcePos, msg: str) -> None:
         super().__init__(pos, f'Failed to AST-convert {pos.src_file} at line '
                               f'{pos.src_line}, column {pos.src_char}: {msg}')

@@ -22,12 +22,15 @@
 """Implements the AST node for lines."""
 from dataclasses import dataclass
 
-from ast_nodes.line_element import LineElementNode
+from ast_nodes.line_element import ALineElementNode
 
 @dataclass(slots=True)
-class TextFragmentNode(LineElementNode):
+class TextFragmentNode(ALineElementNode):
     """AST node for text fragments."""
     text_val: str
+
+    def accept(self, visitor):
+        return visitor.visit_text_fragment(self)
 
     def canonical(self) -> str:
         return self.text_val

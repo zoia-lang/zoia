@@ -26,7 +26,7 @@ from pathlib import Path
 
 from antlr4 import FileStream, InputStream, Token
 
-from ast_converter import ASTConverter
+from parse_converter import ParseConverter
 from ast_nodes import ZoiaFileNode
 from exception import ParsingError
 from grammar import parse, SA_ErrorListener
@@ -54,7 +54,7 @@ def process_zoia_file(zoia_path: Path) -> ZoiaFileNode:
     # UTF-8 required by specification, so this is fine
     ins = FileStream(str(zoia_path), encoding='utf-8')
     parse_tree = parse(ins, 'zoiaFile', sa_err_listener=_REL_INSTANCE)
-    return ASTConverter(ins.fileName).visit(parse_tree)
+    return ParseConverter(ins.fileName).visit(parse_tree)
 
 def process_zoia_string(zoia_src: str, src_name: str) -> ZoiaFileNode:
     """Parses the specified string representation of a Zoia file and converts
@@ -62,4 +62,4 @@ def process_zoia_string(zoia_src: str, src_name: str) -> ZoiaFileNode:
     errors etc."""
     ins = InputStream(zoia_src)
     parse_tree = parse(ins, 'zoiaFile', sa_err_listener=_REL_INSTANCE)
-    return ASTConverter(src_name).visit(parse_tree)
+    return ParseConverter(src_name).visit(parse_tree)

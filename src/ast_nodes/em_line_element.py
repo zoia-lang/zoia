@@ -23,11 +23,11 @@
 circular dependencies."""
 from dataclasses import dataclass
 
-from ast_nodes.line_element import LineElementNode
+from ast_nodes.line_element import ALineElementNode
 from ast_nodes.line_elements import LineElementsNode
 
 @dataclass(slots=True)
-class _EmLineElementNode(LineElementNode):
+class AEmLineElementNode(ALineElementNode):
     """Base AST node for emphasized line elements."""
     elements: LineElementsNode
 

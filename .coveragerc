@@ -18,7 +18,7 @@ exclude_lines =
     # Ignore defensive exceptions that will likely never be raised during tests
     raise (exception\.)?AbstractError
     raise NotImplementedError
-    raise ASTConversionError
+    raise ParseConversionError
 
     # Same goes for defensive checks in __lt__ implementations
     return NotImplemented

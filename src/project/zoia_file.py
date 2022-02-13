@@ -27,7 +27,7 @@ from pathlib import Path
 
 import log
 from ast_nodes import ZoiaFileNode
-from exception import ASTConversionError, ParsingError
+from exception import ParseConversionError, ParsingError
 from zoia_processor import process_zoia_file
 
 # FIXME finish
@@ -69,7 +69,7 @@ class ZoiaFile:
                       f'$fWl${p.src_line}$fT$, column $fWl${p.src_char}$fT$: '
                       f'$fRl${e.orig_msg}$fT$')
             return None
-        except ASTConversionError as e:
+        except ParseConversionError as e:
             if raise_errors:
                 raise
             p = e.src_pos

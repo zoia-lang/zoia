@@ -27,9 +27,9 @@ from antlr4.tree.Tree import TerminalNodeImpl
 
 from ast_nodes import AliasNode, CommandNode, HeaderNode, KwdArgumentNode, \
     LineNode, StdArgumentNode, TextFragmentNode, ZoiaFileNode, \
-    LineElementsNode, ArgumentNode, Em1LineElementNode, Em2LineElementNode, \
+    LineElementsNode, AArgumentNode, Em1LineElementNode, Em2LineElementNode, \
     Em3LineElementNode
-from exception import ASTConversionError
+from exception import ParseConversionError
 from grammar import zoiaParser, zoiaVisitor
 from src_pos import SourcePos
 
@@ -42,7 +42,7 @@ _text_fragment_children = {zoiaParser.Spaces, zoiaParser.Word}
 # noinspection PyArgumentList
 
 # Ignore the non-PEP8 names, inherited from the generated code
-class ASTConverter(zoiaVisitor):
+class ParseConverter(zoiaVisitor):
     """Converts an ANTLR parse tree into a Zoia AST."""
     def __init__(self, parsed_file: str) -> None:
         self.parsed_file = parsed_file
@@ -103,9 +103,9 @@ class ASTConverter(zoiaVisitor):
             try:
                 visit_method = visit_lookup[le_child.__class__]
             except KeyError as e:
-                raise ASTConversionError(self.make_pos(le_child),
-                                         f"Unknown or invalid line element "
-                                         f"'{le_child.getText()}'") from e
+                raise ParseConversionError(self.make_pos(le_child),
+                                           f"Unknown or invalid line element "
+                                           f"'{le_child.getText()}'") from e
             elements.append(visit_method(le_child))
         return LineElementsNode(elements, src_pos=self.make_pos(ctx))
 
@@ -134,9 +134,9 @@ class ASTConverter(zoiaVisitor):
             if child_spaces:
                 node_text = child_spaces.getText()
             else:
-                raise ASTConversionError(self.make_pos(ctx),
-                                         f"Unknown or invalid text fragment "
-                                         f"'{ctx.getText()}'")
+                raise ParseConversionError(self.make_pos(ctx),
+                                           f"Unknown or invalid text fragment "
+                                           f"'{ctx.getText()}'")
         return TextFragmentNode(node_text, src_pos=self.make_pos(ctx))
 
     def visitTextFragmentReq(self, ctx: zoiaParser.TextFragmentReqContext) \
@@ -147,9 +147,9 @@ class ASTConverter(zoiaVisitor):
                     tf_child.symbol.type in _text_fragment_children):
                 s.write(tf_child.getText())
             else:
-                raise ASTConversionError(self.make_pos(ctx),
-                                         f"Unknown or invalid required "
-                                         f"text fragment '{ctx.getText()}'")
+                raise ParseConversionError(self.make_pos(ctx),
+                                           f"Unknown or invalid required "
+                                           f"text fragment '{ctx.getText()}'")
         return TextFragmentNode(s.getvalue(), src_pos=self.make_pos(ctx))
 
     def visitAlias(self, ctx: zoiaParser.AliasContext) -> AliasNode:
@@ -162,12 +162,12 @@ class ASTConverter(zoiaVisitor):
         return CommandNode(cmd_name, arguments, src_pos=self.make_pos(ctx))
 
     def visitArguments(self, ctx: zoiaParser.ArgumentsContext) \
-            -> list[ArgumentNode]:
+            -> list[AArgumentNode]:
         if ctx is None:
             return [] # command has an optional arguments param
         return [self.visitArgument(a) for a in ctx.argument()]
 
-    def visitArgument(self, ctx: zoiaParser.ArgumentContext) -> ArgumentNode:
+    def visitArgument(self, ctx: zoiaParser.ArgumentContext) -> AArgumentNode:
         std_argument = ctx.stdArgument()
         if std_argument is not None:
             return self.visitStdArgument(std_argument)
@@ -175,9 +175,9 @@ class ASTConverter(zoiaVisitor):
         if kwd_argument is not None:
             return self.visitKwdArgument(kwd_argument)
         else:
-            raise ASTConversionError(self.make_pos(ctx),
-                                     f"Unknown or invalid argument: "
-                                     f"'{ctx.getText()}'")
+            raise ParseConversionError(self.make_pos(ctx),
+                                       f"Unknown or invalid argument: "
+                                       f"'{ctx.getText()}'")
 
     def visitKwdArgument(self, ctx: zoiaParser.KwdArgumentContext) \
             -> KwdArgumentNode:

@@ -23,15 +23,18 @@
 from dataclasses import dataclass
 from io import StringIO
 
-from ast_nodes.argument import ArgumentNode
+from ast_nodes.argument import AArgumentNode
 from ast_nodes.base import _write_arguments
-from ast_nodes.line_element import LineElementNode
+from ast_nodes.line_element import ALineElementNode
 
 @dataclass(slots=True)
-class CommandNode(LineElementNode):
+class CommandNode(ALineElementNode):
     """AST node for commands."""
     cmd_name: str
-    arguments: list[ArgumentNode]
+    arguments: list[AArgumentNode]
+
+    def accept(self, visitor):
+        return visitor.visit_command(self)
 
     def canonical(self) -> str:
         s = StringIO()

@@ -22,8 +22,11 @@
 """Implements the AST node for standard arguments."""
 from dataclasses import dataclass
 
-from ast_nodes.argument import ArgumentNode
+from ast_nodes.argument import AArgumentNode
 
 @dataclass(slots=True)
-class StdArgumentNode(ArgumentNode):
+class StdArgumentNode(AArgumentNode):
     """AST node for standard arguments."""
+
+    def accept(self, visitor):
+        return visitor.visit_std_argument(self)

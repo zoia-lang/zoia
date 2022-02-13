@@ -23,13 +23,16 @@
 from dataclasses import dataclass
 from typing import Optional
 
-from ast_nodes.base import _ASTNode
+from ast_nodes.base import AASTNode
 from ast_nodes.line_elements import LineElementsNode
 
 @dataclass(slots=True)
-class LineNode(_ASTNode):
+class LineNode(AASTNode):
     """AST node for lines."""
     elements: Optional[LineElementsNode]
+
+    def accept(self, visitor):
+        return visitor.visit_line(self)
 
     def canonical(self) -> str:
         elements_canon = self.elements.canonical() if self.elements else ''

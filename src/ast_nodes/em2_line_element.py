@@ -22,11 +22,14 @@
 """Implements the AST node for level 2 emphasized line elements."""
 from dataclasses import dataclass
 
-from ast_nodes.em_line_element import _EmLineElementNode
+from ast_nodes.em_line_element import AEmLineElementNode
 
 @dataclass(slots=True)
-class Em2LineElementNode(_EmLineElementNode):
+class Em2LineElementNode(AEmLineElementNode):
     """AST node for level 2 emphasized line elements."""
+
+    def accept(self, visitor):
+        return visitor.visit_em2_line_element(self)
 
     def canonical(self) -> str:
         # @dataclass with slots=True breaks argument-less super

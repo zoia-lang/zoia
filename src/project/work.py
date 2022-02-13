@@ -79,6 +79,6 @@ class Work(_ADirBase):
         # Extract the work index from the name of the work (we know the regex
         # matches at this point)
         wk_index = int(match_work(work_folder.name).group(1))
-        # See ast_converter.py for the reasoning
+        # See parse_converter.py for the reasoning
         # noinspection PyArgumentList
         return cls(chapters, wk_index, zoia_files=aux_files)

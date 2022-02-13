@@ -23,13 +23,16 @@
 from dataclasses import dataclass
 from io import StringIO
 
-from ast_nodes.argument import ArgumentNode
-from ast_nodes.base import _ASTNode, _write_arguments
+from ast_nodes.argument import AArgumentNode
+from ast_nodes.base import AASTNode, _write_arguments
 
 @dataclass(slots=True)
-class HeaderNode(_ASTNode):
+class HeaderNode(AASTNode):
     """AST node for file headers."""
-    arguments: list[ArgumentNode]
+    arguments: list[AArgumentNode]
+
+    def accept(self, visitor):
+        return visitor.visit_header(self)
 
     def canonical(self) -> str:
         s = StringIO()

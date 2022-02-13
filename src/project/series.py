@@ -71,6 +71,6 @@ class Series(_ADirBase):
         if not is_contiguous(work_indices):
             return ps_error('Work indices must form a contiguous sequence',
                             series_rel, raise_errors)
-        # See ast_converter.py for the reasoning
+        # See parse_converter.py for the reasoning
         # noinspection PyArgumentList
         return cls(works, zoia_files=aux_files)

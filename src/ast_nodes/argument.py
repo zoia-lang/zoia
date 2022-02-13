@@ -23,11 +23,11 @@
 dependencies."""
 from dataclasses import dataclass
 
-from ast_nodes.base import _ASTNode
+from ast_nodes.base import AASTNode
 from ast_nodes.line_elements import LineElementsNode
 
 @dataclass(slots=True)
-class ArgumentNode(_ASTNode):
+class AArgumentNode(AASTNode):
     """Base AST node for arguments. See KwdArgumentNode and StdArgumentNode."""
     arg_value: LineElementsNode
 

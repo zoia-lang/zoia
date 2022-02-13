@@ -29,6 +29,8 @@ class ATestParser:
     """Base class for all tests that need to parse Zoia code."""
     _test_src: str
     _do_fixups: bool = True
+    # Set in _parse_src if a fixup to the header was performed
+    _added_header: bool = False
 
     def _parse_src(self, test_src: str = None) -> ZoiaFileNode:
         """Creates a new zoiaParser instance with the specified source code
@@ -37,6 +39,7 @@ class ATestParser:
             test_src = self._test_src
         # For convenience, the \header part can be elided in tests
         if self._do_fixups and '\\header' not in test_src:
+            self._added_header = True
             test_src = _DEFAULT_HEADER + test_src
         # For convenience, an ending \n can be elided in tests
         if self._do_fixups and not test_src.endswith('\n'):

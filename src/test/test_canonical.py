@@ -132,14 +132,14 @@ class TestCommandWhitespaceCR(_ATestCanonicalRepr):
 class TestCommandMarkup(_ATestCanonicalRepr):
     """Markup should be handled correctly inside commands."""
     _test_src = _mks('\\foo[',
-                     '    *italic*;',
-                     '    bar = **bold**;',
-                     '    qux = Text that is ***bold-italic***.;',
+                     '    *em1*;',
+                     '    bar = **em2**;',
+                     '    qux = Text that is ***em3***.;',
                      ']')
     _test_rep = _mkr('\\foo[',
-                     '    *italic*;',
-                     '    bar = **bold**;',
-                     '    qux = Text that is ***bold-italic***.;',
+                     '    *em1*;',
+                     '    bar = **em2**;',
+                     '    qux = Text that is ***em3***.;',
                      ']')
 
 class TestCommandNested(_ATestCanonicalRepr):
@@ -163,32 +163,38 @@ class TestUnicodeCR(_ATestCanonicalRepr):
                      '    😀;',
                      '] 警告')
 
-class TestItalic(_ATestCanonicalRepr):
-    """Italic text should have an unchanged canonical representation."""
-    _test_src = _mks('This is *italic text*.')
-    _test_rep = _mkr('This is *italic text*.')
+class TestEm1(_ATestCanonicalRepr):
+    """Em1 text should have an unchanged canonical representation."""
+    _test_src = _mks('This is *em1 text*.')
+    _test_rep = _mkr('This is *em1 text*.')
 
-class TestBold(_ATestCanonicalRepr):
-    """Bold text should have an unchanged canonical representation."""
-    _test_src = _mks('This is **bold text**.')
-    _test_rep = _mkr('This is **bold text**.')
+class TestEm2(_ATestCanonicalRepr):
+    """Em2 text should have an unchanged canonical representation."""
+    _test_src = _mks('This is **em2 text**.')
+    _test_rep = _mkr('This is **em2 text**.')
 
-class TestBoldItalic(_ATestCanonicalRepr):
-    """Bold-italic text should have an unchanged canonical representation."""
-    _test_src = _mks('This is ***bold-italic text***.')
-    _test_rep = _mkr('This is ***bold-italic text***.')
+class TestEm3(_ATestCanonicalRepr):
+    """Em3 text should have an unchanged canonical representation."""
+    _test_src = _mks('This is ***em3 text***.')
+    _test_rep = _mkr('This is ***em3 text***.')
 
-class TestItalicComplex(_ATestCanonicalRepr):
-    """Aliases and commands in italic text should be handled correctly."""
-    _test_src = _mks('*Italic with @aliases and \\commands*')
-    _test_rep = _mkr('*Italic with @aliases| and \\commands|*')
+class TestEm1Complex(_ATestCanonicalRepr):
+    """Aliases and commands in em1 text should be handled correctly."""
+    _test_src = _mks('*Em1 with @aliases and \\commands*')
+    _test_rep = _mkr('*Em1 with @aliases| and \\commands|*')
 
-class TestBoldComplex(_ATestCanonicalRepr):
-    """Aliases and commands in bold text should be handled correctly."""
-    _test_src = _mks('**Bold with @aliases and \\commands**')
-    _test_rep = _mkr('**Bold with @aliases| and \\commands|**')
+class TestEm2Complex(_ATestCanonicalRepr):
+    """Aliases and commands in em2 text should be handled correctly."""
+    _test_src = _mks('**Em2 with @aliases and \\commands**')
+    _test_rep = _mkr('**Em2 with @aliases| and \\commands|**')
 
-class TestBoldItalicComplex(_ATestCanonicalRepr):
-    """Aliases and commands in bold-italic text should be handled correctly."""
-    _test_src = _mks('***Bold-italic with @aliases and \\commands***')
-    _test_rep = _mkr('***Bold-italic with @aliases| and \\commands|***')
+class TestEm3Complex(_ATestCanonicalRepr):
+    """Aliases and commands in em3 text should be handled correctly."""
+    _test_src = _mks('***Em3 with @aliases and \\commands***')
+    _test_rep = _mkr('***Em3 with @aliases| and \\commands|***')
+
+class TestMarkupCombined(_ATestCanonicalRepr):
+    """As horrible as this looks, any level of markup should be able to follow
+    any other level of markup without issues."""
+    _test_src = _mks('*a***b*****c****d***e**')
+    _test_rep = _mkr('*a***b*****c****d***e**')
