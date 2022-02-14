@@ -34,7 +34,7 @@ class ZoiaFileNode(AASTNode):
     lines: list[LineNode]
 
     def accept(self, visitor):
-        visitor.visit_zoia_file(self)
+        return visitor.visit_zoia_file(self)
 
     def canonical(self) -> str:
         s = StringIO()

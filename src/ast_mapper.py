@@ -30,15 +30,17 @@ class AASTMapper(AASTVisitor):
             return node_val.accept(self)
         elif isinstance(node_val, list):
             ret_list = []
+            append_ret = ret_list.append
+            visit_val = self._try_visit_val
             for list_el in node_val:
-                ret_list.append(self._try_visit_val(list_el))
+                append_ret(visit_val(list_el))
             return ret_list
         return self._map_leaf(node_val)
 
     def _visit_default(self, node: AASTNode):
+        visit_val = self._try_visit_val
         for node_attr in node.__slots__:
-            node_val = getattr(node, node_attr)
-            setattr(node, node_attr, self._try_visit_val(node_val))
+            setattr(node, node_attr, visit_val(getattr(node, node_attr)))
         return node
 
     # API that is intended for overriding by end users begins here
