@@ -109,3 +109,10 @@ class TestMapEm2ComplexCR(_ATestASTMapper, TestEm2ComplexCR):
 class TestMapEm3ComplexCR(_ATestASTMapper, TestEm3ComplexCR):
     """@aliases -> aliases"""
     _test_rep = mkr('***Em3 with aliases and \\commands|***')
+
+# Delete these, otherwise pytest will see them in scope and run them again
+del ATestCanonicalRepr, TestHeaderCR, TestCommentCR, TestTextFragmentCR, \
+    TestAliasCR, TestAliasBarCR, TestCommandNoArgCR, TestCommandWithArgCR, \
+    TestKeywordArgsCR, TestCommandWhitespaceCR, TestCommandMarkupCR, \
+    TestCommandNestedCR, TestUnicodeCR, TestEm1CR, TestEm2CR, TestEm3CR, \
+    TestEm1ComplexCR, TestEm2ComplexCR, TestEm3ComplexCR, TestMarkupCombinedCR
