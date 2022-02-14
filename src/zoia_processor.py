@@ -33,27 +33,34 @@ from grammar import parse, SA_ErrorListener
 from src_pos import SourcePos
 
 class _RaiseErrorListener(SA_ErrorListener):
+    """Error listener that reports parsing errors to our logging framework."""
+    def __init__(self, project_folder: Path = None):
+        self._project_folder = project_folder
+
     # No point in pylint complaining about this - it's inherited from generated
     # source code, so we can't fix it
     # pylint: disable=arguments-renamed,too-many-arguments
     def syntaxError(self, input_stream: InputStream, offending_symbol: Token,
                     char_index: int, line: int, column: int, msg: str):
         try:
-            origin_file = offending_symbol.source[1].fileName
+            origin_path = Path(offending_symbol.source[1].fileName)
+            if (self._project_folder is not None and
+                    origin_path.is_relative_to(self._project_folder)):
+                origin_path = origin_path.relative_to(self._project_folder)
+            origin_file = str(origin_path)
         except (AttributeError, KeyError, TypeError):
             origin_file = '<unknown file>'
         # 'from None' to hide the pointless, messageless error that we're in
         # the middle of handling while this gets called
         raise ParsingError(SourcePos(origin_file, line, column), msg) from None
 
-_REL_INSTANCE = _RaiseErrorListener()
-
-def process_zoia_file(zoia_path: Path) -> ZoiaFileNode:
+def process_zoia_file(zoia_path: Path, project_folder: Path) -> ZoiaFileNode:
     """Parses the Zoia file at the specified path and converts it into a Zoia
     AST."""
     # UTF-8 required by specification, so this is fine
     ins = FileStream(str(zoia_path), encoding='utf-8')
-    parse_tree = parse(ins, 'zoiaFile', sa_err_listener=_REL_INSTANCE)
+    parse_tree = parse(ins, 'zoiaFile',
+                       sa_err_listener=_RaiseErrorListener(project_folder))
     return ParseConverter(ins.fileName).visit(parse_tree)
 
 def process_zoia_string(zoia_src: str, src_name: str) -> ZoiaFileNode:
@@ -61,5 +68,5 @@ def process_zoia_string(zoia_src: str, src_name: str) -> ZoiaFileNode:
     it into a Zoia AST. src_name specifies the name of the source to use in
     errors etc."""
     ins = InputStream(zoia_src)
-    parse_tree = parse(ins, 'zoiaFile', sa_err_listener=_REL_INSTANCE)
+    parse_tree = parse(ins, 'zoiaFile', sa_err_listener=_RaiseErrorListener())
     return ParseConverter(src_name).visit(parse_tree)

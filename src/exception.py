@@ -25,7 +25,6 @@ from os import PathLike
 from src_pos import SourcePos
 # NO OTHER LOCAL IMPORTS! This has to be importable from any module/package.
 
-# FIXME docstrings
 class AbstractError(Exception):
     """Abstract section of code called."""
     def __init__(self, abs_method: callable) -> None:

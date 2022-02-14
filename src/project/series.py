@@ -35,33 +35,31 @@ class Series(_ADirBase):
     works: list[Work]
 
     @classmethod
-    def parse_series(cls, series_folder: Path, *, raise_errors: bool = False):
+    def parse_series(cls, series_folder: Path, project_folder: Path, /, *,
+                     raise_errors: bool):
         """Parses a series ('src' folder) at the specified path."""
-        # Resolve the path first so all later operations can use full paths and
-        # ensure it exists while we're at it
-        try:
-            series_folder = series_folder.resolve(strict=True)
-        except FileNotFoundError:
-            return ps_error("No 'src' folder found", Path(''), raise_errors)
-        project_folder = series_folder.parent
         series_rel = series_folder.relative_to(project_folder)
         log.info(log.arrow(1, f'Found series at '
                               f'$fYl${series_rel}$R$'))
         if not dir_case_is_valid(series_folder, series_rel, raise_errors):
             return None
         aux_files = cls.parse_zoia_files(
-            series_folder, project_folder, raise_errors, arrow_level=2,
-            warning_msg='Failed to parse series due to errors when parsing '
-                        'one or more Zoia files')
-        works = [Work.parse_work(w, project_folder, raise_errors)
+            series_folder, project_folder, raise_errors=raise_errors,
+            arrow_level=2,
+            warning_msg=f'Failed to parse $fYl${series_folder.name}$R$ due to '
+                        f'errors when parsing one or more Zoia files')
+        if aux_files is None:
+            return None # Warning already logged in parse_zoia_files
+        works = [Work.parse_work(w, project_folder, raise_errors=raise_errors)
                  for w in series_folder.iterdir() if match_work(w.name)]
         if not all(works):
             # This is just a cascading effect of a real error
-            log.warning('Failed to parse series due to errors when parsing '
-                        'one or more works')
+            log.warning(f'Failed to parse $fYl${series_folder.name}$R$ '
+                        f'due to errors when parsing one or more works')
             return None
         if not works:
-            return ps_error("The 'src' folder must contain one or more works",
+            return ps_error(f"The '{series_folder.name}' folder must contain "
+                            f"one or more works",
                             series_rel, raise_errors)
         works.sort() # Blows up on None
         work_indices = [w.work_index for w in works]

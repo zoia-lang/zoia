@@ -48,7 +48,7 @@ class Chapter(_ADirBase):
         return self.chapter_index < other.chapter_index
 
     @classmethod
-    def parse_chapter(cls, chapter_folder: Path, project_folder: Path,
+    def parse_chapter(cls, chapter_folder: Path, project_folder: Path, /, *,
                       raise_errors: bool):
         """Parses a chapter folder at the specified path."""
         chapter_rel = chapter_folder.relative_to(project_folder)
@@ -57,9 +57,12 @@ class Chapter(_ADirBase):
         if not dir_case_is_valid(chapter_folder, chapter_rel, raise_errors):
             return None
         aux_files = cls.parse_zoia_files(
-            chapter_folder, project_folder, raise_errors, arrow_level=4,
-            warning_msg='Failed to parse chapter due to errors when parsing '
-                        'one or more Zoia files')
+            chapter_folder, project_folder, raise_errors=raise_errors,
+            arrow_level=4,
+            warning_msg=f'Failed to parse $fYl${chapter_folder.name}$R$ due '
+                        f'to errors when parsing one or more Zoia files')
+        if aux_files is None:
+            return None # Warning already logged in parse_zoia_files
         # There caaaan be only oooooooone
         main_files = [f for f in aux_files if f.is_main_file()]
         if not main_files:

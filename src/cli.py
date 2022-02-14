@@ -26,7 +26,7 @@ from pathlib import Path
 
 import log
 from exception import AbstractError
-from project import Series
+from project import Project
 
 def _print_legal_verbs(*, illegal_verb: str = ''):
     """Helper function for printing all recognized verbs (and optionally
@@ -87,9 +87,8 @@ class _CommonVerb(_Verb):
 class _Build(_CommonVerb):
     """Verb that builds a project."""
     def _run_common(self, args: list[str]) -> None:
-        log.info(f'Working directory is $fWl${Path.cwd()}$R$')
         start_time = time.time()
-        Series.parse_series(Path.cwd() / 'src')
+        Project.parse_project(Path.cwd())
         duration = time.time() - start_time
         log.info(f'Build took {duration:.1f}s')
 

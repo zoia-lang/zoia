@@ -18,7 +18,7 @@ This is a mockup for what the layout of a typical Zoia project would look like.
 │       └── <a href="#summaryhtml">summary.html</a>
 ├── <a href="#src">src</a>
 │   ├── <a href="#aliaseszoia">aliases.zoia</a>
-│   ├── <a href="#dictzoia">dict.zoia</a>
+│   ├── <a href="#dictionaryzoia">dictionary.zoia</a>
 │   └── work1
 │       ├── ch1
 │       │   └── <a href="#mainzoia">main.zoia</a>
@@ -82,12 +82,12 @@ This file defines aliases and may not contain anything except alias
 definitions (`\def_alias` commands). You can change the name using
 [`zoia.toml`](#zoiatoml).
 
-## `dict.zoia`
+## `dictionary.zoia`
 This file can be used to add words to the spellcheck dictionary and may not
 contain anything except word additions (`\dict_add` commands). You can change
 the name using [`zoia.toml`](#zoiatoml).
 
 ## `zoia.toml`
 The config file for this Zoia project. Not sure what exactly this will include,
-but at the very least this is where the names for the special aliases and dict
+but at the very least this is where the names for the special aliases and dictionary
 files can be customized.

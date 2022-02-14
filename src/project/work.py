@@ -47,7 +47,7 @@ class Work(_ADirBase):
         return self.work_index < other.work_index
 
     @classmethod
-    def parse_work(cls, work_folder: Path, project_folder: Path,
+    def parse_work(cls, work_folder: Path, project_folder: Path, /, *,
                    raise_errors: bool):
         """Parses a work folder at the specified path."""
         work_rel = work_folder.relative_to(project_folder)
@@ -55,15 +55,19 @@ class Work(_ADirBase):
         if not dir_case_is_valid(work_folder, work_rel, raise_errors):
             return None
         aux_files = cls.parse_zoia_files(
-            work_folder, project_folder, raise_errors, arrow_level=3,
-            warning_msg='Failed to parse work due to errors when parsing '
-                        'one or more Zoia files')
-        chapters = [Chapter.parse_chapter(c, project_folder, raise_errors)
+            work_folder, project_folder, raise_errors=raise_errors,
+            arrow_level=3,
+            warning_msg=f'Failed to parse $fYl${work_folder.name}$R$ due to '
+                        f'errors when parsing one or more Zoia files')
+        if aux_files is None:
+            return None # Warning already logged in parse_zoia_files
+        chapters = [Chapter.parse_chapter(c, project_folder,
+                                          raise_errors=raise_errors)
                     for c in work_folder.iterdir() if match_chapter(c.name)]
         if not all(chapters):
             # This is just a cascading effect of a real error
-            log.warning('Failed to parse work due to errors when parsing one '
-                        'or more chapters')
+            log.warning(f'Failed to parse $fYl${work_folder.name}$R$ due to '
+                        f'errors when parsing one or more chapters')
             return None
         if not chapters:
             return ps_error('Work folders must contain one or more chapters',

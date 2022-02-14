@@ -137,7 +137,7 @@ def _parse_cmd(cmd: str) -> str:
         raise SyntaxError(f'Invalid log command: must have length 1-3, but '
                           f'has length {len(cmd)}')
 
-def _parse_color(color: str, *, light: bool = False) -> str:
+def _parse_color(color: str, /, *, light: bool = False) -> str:
     """Parses a single color and returns it as an escape code."""
     try:
         target_loc = _char_to_location[color[0]]
@@ -171,7 +171,7 @@ _num_errors = 0
 
 # FIXME Use the severity argument
 # pylint: disable=unused-argument
-def _do_log(s: str, *, severity: _Level) -> None:
+def _do_log(s: str, /, *, severity: _Level) -> None:
     """The method that actually handles parsing and printing of a single log
     line."""
     print(_colorize_line(s), file=_wrapped_stdout)
@@ -188,7 +188,7 @@ def info(s: str) -> None:
     Intended for normal messages that the end-user should see."""
     _do_log(s, severity=_Level.INFO)
 
-def error(s: str, *, count_error: bool = True) -> None:
+def error(s: str, /, *, count_error: bool = True) -> None:
     """Logs a message with severity level of ERROR. Intended for critical
     problems that prevent the program from completing its task. They will be
     highlighted in red and preceded with a '[!]' marker. The number of
@@ -198,7 +198,7 @@ def error(s: str, *, count_error: bool = True) -> None:
         global _num_errors
         _num_errors += 1
 
-def warning(s: str, *, count_warning: bool = True) -> None:
+def warning(s: str, /, *, count_warning: bool = True) -> None:
     """Logs a message with severity level of WARNING. Intended for problems
     that do not prevent the program from completing its task, but are likely to
     be mistakes or could cause errors later down the line. They will be

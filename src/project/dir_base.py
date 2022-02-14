@@ -32,14 +32,15 @@ class _ADirBase:
     zoia_files: list[ZoiaFile] = field(kw_only=True)
 
     @staticmethod
-    def parse_zoia_files(curr_folder: Path, project_folder: Path,
+    def parse_zoia_files(curr_folder: Path, project_folder: Path, /, *,
                          raise_errors: bool, arrow_level: int,
                          warning_msg: str) -> list[ZoiaFile] | None:
         """Parses .zoia files in the specified folder. The remaining arguments
         are passed to parse_zoia_file, except for warning_msg, which is used
         for raising a warning if one or more files fails to parse."""
-        ret_files = [ZoiaFile.parse_zoia_file(f, project_folder, raise_errors,
-                                              arrow_level)
+        ret_files = [ZoiaFile.parse_zoia_file(f, project_folder,
+                                              raise_errors=raise_errors,
+                                              arrow_level=arrow_level)
                      for f in curr_folder.iterdir() if f.suffix == '.zoia']
         if not all(ret_files):
             # This is just a cascading effect of a real error

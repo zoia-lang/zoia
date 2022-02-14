@@ -26,13 +26,13 @@ from pathlib import Path
 import pytest
 
 from exception import ProjectStructureError
-from project import Series
+from project import Project
 
 # Utilities
-def _get_src_path(test_name: str) -> Path:
-    """Retrieves the full path to the 'src' folder for the test with the
+def _get_proj_path(test_name: str) -> Path:
+    """Retrieves the full path to the project folder for the test with the
     specified directory name."""
-    return Path(__file__).parent.resolve(strict=True) / test_name / 'src'
+    return Path(__file__).parent.resolve(strict=True) / test_name
 
 class _ATestProject:
     _test_name: str
@@ -42,8 +42,8 @@ class _ATestProjectPassing(_ATestProject):
     def test_proj_passes(self) -> None:
         """Asserts that the series located at this test directory parses
         successfully."""
-        assert Series.parse_series(_get_src_path(self._test_name),
-                                   raise_errors=True)
+        assert Project.parse_project(_get_proj_path(self._test_name),
+                                     raise_errors=True)
 
 class _ATestProjectFailing(_ATestProject):
     """Base class for failing project directory tests."""
@@ -53,8 +53,8 @@ class _ATestProjectFailing(_ATestProject):
         """Asserts that the series located at the specified test directory does
         not parse successfully."""
         try:
-            Series.parse_series(_get_src_path(self._test_name),
-                                raise_errors=True)
+            Project.parse_project(_get_proj_path(self._test_name),
+                                  raise_errors=True)
             pytest.fail('Parsing was supposed to fail, but succeeded instead')
         except ProjectStructureError as e:
             assert self._exp_error in str(e)
@@ -97,6 +97,12 @@ class TestNoMainFile(_ATestProjectFailing):
     _test_name = 'no_main_file'
     _exp_error = "Each chapter must contain a 'main.zoia' file"
 
+class TestNoProject(_ATestProjectFailing):
+    """A project without a project folder (i.e. one where the target path
+    points to a non-existent folder) should be rejected."""
+    _test_name = 'no_project'
+    _exp_error = "No project folder found"
+
 class TestNoSrc(_ATestProjectFailing):
     """A project without a src folder (i.e. without a series) should be
     rejected."""
@@ -113,6 +119,8 @@ class TestUpperFile(_ATestProjectFailing):
     _test_name = 'upper_file'
     _exp_error = "'Main.zoia' is not lowercased"
 
+# FIXME test this on Windows - do we reject the non-lowercased Src?
+@pytest.mark.skipif('os.name == "nt"')
 class TestUpperSrc(_ATestProjectFailing):
     """A project with a non-lowercased 'src' folder should be rejected."""
     _test_name = 'upper_src'
