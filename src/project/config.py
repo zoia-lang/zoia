@@ -33,6 +33,7 @@ import log
 from exception import AbstractError
 from utils import ps_error
 
+# Internal API begins here
 class _AOption:
     """Base class for all options. See its subclasses like _ASrcPathOption for
     more information."""
@@ -66,9 +67,13 @@ class _AOption:
     def __repr__(self):
         return f"Option<{self.option_name} = '{self.option_value}'>"
 
+# TODO Do we need src path options separate from Zoia path options?
 class _ASrcPathOption(_AOption):
-    """Base class for src path options. Do not use this directly. Instead, use
-    the _src_path_option API and pass a default value."""
+    """Base class for src path options. A path, specified relative to the 'src'
+    folder. Must be entirely lowercase and must exist.
+
+    Do not use this directly. Instead, use the _src_path_option API and pass a
+    default value."""
     option_value: Path
     __slots__ = ()
 
@@ -88,21 +93,50 @@ class _ASrcPathOption(_AOption):
         final_path = project_folder / rel_path
         try:
             final_path = final_path.resolve(strict=True)
-        except FileNotFoundError:
+        except FileNotFoundError as e:
             return ps_error(f"Failed to parse option '{option_name}': "
-                            f"Specified path '{rel_path}' does not exist",
-                            Path('zoia.toml'), raise_errors)
+                            f"Specified path '{option_value}' does not exist "
+                            f"(resolved to '{rel_path}')",
+                            Path('zoia.toml'), raise_errors, orig_error=e)
         return cls(option_name, final_path)
 
-def _src_path_option(default: str):
-    """Internal method for defining a src path option. Pass it a default value
+# def _src_path_option(default: str, /): # TODO unused, see above
+#     """Internal method for defining a src path option. Pass it a default
+#     value to get an appropriate class for the annotation back."""
+#     class _SrcPathOption(_ASrcPathOption):
+#         """Internal class that holds an appropriate default value for a src
+#         path option."""
+#         option_default: str = default
+#         __slots__ = ()
+#     return _SrcPathOption
+
+class _AZoiaPathOption(_ASrcPathOption):
+    """Base class for Zoia path options. Similar to _ASrcPathOption, but must
+    end in .zoia.
+
+    Do not use this directly. Instead, use the _zoia_path_option API and pass a
+    default value."""
+    @classmethod
+    def _do_parse_option(cls, option_value: str | None, option_name: str,
+                         project_folder: Path, /, *, raise_errors: bool):
+        # lower() because the check for lowercasing is done in _ASrcPathOption
+        if not option_value.lower().endswith('.zoia'):
+            return ps_error(f"Failed to parse option '{option_name}': "
+                            f"Specified path '{option_value}' does not end in "
+                            f"'.zoia'", Path('zoia.toml'), raise_errors)
+        return super()._do_parse_option(
+            option_value, option_name, project_folder,
+            raise_errors=raise_errors)
+
+def _zoia_path_option(default: str, /):
+    """Internal method for defining a Zoia path option. Pass it a default value
     to get an appropriate class for the annotation back."""
-    class _SrcPathOption(_ASrcPathOption):
-        """Internal class that holds an appropriate default value for a src
+    class _ZoiaPathOption(_AZoiaPathOption):
+        """Internal class that holds an appropriate default value for a Zoia
         path option."""
         option_default: str = default
         __slots__ = ()
-    return _SrcPathOption
+    return _ZoiaPathOption
 
 @dataclass(slots=True)
 class _ASection:
@@ -134,23 +168,24 @@ class _ASection:
             return None
         # Warn if any unknown options are left in the section
         for unk_option in section_contents:
-            log.warning(f'Unknown or unused option $fWl${unk_option}$R$ '
-                        f'found in section $fWl${section_name}$R$')
+            log.warning(f'Unknown option $fWl${unk_option}$R$ found in '
+                        f'section $fWl${section_name}$R$')
         # For some reason PyCharm bugs out here and thinks this initializer
         # doesn't take any arguments - probably similar to the bug in
         # parse_converter, see there for more info
         # noinspection PyArgumentList
         return cls(**init_params)
 
+# Public API begins here
 @dataclass(slots=True)
 class SectionAliases(_ASection):
     """Represents the 'aliases' section."""
-    src_path: _src_path_option('aliases.zoia')
+    src_path: _zoia_path_option('aliases.zoia')
 
 @dataclass(slots=True)
 class SectionDict(_ASection):
     """Represents the 'dictionary' section."""
-    src_path: _src_path_option('dictionary.zoia')
+    src_path: _zoia_path_option('dictionary.zoia')
 
 @dataclass(slots=True)
 class ZoiaToml:
@@ -163,22 +198,26 @@ class ZoiaToml:
     @classmethod
     def parse_zoia_toml(cls, toml_path: Path, project_folder: Path, /, *,
                         raise_errors: bool):
-        """Parses a zoia.toml file at the specified path. Returns a tuple
-        containing two elements: the parsed file (or None if parsing failed or
-        the file does not exist) and a boolean that is True iff the file exists
-        and parsing failed."""
+        """Parses a zoia.toml file at the specified path. Returns None if
+        parsing failed."""
         toml_rel = toml_path.relative_to(project_folder)
         config_ann: dict[str, Type[_ASection]] = inspect.get_annotations(cls)
         try:
             with toml_path.open('rb') as ins:
                 parsed_toml = tomli.load(ins)
+            log.info(log.arrow(1, f'Parsing config at $fCl${toml_rel}$R$'))
         except FileNotFoundError:
-            # No config present, this is fine
-            return None, False
+            # Load the default config by behaving as if the file existed and
+            # was empty
+            parsed_toml = {}
+            log.info(log.arrow(1, f'No config found at $fCl${toml_rel}$R$, '
+                                  f'using default values'))
+        except tomli.TOMLDecodeError as e:
+            # The config file has broken TOML syntax, wrap and re-raise error
+            return ps_error(f'Invalid TOML syntax: {str(e)}', toml_rel,
+                            raise_errors, orig_error=e)
         # Default section contents are an empty dict
         config_contents = defaultdict(dict, parsed_toml.copy())
-        log.info(log.arrow(1, f'Parsing config at '
-                              f'$fCl${toml_rel}$R$'))
         init_params = {}
         any_failed = False
         for section_name, section_type in config_ann.items():
@@ -196,9 +235,9 @@ class ZoiaToml:
             # This is just a cascading effect of a real error
             log.warning(f'Failed to parse $fCl${toml_rel}$R$ due to errors '
                         f'when parsing one or more sections')
-            return None, True
+            return None
         # Warn if any unknown sections are left in the config
         for unk_section in config_contents:
-            log.warning(f'Unknown or unused section $fWl${unk_section}$R$ '
-                        f'found in $fCl${toml_rel}$R$')
-        return cls(**init_params), False
+            log.warning(f'Unknown section $fWl${unk_section}$R$ found in '
+                        f'$fCl${toml_rel}$R$')
+        return cls(**init_params)

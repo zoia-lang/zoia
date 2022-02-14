@@ -1,0 +1,5 @@
+Hi, I'm going to define aliases in here!
+
+So I want A to equal Anna
+C to equal Catrina
+etc.

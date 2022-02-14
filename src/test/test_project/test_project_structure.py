@@ -21,123 +21,97 @@
 # =============================================================================
 """This module runs tests that check whether project structures are being
 parsed correctly."""
-from pathlib import Path
+from test.base import ATestProjectFailing, ATestProjectPassing
 
 import pytest
 
-from exception import ProjectStructureError
-from project import Project
+class _ATestPSFailing(ATestProjectFailing):
+    """Base class for failing project structure tests."""
+    _py_file_path = __file__
 
-# Utilities
-def _get_proj_path(test_name: str) -> Path:
-    """Retrieves the full path to the project folder for the test with the
-    specified directory name."""
-    return Path(__file__).parent.resolve(strict=True) / test_name
-
-class _ATestProject:
-    _test_name: str
-
-class _ATestProjectPassing(_ATestProject):
-    """Base class for passing project directory tests."""
-    def test_proj_passes(self) -> None:
-        """Asserts that the series located at this test directory parses
-        successfully."""
-        assert Project.parse_project(_get_proj_path(self._test_name),
-                                     raise_errors=True)
-
-class _ATestProjectFailing(_ATestProject):
-    """Base class for failing project directory tests."""
-    _exp_error: str
-
-    def test_proj_fails(self) -> None:
-        """Asserts that the series located at the specified test directory does
-        not parse successfully."""
-        try:
-            Project.parse_project(_get_proj_path(self._test_name),
-                                  raise_errors=True)
-            pytest.fail('Parsing was supposed to fail, but succeeded instead')
-        except ProjectStructureError as e:
-            assert self._exp_error in str(e)
+class _ATestPSPassing(ATestProjectPassing):
+    """Base class for passing project structure tests."""
+    _py_file_path = __file__
 
 # Failing tests begin here
-class TestEmptySeries(_ATestProjectFailing):
+class TestEmptySeries(_ATestPSFailing):
     """An empty series folder should be rejected."""
     _test_name = 'empty_series'
     _exp_error = "The 'src' folder must contain one or more works"
 
-class TestEmptyWork(_ATestProjectFailing):
+class TestEmptyWork(_ATestPSFailing):
     """An empty work folder should be rejected."""
     _test_name = 'empty_work'
     _exp_error = 'Work folders must contain one or more chapters'
 
-class TestIncontiguousChapters(_ATestProjectFailing):
+class TestIncontiguousChapters(_ATestPSFailing):
     """A work with chapters whose indices are not contiguous should be
     rejected."""
     _test_name = 'incontiguous_chapters'
     _exp_error = 'Chapter indices must form a contiguous sequence'
 
-class TestIncontiguousWorks(_ATestProjectFailing):
+class TestIncontiguousWorks(_ATestPSFailing):
     """A series with works whose indices are not contiguous should be
     rejected."""
     _test_name = 'incontiguous_works'
     _exp_error = 'Work indices must form a contiguous sequence'
 
-class TestNoIndex1Chapter(_ATestProjectFailing):
+class TestNoIndex1Chapter(_ATestPSFailing):
     """A work without a chapter with index should be rejected."""
     _test_name = 'no_index_1_chapter'
     _exp_error = 'The first chapter in a work must have index 1'
 
-class TestNoIndex1Work(_ATestProjectFailing):
+class TestNoIndex1Work(_ATestPSFailing):
     """A series without a work with index 1 should be rejected."""
     _test_name = 'no_index_1_work'
     _exp_error = 'The first work in a series must have index 1'
 
-class TestNoMainFile(_ATestProjectFailing):
+class TestNoMainFile(_ATestPSFailing):
     """A chapter without a main file should be rejected."""
     _test_name = 'no_main_file'
     _exp_error = "Each chapter must contain a 'main.zoia' file"
 
-class TestNoProject(_ATestProjectFailing):
+class TestNoProject(_ATestPSFailing):
     """A project without a project folder (i.e. one where the target path
     points to a non-existent folder) should be rejected."""
     _test_name = 'no_project'
     _exp_error = "No project folder found"
 
-class TestNoSrc(_ATestProjectFailing):
+class TestNoSrc(_ATestPSFailing):
     """A project without a src folder (i.e. without a series) should be
     rejected."""
     _test_name = 'no_src'
     _exp_error = "No 'src' folder found"
 
-class TestUpperChapter(_ATestProjectFailing):
+class TestUpperChapter(_ATestPSFailing):
     """A project with a non-lowercased chapter folder should be rejected."""
     _test_name = 'upper_chapter'
     _exp_error = "'Ch1' is not lowercased"
 
-class TestUpperFile(_ATestProjectFailing):
+class TestUpperFile(_ATestPSFailing):
     """A project with a non-lowercased chapter folder should be rejected."""
     _test_name = 'upper_file'
     _exp_error = "'Main.zoia' is not lowercased"
 
 # FIXME test this on Windows - do we reject the non-lowercased Src?
 @pytest.mark.skipif('os.name == "nt"')
-class TestUpperSrc(_ATestProjectFailing):
+class TestUpperSrc(_ATestPSFailing):
     """A project with a non-lowercased 'src' folder should be rejected."""
     _test_name = 'upper_src'
     _exp_error = "No 'src' folder found"
 
-class TestUpperWork(_ATestProjectFailing):
+class TestUpperWork(_ATestPSFailing):
     """A project with a non-lowercased work folder should be rejected."""
     _test_name = 'upper_work'
     _exp_error = "'Work1' is not lowercased"
 
 # Passing tests begin here
-class TestArbitraryZoiaFiles(_ATestProjectPassing):
+class TestArbitraryZoiaFiles(_ATestPSPassing):
     """Zoia files should be accepted and parsed no matter which folder under
     src they are placed in."""
     _test_name = 'arbitrary_zoia_files'
 
-class TestSimpleStructure(_ATestProjectPassing):
+class TestSimpleStructure(_ATestPSPassing):
     """A single work with a single chapter and a valid main.zoia file should be
     accepted."""
     _test_name = 'simple_structure'

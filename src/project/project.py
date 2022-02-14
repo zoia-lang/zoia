@@ -33,7 +33,7 @@ from utils import ps_error
 class Project:
     """The Project class oversees all operations on a project written in
     Zoia. To obtain a Project instance, use the parse_project classmethod."""
-    src: Series
+    series: Series
     config: ZoiaToml
 
     @classmethod
@@ -45,30 +45,31 @@ class Project:
         # ensure it exists while we're at it
         try:
             project_folder = project_folder.resolve(strict=True)
-        except FileNotFoundError:
-            return ps_error('No project folder found', Path(''), raise_errors)
+        except FileNotFoundError as e:
+            return ps_error('No project folder found', Path(''),
+                            raise_errors, orig_error=e)
         log.info(f'Actual project folder is $fWl${project_folder}$R$')
-        # Parse the config file 'zoia.toml', if it exists
-        zoia_toml_rel = 'zoia.toml'
-        config, parsing_failed = ZoiaToml.parse_zoia_toml(
-            project_folder / zoia_toml_rel, project_folder,
-            raise_errors=raise_errors)
-        if parsing_failed:
-            log.warning(f'Failed to parse project due to errors when parsing '
-                        f'$fCl${zoia_toml_rel}$R$')
-            return None
         # Parse the series folder 'src', which must exist
         series_rel = 'src'
         series_folder = project_folder / series_rel
         try:
             series_folder = series_folder.resolve(strict=True)
-        except FileNotFoundError:
+        except FileNotFoundError as e:
             return ps_error(f"No '{series_rel}' folder found", Path(''),
-                            raise_errors)
-        series = Series.parse_series(series_folder, project_folder,
+                            raise_errors, orig_error=e)
+        parsed_series = Series.parse_series(series_folder, project_folder,
                                      raise_errors=raise_errors)
-        if series is None:
+        if parsed_series is None:
             log.warning(f'Failed to parse project due to errors when parsing '
                         f'$fYl${series_rel}$R$')
             return None
-        return cls(series, config)
+        # Parse the config file 'zoia.toml', if it exists
+        zoia_toml_rel = 'zoia.toml'
+        parsed_config = ZoiaToml.parse_zoia_toml(
+            project_folder / zoia_toml_rel, project_folder,
+            raise_errors=raise_errors)
+        if parsed_config is None:
+            log.warning(f'Failed to parse project due to errors when parsing '
+                        f'$fCl${zoia_toml_rel}$R$')
+            return None
+        return cls(parsed_series, parsed_config)

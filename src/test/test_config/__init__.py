@@ -19,5 +19,5 @@
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # =============================================================================
-"""This package houses tests related to the project package, except config.py.
-See test_config for that."""
+"""This package houses tests related to config.py. See test_project for all
+other project-related tests."""

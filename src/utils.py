@@ -33,11 +33,12 @@ def is_contiguous(l: list[int]) -> bool:
     n + 1 must have value v + 1."""
     return len(list(groupby(enumerate(l), key=lambda x: x[0] - x[1]))) == 1
 
-def ps_error(msg: str, relevant_path: PathLike, raise_errors: bool):
+def ps_error(msg: str, relevant_path: PathLike, raise_errors: bool, *,
+             orig_error: Exception = None):
     """Prints or raises a project structure error, depending on whether
     raise_errors is True or not."""
     if raise_errors:
-        raise ProjectStructureError(relevant_path, msg)
+        raise ProjectStructureError(relevant_path, msg) from orig_error
     else:
         log.error(f'Invalid project structure at $fWl${relevant_path}$fT$: '
                   f'$fRl${msg}$fT$')

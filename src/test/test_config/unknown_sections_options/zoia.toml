@@ -1,0 +1,10 @@
+[aliases]
+src_path = "sesaila.zoia"
+foo = "bar"
+
+[dictionary]
+src_path = "yranoitcid.zoia"
+bar = "foo"
+
+[qux]
+foobar = "barfoo"
