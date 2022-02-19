@@ -19,10 +19,11 @@ public:
 
   enum {
     RuleZoiaFile = 0, RuleHeader = 1, RuleLine = 2, RuleLineElements = 3,
-    RuleLineElementsInner = 4, RuleEm3LineElement = 5, RuleEm2LineElement = 6,
-    RuleEm1LineElement = 7, RuleTextFragment = 8, RuleTextFragmentReq = 9,
-    RuleAlias = 10, RuleCommand = 11, RuleArguments = 12, RuleArgument = 13,
-    RuleKwdArgument = 14, RuleStdArgument = 15, RuleWhitespace = 16
+    RuleLineElementsInner = 4, RuleLineElementsArg = 5, RuleEm3LineElement = 6,
+    RuleEm2LineElement = 7, RuleEm1LineElement = 8, RuleTextFragment = 9,
+    RuleTextFragmentReq = 10, RuleTextFragmentWord = 11, RuleAlias = 12,
+    RuleCommand = 13, RuleArguments = 14, RuleArgument = 15, RuleKwdArgument = 16,
+    RuleStdArgument = 17, RuleWhitespace = 18
   };
 
   explicit zoiaParser(antlr4::TokenStream *input);
@@ -40,11 +41,13 @@ public:
   class LineContext;
   class LineElementsContext;
   class LineElementsInnerContext;
+  class LineElementsArgContext;
   class Em3LineElementContext;
   class Em2LineElementContext;
   class Em1LineElementContext;
   class TextFragmentContext;
   class TextFragmentReqContext;
+  class TextFragmentWordContext;
   class AliasContext;
   class CommandContext;
   class ArgumentsContext;
@@ -140,6 +143,31 @@ public:
 
   LineElementsInnerContext* lineElementsInner();
 
+  class  LineElementsArgContext : public antlr4::ParserRuleContext {
+  public:
+    LineElementsArgContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    TextFragmentWordContext *textFragmentWord();
+    std::vector<AliasContext *> alias();
+    AliasContext* alias(size_t i);
+    std::vector<CommandContext *> command();
+    CommandContext* command(size_t i);
+    std::vector<Em1LineElementContext *> em1LineElement();
+    Em1LineElementContext* em1LineElement(size_t i);
+    std::vector<Em2LineElementContext *> em2LineElement();
+    Em2LineElementContext* em2LineElement(size_t i);
+    std::vector<Em3LineElementContext *> em3LineElement();
+    Em3LineElementContext* em3LineElement(size_t i);
+    std::vector<TextFragmentContext *> textFragment();
+    TextFragmentContext* textFragment(size_t i);
+
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+
+  };
+
+  LineElementsArgContext* lineElementsArg();
+
   class  Em3LineElementContext : public antlr4::ParserRuleContext {
   public:
     Em3LineElementContext(antlr4::ParserRuleContext *parent, size_t invokingState);
@@ -214,6 +242,20 @@ public:
 
   TextFragmentReqContext* textFragmentReq();
 
+  class  TextFragmentWordContext : public antlr4::ParserRuleContext {
+  public:
+    TextFragmentWordContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *Word();
+    antlr4::tree::TerminalNode *Spaces();
+
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+
+  };
+
+  TextFragmentWordContext* textFragmentWord();
+
   class  AliasContext : public antlr4::ParserRuleContext {
   public:
     AliasContext(antlr4::ParserRuleContext *parent, size_t invokingState);
@@ -285,7 +327,7 @@ public:
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *Word();
     antlr4::tree::TerminalNode *Equals();
-    LineElementsContext *lineElements();
+    LineElementsArgContext *lineElementsArg();
     std::vector<antlr4::tree::TerminalNode *> Spaces();
     antlr4::tree::TerminalNode* Spaces(size_t i);
 
@@ -300,7 +342,7 @@ public:
   public:
     StdArgumentContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    LineElementsContext *lineElements();
+    LineElementsArgContext *lineElementsArg();
 
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;

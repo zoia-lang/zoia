@@ -23,12 +23,12 @@
 ANTLR parse tree."""
 from io import StringIO
 
-from antlr4.tree.Tree import TerminalNodeImpl
+from antlr4.tree.Tree import TerminalNodeImpl, ParseTree
 
 from ast_nodes import AliasNode, CommandNode, HeaderNode, KwdArgumentNode, \
     LineNode, StdArgumentNode, TextFragmentNode, ZoiaFileNode, \
     LineElementsNode, AArgumentNode, Em1LineElementNode, Em2LineElementNode, \
-    Em3LineElementNode
+    Em3LineElementNode, AASTNode
 from exception import ParseConversionError
 from grammar import zoiaParser, zoiaVisitor
 from src_pos import SourcePos
@@ -46,26 +46,34 @@ class ParseConverter(zoiaVisitor):
     """Converts an ANTLR parse tree into a Zoia AST."""
     def __init__(self, parsed_file: str) -> None:
         self.parsed_file = parsed_file
-        # Avoids a bunch of 'if isinstance' checks in visitLineElements and
-        # visitLineElementsInner
+        # Avoids a bunch of 'if isinstance' checks in visitLineElements,
+        # visitLineElementsInner and visitLineElementsArg
         shared_lookup = {
             zoiaParser.AliasContext: self.visitAlias,
             zoiaParser.CommandContext: self.visitCommand,
         }
-        self._line_element_inner_lookup = shared_lookup | {
-            zoiaParser.TextFragmentReqContext: self.visitTextFragmentReq,
-        }
         self._line_element_lookup = shared_lookup | {
+            zoiaParser.TextFragmentContext: self.visitTextFragment,
             zoiaParser.Em1LineElementContext: self.visitEm1LineElement,
             zoiaParser.Em2LineElementContext: self.visitEm2LineElement,
             zoiaParser.Em3LineElementContext: self.visitEm3LineElement,
-            zoiaParser.TextFragmentContext: self.visitTextFragment,
+        }
+        self._line_element_inner_lookup = shared_lookup | {
+            zoiaParser.TextFragmentReqContext: self.visitTextFragmentReq,
+        }
+        self._line_element_arg_lookup = self._line_element_lookup | {
+            zoiaParser.TextFragmentWordContext: self.visitTextFragmentWord,
         }
 
     def make_pos(self, ctx) -> SourcePos:
         """Creates a source position from the specified context object."""
         return SourcePos(src_file=self.parsed_file, src_line=ctx.start.line,
                          src_char=ctx.start.column)
+
+    # Override to add typing
+    def visit(self, tree: ParseTree) -> AASTNode:
+        # pylint: disable=useless-super-delegation
+        return super().visit(tree)
 
     # Sorted by the order in which they are defined in the grammar
     def visitZoiaFile(self, ctx: zoiaParser.ZoiaFileContext) -> ZoiaFileNode:
@@ -93,6 +101,11 @@ class ParseConverter(zoiaVisitor):
             -> LineElementsNode:
         return self._visit_line_elements_shared(
             ctx, self._line_element_inner_lookup)
+
+    def visitLineElementsArg(self, ctx: zoiaParser.LineElementsArgContext) \
+            -> LineElementsNode:
+        return self._visit_line_elements_shared(
+            ctx, self._line_element_arg_lookup)
 
     def _visit_line_elements_shared(self, ctx, visit_lookup) \
             -> LineElementsNode:
@@ -152,6 +165,15 @@ class ParseConverter(zoiaVisitor):
                                            f"text fragment '{ctx.getText()}'")
         return TextFragmentNode(s.getvalue(), src_pos=self.make_pos(ctx))
 
+    def visitTextFragmentWord(self, ctx: zoiaParser.TextFragmentWordContext) \
+            -> TextFragmentNode:
+        s = StringIO()
+        s.write(ctx.Word().getText())
+        child_spaces = ctx.Spaces()
+        if child_spaces:
+            s.write(child_spaces.getText())
+        return TextFragmentNode(s.getvalue(), src_pos=self.make_pos(ctx))
+
     def visitAlias(self, ctx: zoiaParser.AliasContext) -> AliasNode:
         return AliasNode(ctx.Word().getText(),
                          src_pos=self.make_pos(ctx))
@@ -182,11 +204,12 @@ class ParseConverter(zoiaVisitor):
     def visitKwdArgument(self, ctx: zoiaParser.KwdArgumentContext) \
             -> KwdArgumentNode:
         kwd_name = ctx.Word().getText()
-        arg_value = self.visitLineElements(ctx.lineElements())
+        arg_value = self.visitLineElementsArg(ctx.lineElementsArg())
         # Reverse order due to dataclass inheritance
         return KwdArgumentNode(arg_value, kwd_name, src_pos=self.make_pos(ctx))
 
     def visitStdArgument(self, ctx: zoiaParser.StdArgumentContext) \
             -> StdArgumentNode:
-        return StdArgumentNode(self.visitLineElements(ctx.lineElements()),
-                               src_pos=self.make_pos(ctx))
+        return StdArgumentNode(
+            self.visitLineElementsArg(ctx.lineElementsArg()),
+            src_pos=self.make_pos(ctx))

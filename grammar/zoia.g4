@@ -25,8 +25,16 @@ header: Header arguments Newline;
 line: lineElements? Newline;
 lineElements: (textFragment | alias | command | em1LineElement |
                em2LineElement | em3LineElement)+;
-// The lineElements that may occur inside emLineElements
+// The lineElements that may occur inside em*LineElements
+// This prevents nested em*LineElements
 lineElementsInner: (textFragmentReq | alias | command)+;
+// The lineElements that may occur inside *Arguments
+// This resolves an ambiguity/context sensitivity by requiring that
+// the first text fragment not start with spaces.
+lineElementsArg: (textFragmentWord | alias | command |
+                  em1LineElement | em2LineElement | em3LineElement)
+                 (textFragment | alias | command |
+                  em1LineElement | em2LineElement | em3LineElement)*;
 
 // One or more line elements, surrounded by 1-3 asterisks.
 em3LineElement: Asterisk Asterisk Asterisk
@@ -39,6 +47,8 @@ em1LineElement: Asterisk lineElementsInner Asterisk;
 textFragment: Word | Spaces;
 // Version of textFragment that may not evaluate to pure whitespace.
 textFragmentReq: Spaces? Word Spaces?;
+// Version of textFragmentReq that must begin with a word.
+textFragmentWord: Word Spaces?;
 
 // An at sign followed by a word. May optionally be ended by a
 // vertical bar (this is necessary when an alias is followed by
@@ -64,8 +74,8 @@ arguments: BracketsOpen whitespace? argument
 // Either a text fragment or a word, an equals sign and a text
 // fragment.
 argument: kwdArgument | stdArgument;
-kwdArgument: Word Spaces? Equals Spaces? lineElements;
-stdArgument: lineElements;
+kwdArgument: Word Spaces? Equals Spaces? lineElementsArg;
+stdArgument: lineElementsArg;
 
 // Any kind of whitespace: newlines, spaces, tabs, etc.
 whitespace: (Newline | Spaces)+;

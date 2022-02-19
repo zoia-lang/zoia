@@ -47,6 +47,13 @@ class Chapter(_ADirBase):
             return NotImplemented
         return self.chapter_index < other.chapter_index
 
+    def get_zoia_file(self, zoia_name: str) -> ZoiaFile | None:
+        if zoia_name == 'main.zoia':
+            return self.main_file
+        # @dataclass with slots=True breaks argument-less super
+        # pylint: disable=super-with-arguments
+        return super(Chapter, self).get_zoia_file(zoia_name)
+
     @classmethod
     def parse_chapter(cls, chapter_folder: Path, project_folder: Path, /, *,
                       raise_errors: bool):

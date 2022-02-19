@@ -20,7 +20,8 @@
 #
 # =============================================================================
 """Implements series folders."""
-from dataclasses import dataclass
+from collections import defaultdict
+from dataclasses import dataclass, field
 from pathlib import Path
 
 import log
@@ -33,6 +34,22 @@ class Series(_ADirBase):
     """A series is the main 'src' folder, containing one or more works in
     it."""
     works: list[Work]
+    _id_works: defaultdict[int, Work | None] = field(init=False)
+
+    def __post_init__(self):
+        # @dataclass with slots=True breaks argument-less super
+        # pylint: disable=super-with-arguments
+        super(Series, self).__post_init__()
+        self._id_works = defaultdict(lambda: None, {
+            w.work_index: w for w in self.works})
+
+    def get_work(self, work_name: str) -> Work | None:
+        """Returns the work matching the specified name or None if such a work
+        does not exist in this series."""
+        work_ma = match_work(work_name)
+        if not work_ma:
+            return None # Invalid work name syntax
+        return self._id_works[int(work_ma.group(1))]
 
     @classmethod
     def parse_series(cls, series_folder: Path, project_folder: Path, /, *,

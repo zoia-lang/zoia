@@ -27,6 +27,5 @@ from ast_nodes.argument import AArgumentNode
 @dataclass(slots=True)
 class StdArgumentNode(AArgumentNode):
     """AST node for standard arguments."""
-
     def accept(self, visitor):
         return visitor.visit_std_argument(self)

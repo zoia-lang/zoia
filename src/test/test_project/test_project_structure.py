@@ -21,16 +21,15 @@
 # =============================================================================
 """This module runs tests that check whether project structures are being
 parsed correctly."""
-from test.base import ATestProjectFailing, ATestProjectPassing
+from test.base import ATestProjectFailing
+from test.test_project.base import _ATestArbitraryZoiaFiles, \
+    _ATestSimpleStructure
 
 import pytest
 
 class _ATestPSFailing(ATestProjectFailing):
-    """Base class for failing project structure tests."""
-    _py_file_path = __file__
-
-class _ATestPSPassing(ATestProjectPassing):
-    """Base class for passing project structure tests."""
+    """Base class for failing project structure tests. Needed since these don't
+    derive from _ACurrentFile (yet)."""
     _py_file_path = __file__
 
 # Failing tests begin here
@@ -75,7 +74,7 @@ class TestNoProject(_ATestPSFailing):
     """A project without a project folder (i.e. one where the target path
     points to a non-existent folder) should be rejected."""
     _test_name = 'no_project'
-    _exp_error = "No project folder found"
+    _exp_error = "Project folder not found"
 
 class TestNoSrc(_ATestPSFailing):
     """A project without a src folder (i.e. without a series) should be
@@ -106,12 +105,8 @@ class TestUpperWork(_ATestPSFailing):
     _exp_error = "'Work1' is not lowercased"
 
 # Passing tests begin here
-class TestArbitraryZoiaFiles(_ATestPSPassing):
-    """Zoia files should be accepted and parsed no matter which folder under
-    src they are placed in."""
-    _test_name = 'arbitrary_zoia_files'
+class TestArbitraryZoiaFilesParses(_ATestArbitraryZoiaFiles):
+    """arbitrary_zoia_file should parse."""
 
-class TestSimpleStructure(_ATestPSPassing):
-    """A single work with a single chapter and a valid main.zoia file should be
-    accepted."""
-    _test_name = 'simple_structure'
+class TestSimpleStructureParses(_ATestSimpleStructure):
+    """simple_structure should parse."""

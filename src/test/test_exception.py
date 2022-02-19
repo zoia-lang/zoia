@@ -23,8 +23,9 @@
 from exception import AbstractError
 
 def test_abstract_msg() -> None:
-    """AbstractError should correctly derive qualified method names."""
+    """AbstractError should correctly derive method names and source files."""
     try:
-        raise AbstractError(test_abstract_msg)
+        raise AbstractError()
     except AbstractError as e:
         assert 'test_abstract_msg' in str(e)
+        assert 'test_exception' in str(e)

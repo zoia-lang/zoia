@@ -20,6 +20,7 @@
 #
 # =============================================================================
 """Implements shared code for all types of project folders."""
+from collections import defaultdict
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -30,6 +31,16 @@ from project.zoia_file import ZoiaFile
 class _ADirBase:
     """Base class for all project folders."""
     zoia_files: list[ZoiaFile] = field(kw_only=True)
+    _id_zoia: defaultdict[str, ZoiaFile | None] = field(init=False)
+
+    def __post_init__(self):
+        self._id_zoia = defaultdict(lambda: None, {
+            z.file_path.name: z for z in self.zoia_files})
+
+    def get_zoia_file(self, zoia_name: str) -> ZoiaFile | None:
+        """Returns the ZoiaFile matching the specified name or None if such a
+        ZoiaFile does not exist in this folder."""
+        return self._id_zoia[zoia_name]
 
     @staticmethod
     def parse_zoia_files(curr_folder: Path, project_folder: Path, /, *,

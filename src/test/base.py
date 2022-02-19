@@ -31,6 +31,11 @@ from zoia_processor import process_zoia_string
 
 _DEFAULT_HEADER = '\\header[fragment]\n\n'
 
+def mks(*lines):
+    """Makes a Zoia string using the specified lines (with a header
+    prepended)."""
+    return _DEFAULT_HEADER + '\n'.join(lines) + '\n'
+
 class ATestParser:
     """Base class for all tests that need to parse Zoia code."""
     _test_src: str

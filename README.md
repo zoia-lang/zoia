@@ -58,3 +58,8 @@ Zoia itself is licensed [under the GPLv3](LICENSE).
 This does not extend to fiction you write using it, nor does it extend to
 the output generated from such fiction once Zoia compiles it. You may
 license such data however you like.
+
+Note that some files in this repository are licensed under other licenses.
+None of them are part of Zoia itself, they function purely as examples.
+See the [examples directory](doc/examples) and the LICENSE files in there for
+more information.

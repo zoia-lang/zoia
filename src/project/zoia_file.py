@@ -20,20 +20,14 @@
 #
 # =============================================================================
 """Implements .zoia files."""
-from dataclasses import dataclass
-from enum import Enum
+from dataclasses import dataclass, field
 from functools import total_ordering
 from pathlib import Path
 
 import log
 from ast_nodes import ZoiaFileNode
-from exception import ParseConversionError, ParsingError
+from exception import ParseConversionError, ParsingError, ValidationError
 from zoia_processor import process_zoia_file
-
-# FIXME finish
-class FileType(Enum):
-    """Represents the various header types that Zoia files can have."""
-    ALIASES = 0
 
 @dataclass(slots=True)
 @total_ordering
@@ -41,7 +35,7 @@ class ZoiaFile:
     """A Zoia file is a file with the .zoia extension, following the layout
     specified by the Zoia grammar."""
     file_path: Path
-    file_ast: ZoiaFileNode
+    file_ast: ZoiaFileNode = field(repr=False)
 
     def is_main_file(self) -> bool:
         """Checks if this is a main.zoia file."""
@@ -74,6 +68,14 @@ class ZoiaFile:
                 raise
             p = e.src_pos
             log.error(f'Failed to AST-convert $fWl${p.src_file}$fT$ at line '
+                      f'$fWl${p.src_line}$fT$, column $fWl${p.src_char}$fT$: '
+                      f'$fRl${e.orig_msg}$fT$')
+            return None
+        except ValidationError as e:
+            if raise_errors:
+                raise
+            p = e.src_pos
+            log.error(f'Failed to validate $fWl${p.src_file}$fT$ at line '
                       f'$fWl${p.src_line}$fT$, column $fWl${p.src_char}$fT$: '
                       f'$fRl${e.orig_msg}$fT$')
             return None

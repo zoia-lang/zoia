@@ -29,6 +29,8 @@ public:
 
     virtual antlrcpp::Any visitLineElementsInner(zoiaParser::LineElementsInnerContext *context) = 0;
 
+    virtual antlrcpp::Any visitLineElementsArg(zoiaParser::LineElementsArgContext *context) = 0;
+
     virtual antlrcpp::Any visitEm3LineElement(zoiaParser::Em3LineElementContext *context) = 0;
 
     virtual antlrcpp::Any visitEm2LineElement(zoiaParser::Em2LineElementContext *context) = 0;
@@ -38,6 +40,8 @@ public:
     virtual antlrcpp::Any visitTextFragment(zoiaParser::TextFragmentContext *context) = 0;
 
     virtual antlrcpp::Any visitTextFragmentReq(zoiaParser::TextFragmentReqContext *context) = 0;
+
+    virtual antlrcpp::Any visitTextFragmentWord(zoiaParser::TextFragmentWordContext *context) = 0;
 
     virtual antlrcpp::Any visitAlias(zoiaParser::AliasContext *context) = 0;
 

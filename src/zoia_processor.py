@@ -25,11 +25,13 @@ AST."""
 from pathlib import Path
 
 from antlr4 import FileStream, InputStream, Token
+from antlr4.tree.Tree import ParseTree
 
-from parse_converter import ParseConverter
 from ast_nodes import ZoiaFileNode
+from ast_validator import ASTValidator
 from exception import ParsingError
 from grammar import parse, SA_ErrorListener
+from parse_converter import ParseConverter
 from src_pos import SourcePos
 
 class _RaiseErrorListener(SA_ErrorListener):
@@ -54,19 +56,25 @@ class _RaiseErrorListener(SA_ErrorListener):
         # the middle of handling while this gets called
         raise ParsingError(SourcePos(origin_file, line, column), msg) from None
 
+def _process_shared(parse_tree: ParseTree, src_name: str) -> ZoiaFileNode:
+    """Shared code of process_zoia_file and process_zoia_string."""
+    ret_ast = ParseConverter(src_name).visit(parse_tree)
+    ASTValidator().visit(ret_ast)
+    return ret_ast
+
 def process_zoia_file(zoia_path: Path, project_folder: Path) -> ZoiaFileNode:
     """Parses the Zoia file at the specified path and converts it into a Zoia
-    AST."""
+    AST. Also performs validation on the resulting AST."""
     # UTF-8 required by specification, so this is fine
     ins = FileStream(str(zoia_path), encoding='utf-8')
     parse_tree = parse(ins, 'zoiaFile',
                        sa_err_listener=_RaiseErrorListener(project_folder))
-    return ParseConverter(ins.fileName).visit(parse_tree)
+    return _process_shared(parse_tree, ins.fileName)
 
 def process_zoia_string(zoia_src: str, src_name: str) -> ZoiaFileNode:
     """Parses the specified string representation of a Zoia file and converts
     it into a Zoia AST. src_name specifies the name of the source to use in
-    errors etc."""
+    errors etc. Also performs validation on the resulting AST."""
     ins = InputStream(zoia_src)
     parse_tree = parse(ins, 'zoiaFile', sa_err_listener=_RaiseErrorListener())
-    return ParseConverter(src_name).visit(parse_tree)
+    return _process_shared(parse_tree, src_name)

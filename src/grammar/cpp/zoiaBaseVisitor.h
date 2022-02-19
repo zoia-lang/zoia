@@ -35,6 +35,10 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual antlrcpp::Any visitLineElementsArg(zoiaParser::LineElementsArgContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual antlrcpp::Any visitEm3LineElement(zoiaParser::Em3LineElementContext *ctx) override {
     return visitChildren(ctx);
   }
@@ -52,6 +56,10 @@ public:
   }
 
   virtual antlrcpp::Any visitTextFragmentReq(zoiaParser::TextFragmentReqContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitTextFragmentWord(zoiaParser::TextFragmentWordContext *ctx) override {
     return visitChildren(ctx);
   }
 

@@ -19,9 +19,9 @@ def run_setup(with_binary):
 
         extra_compile_args = {
             'windows': ['/DANTLR4CPP_STATIC', '/Zc:__cplusplus'],
-            'linux': ['-std=c++11'],
-            'darwin': ['-std=c++11'],
-            'cygwin': ['-std=c++11'],
+            'linux': ['-std=c++11', '-g0'],
+            'darwin': ['-std=c++11', '-g0'],
+            'cygwin': ['-std=c++11', '-g0'],
         }
 
         # Define an Extension object that describes the Antlr accelerator

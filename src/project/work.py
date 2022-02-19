@@ -21,7 +21,8 @@
 # =============================================================================
 """Implements work folders."""
 import re
-from dataclasses import dataclass
+from collections import defaultdict
+from dataclasses import dataclass, field
 from functools import total_ordering
 from pathlib import Path
 
@@ -40,11 +41,27 @@ class Work(_ADirBase):
     """A work folder is a folder containing one or more chapters."""
     chapters: list[Chapter]
     work_index: int
+    _id_chapters: defaultdict[int, Chapter | None] = field(init=False)
+
+    def __post_init__(self):
+        # @dataclass with slots=True breaks argument-less super
+        # pylint: disable=super-with-arguments
+        super(Work, self).__post_init__()
+        self._id_chapters = defaultdict(lambda: None, {
+            c.chapter_index: c for c in self.chapters})
 
     def __lt__(self, other) -> bool:
         if not isinstance(other, Work):
             return NotImplemented
         return self.work_index < other.work_index
+
+    def get_chapter(self, chapter_name) -> Chapter | None:
+        """Returns the chapter matching the specified name or None if such a
+        chapter does not exist in this work."""
+        chapter_ma = match_chapter(chapter_name)
+        if not chapter_ma:
+            return None # Invalid chapter name syntax
+        return self._id_chapters[int(chapter_ma.group(1))]
 
     @classmethod
     def parse_work(cls, work_folder: Path, project_folder: Path, /, *,

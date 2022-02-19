@@ -102,6 +102,9 @@ disable=raw-checker-failed,
         too-many-return-statements,
         # Let me have my locals dangit :(
         too-many-locals,
+        # PyCharm's detection is smarter and takes child classes overriding
+        # the method into account
+        no-self-use,
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option

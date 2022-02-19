@@ -34,6 +34,11 @@ class zoiaVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by zoiaParser#lineElementsArg.
+    def visitLineElementsArg(self, ctx:zoiaParser.LineElementsArgContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by zoiaParser#em3LineElement.
     def visitEm3LineElement(self, ctx:zoiaParser.Em3LineElementContext):
         return self.visitChildren(ctx)
@@ -56,6 +61,11 @@ class zoiaVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by zoiaParser#textFragmentReq.
     def visitTextFragmentReq(self, ctx:zoiaParser.TextFragmentReqContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by zoiaParser#textFragmentWord.
+    def visitTextFragmentWord(self, ctx:zoiaParser.TextFragmentWordContext):
         return self.visitChildren(ctx)
 
 

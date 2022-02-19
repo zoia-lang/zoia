@@ -20,17 +20,19 @@
 #
 # =============================================================================
 """This module houses tests related to ast_mapper."""
-from test.test_canonical import mkr, ATestCanonicalRepr, TestHeaderCR, \
+from test.base import mks
+from test.test_canonical import ATestCanonicalRepr, TestHeaderCR, \
     TestCommentCR, TestTextFragmentCR, TestAliasCR, TestAliasBarCR, \
     TestCommandNoArgCR, TestCommandWithArgCR, TestKeywordArgsCR, \
-    TestCommandWhitespaceCR, TestCommandMarkupCR, TestCommandNestedCR, \
+    TestCommandWhitespaceCR, TestCommandMarkupCR, TestCommandNestedSACR, \
     TestUnicodeCR, TestEm1CR, TestEm2CR, TestEm3CR, TestEm1ComplexCR, \
-    TestEm2ComplexCR, TestEm3ComplexCR, TestMarkupCombinedCR
+    TestEm2ComplexCR, TestEm3ComplexCR, TestMarkupCombinedCR, \
+    TestCommandNestedMACR
 
 from ast_mapper import AASTMapper
 from ast_nodes import AliasNode, TextFragmentNode
 
-class _MapperTest(AASTMapper):
+class _TestMapper(AASTMapper):
     """Test mapper implementation that simply replaces AliasNodes with
     TextFragmentNodes (without changing the text)."""
     def visit_alias(self, node: AliasNode):
@@ -42,7 +44,7 @@ class _ATestASTMapper(ATestCanonicalRepr):
     """Base class for AASTMapper tests."""
     def _get_canonical(self, test_src: str) -> str:
         tree = self._parse_src(test_src)
-        mapper = _MapperTest()
+        mapper = _TestMapper()
         tree_tf = mapper.visit(tree)
         return tree_tf.canonical()
 
@@ -71,8 +73,11 @@ class TestMapCommandWhitespaceCR(_ATestASTMapper, TestCommandWhitespaceCR):
 class TestMapCommandMarkupCR(_ATestASTMapper, TestCommandMarkupCR):
     """Version of TestCommandMarkupCR that maps before testing."""
 
-class TestMapCommandNestedCR(_ATestASTMapper, TestCommandNestedCR):
-    """Version of TestCommandNestedCR that maps before testing."""
+class TestMapCommandNestedSACR(_ATestASTMapper, TestCommandNestedSACR):
+    """Version of TestCommandNestedSACR that maps before testing."""
+
+class TestMapCommandNestedMACR(_ATestASTMapper, TestCommandNestedMACR):
+    """Version of TestCommandNestedMACR that maps before testing."""
 
 class TestMapUnicodeCR(_ATestASTMapper, TestUnicodeCR):
     """Version of TestUnicodeCR that maps before testing."""
@@ -92,27 +97,28 @@ class TestMapMarkupCombinedCR(_ATestASTMapper, TestMarkupCombinedCR):
 # Canonical repr tests with aliases in it should remove the '@' and '|'
 class TestMapAliasCR(_ATestASTMapper, TestAliasCR):
     """@foo| -> 'foo', @bar| -> 'bar', @qux| -> 'qux'"""
-    _test_rep = mkr('foobar  qux')
+    _test_rep = mks('foobar  qux')
 
 class TestMapAliasBarCR(_ATestASTMapper, TestAliasBarCR):
     """@A -> 'A', @B| -> 'B', @C, -> 'C,', @D| -> D"""
-    _test_rep = mkr('A ran into B, C, and D.')
+    _test_rep = mks('A ran into B, C, and D.')
 
 class TestMapEm1ComplexCR(_ATestASTMapper, TestEm1ComplexCR):
     """@aliases -> aliases"""
-    _test_rep = mkr('*Em1 with aliases and \\commands|*')
+    _test_rep = mks('*Em1 with aliases and \\commands|*')
 
 class TestMapEm2ComplexCR(_ATestASTMapper, TestEm2ComplexCR):
     """@aliases -> aliases"""
-    _test_rep = mkr('**Em2 with aliases and \\commands|**')
+    _test_rep = mks('**Em2 with aliases and \\commands|**')
 
 class TestMapEm3ComplexCR(_ATestASTMapper, TestEm3ComplexCR):
     """@aliases -> aliases"""
-    _test_rep = mkr('***Em3 with aliases and \\commands|***')
+    _test_rep = mks('***Em3 with aliases and \\commands|***')
 
 # Delete these, otherwise pytest will see them in scope and run them again
 del ATestCanonicalRepr, TestHeaderCR, TestCommentCR, TestTextFragmentCR, \
     TestAliasCR, TestAliasBarCR, TestCommandNoArgCR, TestCommandWithArgCR, \
     TestKeywordArgsCR, TestCommandWhitespaceCR, TestCommandMarkupCR, \
-    TestCommandNestedCR, TestUnicodeCR, TestEm1CR, TestEm2CR, TestEm3CR, \
-    TestEm1ComplexCR, TestEm2ComplexCR, TestEm3ComplexCR, TestMarkupCombinedCR
+    TestCommandNestedSACR, TestUnicodeCR, TestEm1CR, TestEm2CR, TestEm3CR, \
+    TestEm1ComplexCR, TestEm2ComplexCR, TestEm3ComplexCR, \
+    TestMarkupCombinedCR, TestCommandNestedMACR

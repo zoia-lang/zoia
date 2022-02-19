@@ -20,6 +20,8 @@
 #
 # =============================================================================
 """This module contains all custom exceptions for Zoia."""
+import inspect
+import os
 from os import PathLike
 
 from src_pos import SourcePos
@@ -27,33 +29,51 @@ from src_pos import SourcePos
 
 class AbstractError(Exception):
     """Abstract section of code called."""
-    def __init__(self, abs_method: callable) -> None:
-        super().__init__(f"Abstract method '{abs_method.__qualname__}' was "
-                         f"called")
+    def __init__(self) -> None:
+        call_stack = inspect.stack()
+        or_file, or_line, or_function = call_stack[1][1:4]
+        super().__init__(f"Abstract method '{or_function}' (at "
+                         f"{os.path.basename(or_file)}:{or_line}) "
+                         f"was called")
 
 class _SrcPosError(Exception):
     """Base class for errors that carry information about where in a source
     file they occurred."""
-    def __init__(self, pos: SourcePos, msg: str) -> None:
+    def __init__(self, msg: str, pos: SourcePos, orig_msg: str) -> None:
         super().__init__(msg)
         self.src_pos = pos
+        self.orig_msg = orig_msg
+
+class EvalError(_SrcPosError):
+    """An error that occurred during evaluation."""
+    def __init__(self, pos: SourcePos, msg: str) -> None:
+        super().__init__(f'Failed to evaluate {pos.src_file} at line '
+                         f'{pos.src_line}, column {pos.src_char}: {msg}',
+                         pos, msg)
 
 class ParseConversionError(_SrcPosError):
     """An error that occurred during parse-to-AST conversion."""
     def __init__(self, pos: SourcePos, msg: str) -> None:
-        super().__init__(pos, f'Failed to AST-convert {pos.src_file} at line '
-                              f'{pos.src_line}, column {pos.src_char}: {msg}')
-        self.orig_msg = msg
+        super().__init__(f'Failed to AST-convert {pos.src_file} at line '
+                         f'{pos.src_line}, column {pos.src_char}: {msg}',
+                         pos, msg)
 
 class ParsingError(_SrcPosError):
     """An error that occurred during parsing of a Zoia file."""
     def __init__(self, pos: SourcePos, msg: str) -> None:
-        super().__init__(pos, f'Failed to parse {pos.src_file} at line '
-                              f'{pos.src_line}, column {pos.src_char}: {msg}')
-        self.orig_msg = msg
+        super().__init__(f'Failed to parse {pos.src_file} at line '
+                         f'{pos.src_line}, column {pos.src_char}: {msg}',
+                         pos, msg)
 
 class ProjectStructureError(Exception):
     """The project structure is invalid."""
     def __init__(self, relevant_path: PathLike, msg: str) -> None:
         super().__init__(f"Invalid project structure at '{relevant_path}': "
                          f"{msg}")
+
+class ValidationError(_SrcPosError):
+    """Error while validating Zoia AST nodes."""
+    def __init__(self, pos: SourcePos, msg: str) -> None:
+        super().__init__(f'Failed to validate {pos.src_file} at line '
+                         f'{pos.src_line}, column {pos.src_char}: {msg}',
+                         pos, msg)

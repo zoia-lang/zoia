@@ -27,7 +27,6 @@ from ast_nodes.em_line_element import AEmLineElementNode
 @dataclass(slots=True)
 class Em1LineElementNode(AEmLineElementNode):
     """AST node for level 1 emphasized line elements."""
-
     def accept(self, visitor):
         return visitor.visit_em1_line_element(self)
 

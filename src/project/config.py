@@ -23,7 +23,7 @@
 import inspect
 import os
 from collections import defaultdict
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Type, Any
 
@@ -31,20 +31,16 @@ import tomli
 
 import log
 from exception import AbstractError
-from utils import ps_error
+from utils import ps_error, valid_src_path, valid_zoia_path
 
 # Internal API begins here
+@dataclass(slots=True)
 class _AOption:
     """Base class for all options. See its subclasses like _ASrcPathOption for
     more information."""
     option_name: str
     option_value: Any
-    option_default: Any
-    __slots__ = ('option_name', 'option_value',)
-
-    def __init__(self, opt_name: str, opt_value: Any):
-        self.option_name = opt_name
-        self.option_value = opt_value
+    option_default: Any = field(init=False)
 
     @classmethod
     def parse_option(cls, option_value: Any, option_name: str,
@@ -62,12 +58,10 @@ class _AOption:
                          project_folder: Path, /, *, raise_errors: bool):
         """The actual abstract method that does the parsing. This is what you
         have to override to create a new type of option."""
-        raise AbstractError(cls.parse_option)
-
-    def __repr__(self):
-        return f"Option<{self.option_name} = '{self.option_value}'>"
+        raise AbstractError()
 
 # TODO Do we need src path options separate from Zoia path options?
+@dataclass(slots=True)
 class _ASrcPathOption(_AOption):
     """Base class for src path options. A path, specified relative to the 'src'
     folder. Must be entirely lowercase and must exist.
@@ -75,7 +69,6 @@ class _ASrcPathOption(_AOption):
     Do not use this directly. Instead, use the _src_path_option API and pass a
     default value."""
     option_value: Path
-    __slots__ = ()
 
     @classmethod
     def _do_parse_option(cls, option_value: str | None, option_name: str,
@@ -84,10 +77,10 @@ class _ASrcPathOption(_AOption):
         option_value = option_value.replace(
             '\\', os.path.sep).replace('/', os.path.sep)
         # This is a src-relative path, which must be lowercased
-        if option_value.lower() != option_value:
-            return ps_error(f"Failed to parse option '{option_name}': "
-                            f"'{option_value}' is not lowercased",
-                            Path('zoia.toml'), raise_errors)
+        if not valid_src_path(option_value):
+            ps_error(f"Failed to parse option '{option_name}': "
+                     f"'{option_value}' is not lowercased",
+                     Path('zoia.toml'), raise_errors)
         # Check if the path actually exists
         rel_path = Path('src') / option_value
         final_path = project_folder / rel_path
@@ -110,6 +103,7 @@ class _ASrcPathOption(_AOption):
 #         __slots__ = ()
 #     return _SrcPathOption
 
+@dataclass(slots=True)
 class _AZoiaPathOption(_ASrcPathOption):
     """Base class for Zoia path options. Similar to _ASrcPathOption, but must
     end in .zoia.
@@ -119,12 +113,13 @@ class _AZoiaPathOption(_ASrcPathOption):
     @classmethod
     def _do_parse_option(cls, option_value: str | None, option_name: str,
                          project_folder: Path, /, *, raise_errors: bool):
-        # lower() because the check for lowercasing is done in _ASrcPathOption
-        if not option_value.lower().endswith('.zoia'):
+        # Error from !valid_src_path(option_value) will be raised in super
+        if valid_src_path(option_value) and not valid_zoia_path(option_value):
             return ps_error(f"Failed to parse option '{option_name}': "
                             f"Specified path '{option_value}' does not end in "
                             f"'.zoia'", Path('zoia.toml'), raise_errors)
-        return super()._do_parse_option(
+        # @dataclass with slots=True breaks argument-less super
+        return super(_AZoiaPathOption, cls)._do_parse_option(
             option_value, option_name, project_folder,
             raise_errors=raise_errors)
 

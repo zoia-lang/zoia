@@ -24,6 +24,7 @@ import sys
 import time
 from pathlib import Path
 
+import build_supervisor
 import log
 from exception import AbstractError
 from project import Project
@@ -57,8 +58,10 @@ def _log_boot_info():
     log.info('Zoia - a language for writing fiction.')
     _log_version()
     log.info('Copyright (C) 2021-2022 Infernio')
-    log.info('This is free software licensed under the GPLv3. See the LICENSE '
-             'file included with this program for more information.')
+    log.info('This is free software licensed under the GPLv3.')
+    log.info('See the LICENSE file included with this program for more '
+             'information.')
+    log.info('')
 
 _ZOIA_VERSION = '0.1'
 def _log_version():
@@ -69,11 +72,11 @@ class _Verb:
     """Base class for verbs."""
     def run(self, args: list[str]) -> None:
         """Runs this verb on the specified arguments."""
-        raise AbstractError(self.run)
+        raise AbstractError()
 
 class _CommonVerb(_Verb):
-    """Base class for verbs that share a simple pattern of behavior: logging
-    the standard boot info at startup and printing errors/warnings at exit."""
+    """Base class for verbs that share a pattern of behavior: logging the
+    standard boot info at startup and printing errors/warnings at exit."""
     def run(self, args: list[str]) -> None:
         _log_boot_info()
         self._run_common(args)
@@ -82,15 +85,50 @@ class _CommonVerb(_Verb):
     def _run_common(self, args: list[str]) -> None:
         """Implements the verb-specific behavior (everything besides the
         boot/exit logging)."""
-        raise AbstractError(self._run_common)
+        raise AbstractError()
 
-class _Build(_CommonVerb):
-    """Verb that builds a project."""
+class _ProjectVerb(_CommonVerb):
+    """Base class for common verbs that share an additional pattern of
+    behavior: parsing a project from the first argument or CWD, while keeping
+    track of time elapsed."""
+    _time_msg: str
+
     def _run_common(self, args: list[str]) -> None:
         start_time = time.time()
-        Project.parse_project(Path.cwd())
+        match len(args):
+            case 0:
+                final_path = Path.cwd()
+            case 1:
+                final_path = Path(args[0])
+            case _:
+                print('Usage: zoia build [path]', file=sys.stderr)
+                sys.exit(1)
+        project = Project.parse_project(final_path)
+        if project is not None:
+            self._run_on_project(project)
+        else:
+            log.warning('Aborting build due to errors while parsing project')
         duration = time.time() - start_time
-        log.info(f'Build took {duration:.1f}s')
+        log.info(self._time_msg % f'{duration:.1f}')
+
+    def _run_on_project(self, project: Project) -> None:
+        """Implements the verb-specific behavior using the project."""
+        raise AbstractError()
+
+class _Build(_ProjectVerb):
+    """Verb that builds a project."""
+    _time_msg = 'Build took %ss'
+
+    def _run_on_project(self, project: Project) -> None:
+        build_supervisor.build(project)
+
+class _Check(_ProjectVerb):
+    """Verb that checks a project for spelling, grammar, style, etc.
+    errors."""
+    _time_msg = 'Check took %ss'
+
+    def _run_on_project(self, project: Path) -> None:
+        pass # TODO implement checking
 
 class _Version(_Verb):
     """Verb that prints the Zoia version and exits."""
@@ -99,6 +137,7 @@ class _Version(_Verb):
 
 _verbs = {
     'build': _Build(),
+    'check': _Check(),
     'version': _Version(),
 }
 

@@ -56,3 +56,13 @@ def dir_case_is_valid(dir_path: Path, rel_dir_path: Path,
                      raise_errors)
             case_valid = False
     return case_valid
+
+def valid_src_path(src_path: str):
+    """Returns True if the specified string path is valid as a src-relative
+    path."""
+    return src_path.lower() == src_path
+
+def valid_zoia_path(zoia_path: str):
+    """Returns True if the specified string path is valid as a src-relative
+    path to a Zoia file."""
+    return valid_src_path(zoia_path) and zoia_path.endswith('.zoia')

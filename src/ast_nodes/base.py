@@ -29,17 +29,17 @@ from src_pos import SourcePos
 @dataclass(slots=True)
 class AASTNode:
     """Base class for all Zoia AST nodes."""
-    src_pos: SourcePos = field(kw_only=True)
+    src_pos: SourcePos = field(kw_only=True, repr=False)
 
     def accept(self, visitor):
         """Called by a visitor when it's about to visit this node. It should
         call a specific method on the visitor that will then visit this
         node."""
-        raise AbstractError(self.accept)
+        raise AbstractError()
 
     def canonical(self) -> str:
         """Returns a canonical string representation of this node."""
-        raise AbstractError(self.canonical)
+        raise AbstractError()
 
 def _write_arguments(s: StringIO, arguments: list[AASTNode]) -> None:
     """Helper method for writing out a list of nodes as arguments to a
@@ -47,11 +47,15 @@ def _write_arguments(s: StringIO, arguments: list[AASTNode]) -> None:
     vertical bar as a terminator, if the command does not have any
     arguments)."""
     if arguments:
-        s.write('[\n')
-        for a in arguments:
-            s.write('    ')
-            s.write(a.canonical())
-            s.write(';\n')
+        s.write('[')
+        if len(arguments) == 1:
+            s.write(arguments[0].canonical())
+        else:
+            s.write('\n')
+            for a in arguments:
+                s.write('    ')
+                s.write(a.canonical())
+                s.write(';\n')
         s.write(']')
     else:
         s.write('|')

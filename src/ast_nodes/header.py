@@ -20,7 +20,7 @@
 #
 # =============================================================================
 """Implements the AST node for headers."""
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from io import StringIO
 
 from ast_nodes.argument import AArgumentNode
@@ -30,6 +30,8 @@ from ast_nodes.base import AASTNode, _write_arguments
 class HeaderNode(AASTNode):
     """AST node for file headers."""
     arguments: list[AArgumentNode]
+    # Set by ASTValidator
+    header_type: str = field(init=False)
 
     def accept(self, visitor):
         return visitor.visit_header(self)

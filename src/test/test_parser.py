@@ -84,12 +84,6 @@ class TestAcceptsComment2(_ATestParserPass):
     """A comment at the end of a line should be accepted."""
     _test_src = 'foo \\bar @qux # All three types of line element'
 
-class TestAcceptsSpaceArg(_ATestParserPass):
-    """An argument may be nothing but spaces. This is unintuitive at first, but
-    comes as a side effect of text fragments potentially being nothing but
-    spaces."""
-    _test_src = '\\cmd[ ]'
-
 class TestAcceptsUnicode(_ATestParserPass):
     """Unicode characters should be accepted."""
     _test_src = '\\cömmänd[😀] 警告'
@@ -184,3 +178,7 @@ class TestRejectsKwdEm2(_ATestParserFail):
 class TestRejectsKwdEm3(_ATestParserFail):
     """Em3 text should be rejected when used as a keyword."""
     _test_src = '\\cmd[***foo*** = bar]'
+
+class TestRejectsSpaceArg(_ATestParserFail):
+    """An argument may not consist entirely of spaces."""
+    _test_src = '\\cmd[ ]'

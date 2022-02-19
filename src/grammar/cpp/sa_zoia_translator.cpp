@@ -16,11 +16,13 @@ SA_zoiaTranslator::~SA_zoiaTranslator() {
     Py_XDECREF(LineContext_cls);
     Py_XDECREF(LineElementsContext_cls);
     Py_XDECREF(LineElementsInnerContext_cls);
+    Py_XDECREF(LineElementsArgContext_cls);
     Py_XDECREF(Em3LineElementContext_cls);
     Py_XDECREF(Em2LineElementContext_cls);
     Py_XDECREF(Em1LineElementContext_cls);
     Py_XDECREF(TextFragmentContext_cls);
     Py_XDECREF(TextFragmentReqContext_cls);
+    Py_XDECREF(TextFragmentWordContext_cls);
     Py_XDECREF(AliasContext_cls);
     Py_XDECREF(CommandContext_cls);
     Py_XDECREF(ArgumentsContext_cls);
@@ -61,6 +63,12 @@ antlrcpp::Any SA_zoiaTranslator::visitLineElementsInner(zoiaParser::LineElements
     return py_ctx;
 }
 
+antlrcpp::Any SA_zoiaTranslator::visitLineElementsArg(zoiaParser::LineElementsArgContext *ctx){
+    if(!LineElementsArgContext_cls) LineElementsArgContext_cls = PyObject_GetAttrString(translator->parser_cls, "LineElementsArgContext");
+    PyObject *py_ctx = translator->convert_ctx(this, ctx, LineElementsArgContext_cls);
+    return py_ctx;
+}
+
 antlrcpp::Any SA_zoiaTranslator::visitEm3LineElement(zoiaParser::Em3LineElementContext *ctx){
     if(!Em3LineElementContext_cls) Em3LineElementContext_cls = PyObject_GetAttrString(translator->parser_cls, "Em3LineElementContext");
     PyObject *py_ctx = translator->convert_ctx(this, ctx, Em3LineElementContext_cls);
@@ -88,6 +96,12 @@ antlrcpp::Any SA_zoiaTranslator::visitTextFragment(zoiaParser::TextFragmentConte
 antlrcpp::Any SA_zoiaTranslator::visitTextFragmentReq(zoiaParser::TextFragmentReqContext *ctx){
     if(!TextFragmentReqContext_cls) TextFragmentReqContext_cls = PyObject_GetAttrString(translator->parser_cls, "TextFragmentReqContext");
     PyObject *py_ctx = translator->convert_ctx(this, ctx, TextFragmentReqContext_cls);
+    return py_ctx;
+}
+
+antlrcpp::Any SA_zoiaTranslator::visitTextFragmentWord(zoiaParser::TextFragmentWordContext *ctx){
+    if(!TextFragmentWordContext_cls) TextFragmentWordContext_cls = PyObject_GetAttrString(translator->parser_cls, "TextFragmentWordContext");
+    PyObject *py_ctx = translator->convert_ctx(this, ctx, TextFragmentWordContext_cls);
     return py_ctx;
 }
 

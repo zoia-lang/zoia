@@ -27,28 +27,114 @@ from pathlib import Path
 import log
 from project.config import ZoiaToml
 from project.series import Series
-from utils import ps_error
+from project.zoia_file import ZoiaFile
+from utils import ps_error, valid_zoia_path
 
 @dataclass(slots=True)
 class Project:
     """The Project class oversees all operations on a project written in
     Zoia. To obtain a Project instance, use the parse_project classmethod."""
+    project_path: Path
     series: Series
     config: ZoiaToml
+
+    def find_zoia_file(self, file_path: Path) -> ZoiaFile | None:
+        """Finds a ZoiaFile by its path. The path may be relative to the src
+        folder, relative to the project folder, or absolute. Returns None if
+        the file could not be found."""
+        # First make sure the path exists and make it absolute
+        try:
+            if not file_path.is_absolute():
+                # Not absolute, so relative to either the src or project folder
+                altered_path = self.project_path / 'src' / file_path
+                if not altered_path.exists():
+                    altered_path = self.project_path / file_path
+            else:
+                # Already absolute, just check that it exists
+                altered_path = file_path
+            file_path = altered_path.resolve(strict=True)
+        except FileNotFoundError:
+            return None
+        # Then relativize it and make sure it's a valid Zoia path
+        rel_path = self.relativize(file_path, strip_src=True)
+        if not valid_zoia_path(str(rel_path)):
+            return None
+        # Then we can parse it by parts and look for the file
+        #path_parts =
+        match rel_path.parts:
+            case (zoia_name,): # a.zoia
+                return self.series.get_zoia_file(zoia_name)
+            case (work_name, zoia_name): # work1/a.zoia
+                work = self.series.get_work(work_name)
+                # PEP 505 or something similar sorely missed
+                if work is None:
+                    return None
+                return work.get_zoia_file(zoia_name)
+            case (work_name, chapter_name, zoia_name): # work1/ch1/a.zoia
+                work = self.series.get_work(work_name)
+                if work is None:
+                    return None
+                chapter = work.get_chapter(chapter_name)
+                if chapter is None:
+                    return None
+                return chapter.get_zoia_file(zoia_name)
+            case _: # Some kind of unsupported location
+                return None
+
+    def _find_zoia_or_raise(self, file_path: Path) -> ZoiaFile:
+        """Internal version of find_zoia_file that raises an error if the file
+        could not be found. Meant to be used for required Zoia files, e.g.
+        aliases.zoia and dictionary.zoia."""
+        ret_zoia = self.find_zoia_file(file_path)
+        if ret_zoia is None:
+            raise FileNotFoundError(f"Failed to find required Zoia file "
+                                    f"'{file_path}'")
+        return ret_zoia
+
+    def relativize(self, absolute_path: Path, /, *,
+                   strip_src: bool = False) -> Path:
+        """Returns a version of the specified absolute path relative to the
+        path at which this project is located. If the specified path is not
+        absolute or not relative to this project, a ValueError is raised.
+
+        :param absolute_path: The path to relativize.
+        :param strip_src: If True, remove the leading 'src' from the resulting
+            relative path. In other words, relativize to the src path instead
+            of the project path."""
+        if not absolute_path.is_absolute():
+            raise ValueError('relativize needs an absolute path')
+        rel_target = self.project_path
+        if strip_src:
+            rel_target /= 'src'
+        return absolute_path.relative_to(rel_target)
+
+    @property
+    def aliases_file(self) -> ZoiaFile:
+        """Returns the ZoiaFile object corresponding to the aliases file. This
+        takes any changes made by the config file into account."""
+        return self._find_zoia_or_raise(
+            self.config.aliases.src_path.option_value)
+
+    @property
+    def dictionary_file(self) -> ZoiaFile:
+        """Returns the ZoiaFile object corresponding to the dictionary file.
+        This takes any changes made by the config file into account."""
+        return self._find_zoia_or_raise(
+            self.config.dictionary.src_path.option_value)
 
     @classmethod
     def parse_project(cls, project_folder: Path, /, *,
                       raise_errors: bool = False):
         """Parses a project at the specified path."""
-        log.info(f'Wanted project folder is $fWl${project_folder}$R$')
         # Resolve the path first so all later operations can use full paths and
         # ensure it exists while we're at it
         try:
             project_folder = project_folder.resolve(strict=True)
         except FileNotFoundError as e:
-            return ps_error('No project folder found', Path(''),
-                            raise_errors, orig_error=e)
-        log.info(f'Actual project folder is $fWl${project_folder}$R$')
+            return ps_error('Project folder not found',
+                            project_folder.resolve(), raise_errors,
+                            orig_error=e)
+        log.info(f'Project folder is $fWl${project_folder}$R$')
         # Parse the series folder 'src', which must exist
         series_rel = 'src'
         series_folder = project_folder / series_rel
@@ -72,4 +158,4 @@ class Project:
             log.warning(f'Failed to parse project due to errors when parsing '
                         f'$fCl${zoia_toml_rel}$R$')
             return None
-        return cls(parsed_series, parsed_config)
+        return cls(project_folder, parsed_series, parsed_config)
