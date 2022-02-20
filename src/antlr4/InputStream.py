@@ -21,7 +21,7 @@ class InputStream (object):
 
     def _loadString(self):
         self._index = 0
-        self.data = [ord(c) for c in self.strdata]
+        self.data = list(self.strdata.encode('utf-8'))
         self._size = len(self.data)
 
     @property
