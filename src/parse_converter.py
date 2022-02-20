@@ -28,7 +28,7 @@ from antlr4.tree.Tree import TerminalNodeImpl, ParseTree
 from ast_nodes import AliasNode, CommandNode, HeaderNode, KwdArgumentNode, \
     LineNode, StdArgumentNode, TextFragmentNode, ZoiaFileNode, \
     LineElementsNode, AArgumentNode, Em1LineElementNode, Em2LineElementNode, \
-    Em3LineElementNode, AASTNode
+    Em3LineElementNode
 from exception import ParseConversionError
 from grammar import zoiaParser, zoiaVisitor
 from src_pos import SourcePos
@@ -67,8 +67,9 @@ class ParseConverter(zoiaVisitor):
 
     def make_pos(self, ctx) -> SourcePos:
         """Creates a source position from the specified context object."""
-        return SourcePos(src_file=self.parsed_file, src_line=ctx.start.line,
-                         src_char=ctx.start.column)
+        ctx_start = ctx.start
+        return SourcePos(src_file=self.parsed_file, src_line=ctx_start.line,
+                         src_char=ctx_start.column)
 
     # Override to add typing
     def visit(self, tree: ParseTree) -> ZoiaFileNode:
@@ -141,18 +142,16 @@ class ParseConverter(zoiaVisitor):
 
     def visitTextFragment(self, ctx: zoiaParser.TextFragmentContext) \
             -> TextFragmentNode:
-        child_word = ctx.Word()
-        if child_word:
-            node_text = child_word.getText()
-        else:
-            child_spaces = ctx.Spaces()
-            if child_spaces:
-                node_text = child_spaces.getText()
-            else:
-                raise ParseConversionError(self.make_pos(ctx),
-                                           f"Unknown or invalid text fragment "
-                                           f"'{ctx.getText()}'")
-        return TextFragmentNode(node_text, src_pos=self.make_pos(ctx))
+        try:
+            # This is done for performance - visitTextFragment gets called
+            # tens of thousands of times, so avoiding the inefficient ANTLR
+            # Python APIs (e.g. getToken()) is important
+            return TextFragmentNode(ctx.children[0].symbol.text,
+                                    src_pos=self.make_pos(ctx))
+        except (AttributeError, KeyError, IndexError, TypeError):
+            raise ParseConversionError(self.make_pos(ctx),
+                                       f"Unknown or invalid text fragment "
+                                       f"'{ctx.getText()}'")
 
     def visitTextFragmentReq(self, ctx: zoiaParser.TextFragmentReqContext) \
             -> TextFragmentNode:
