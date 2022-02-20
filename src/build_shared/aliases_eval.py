@@ -21,18 +21,37 @@
 # =============================================================================
 """Implements evaluation of Zoia file of type 'aliases' (also named
 'aliases.zoia' by default)."""
+import log
 from ast_nodes import AASTNode, ZoiaFileNode, HeaderNode, LineNode, \
-    LineElementsNode, CommandNode, StdArgumentNode, TextFragmentNode
+    LineElementsNode, CommandNode, TextFragmentNode
 from ast_visitor import AASTVisitor
-from exception import EvalError
+from cmd_validation import Signature, WordTy, ContentTy
+from exception import EvalError, ValidationError
+from src_pos import SourcePos
+
+_def_alias_sig = Signature(
+    std_only={
+        'key': WordTy(),
+        'val': ContentTy(),
+    },
+)
 
 class AliasesEvaluator(AASTVisitor):
     r"""Evaluates an aliases file to resolve all \def_alias commands in it and
     return them in the form of an easy to process dict."""
     # Override to add return value type
-    def visit(self, tree: AASTNode) -> dict[str, LineElementsNode]:
+    def visit(self, tree: AASTNode) -> dict[str, LineElementsNode] | None:
         # pylint: disable=useless-super-delegation
-        return super().visit(tree)
+        try:
+            return super().visit(tree)
+        except ValidationError as e:
+            # TODO Move this to log - duplicate and doing so will make testing
+            #  it easier too
+            p = e.src_pos
+            log.error(f'Failed to validate $fWl${p.src_file}$fT$ at line '
+                      f'$fWl${p.src_line}$fT$, column $fWl${p.src_char}$fT$: '
+                      f'$fRl${e.orig_msg}$fT$')
+            return None
 
     def _visit_default(self, node: AASTNode):
         raise EvalError(
@@ -51,16 +70,14 @@ class AliasesEvaluator(AASTVisitor):
         ret_dict = {}
         seen_alias_keys = set()
         add_alias_key = seen_alias_keys.add
-        for alias_frag, alias_val in final_aliases:
-            # Be forgiving of extra whitespace
-            alias_key = alias_frag.text_val.strip()
+        for alias_key_tup, alias_val_tup in final_aliases:
+            alias_key = alias_key_tup[0]
             if alias_key in seen_alias_keys:
-                raise EvalError(
-                    alias_frag.src_pos,
-                    f"Duplicate alias key '{alias_key}'")
+                raise EvalError(alias_key_tup[1], f"Duplicate alias key "
+                                                  f"'{alias_key}'")
             else:
                 add_alias_key(alias_key)
-                ret_dict[alias_key] = alias_val
+                ret_dict[alias_key] = alias_val_tup[0]
         return ret_dict
 
     def visit_header(self, node: HeaderNode):
@@ -90,26 +107,12 @@ class AliasesEvaluator(AASTVisitor):
         return ret_aliases
 
     def visit_command(self, node: CommandNode) \
-            -> tuple[TextFragmentNode, LineElementsNode]:
+            -> tuple[tuple[str, SourcePos],
+                     tuple[LineElementsNode, SourcePos]]:
         if node.cmd_name != 'def_alias':
             raise EvalError(
                 node.src_pos,
                 f"Unexpected '\\{node.cmd_name}' command in an aliases file. "
                 f"Only \\def_alias commands are allowed")
-        # TODO This is validation, it should be in ASTValidator (note how
-        #  similar it is!). See TODOs there though
-        std_arg_msg = ('Invalid \\def_alias command: Exactly two standard '
-                       'arguments are required')
-        if len(node.arguments) != 2:
-            raise EvalError(node.src_pos, std_arg_msg)
-        if any(not isinstance(a, StdArgumentNode) for a in node.arguments):
-            raise EvalError(node.src_pos, std_arg_msg)
-        txt_frag_msg = ('The first argument passed to \\def_alias must be a '
-                        'single text fragment containing one word')
-        arg_elements = node.arguments[0].arg_value.elements
-        if len(arg_elements) > 1:
-            raise EvalError(arg_elements[1].src_pos, txt_frag_msg)
-        txt_frag = arg_elements[0]
-        if not isinstance(txt_frag, TextFragmentNode):
-            raise EvalError(txt_frag.src_pos, txt_frag_msg)
-        return txt_frag, node.arguments[1].arg_value
+        proc_args = _def_alias_sig.process_args(node.arguments)[0]
+        return proc_args['key'], proc_args['val']

@@ -71,14 +71,15 @@ class ParseConverter(zoiaVisitor):
                          src_char=ctx.start.column)
 
     # Override to add typing
-    def visit(self, tree: ParseTree) -> AASTNode:
+    def visit(self, tree: ParseTree) -> ZoiaFileNode:
         # pylint: disable=useless-super-delegation
         return super().visit(tree)
 
     # Sorted by the order in which they are defined in the grammar
     def visitZoiaFile(self, ctx: zoiaParser.ZoiaFileContext) -> ZoiaFileNode:
         header = self.visitHeader(ctx.header())
-        lines = [self.visitLine(l) for l in ctx.line()]
+        visit_ln = self.visitLine
+        lines = [visit_ln(l) for l in ctx.line()]
         return ZoiaFileNode(header, lines, src_pos=self.make_pos(ctx))
 
     def visitHeader(self, ctx: zoiaParser.HeaderContext) -> HeaderNode:
@@ -112,6 +113,7 @@ class ParseConverter(zoiaVisitor):
         """Small helper method to deduplicate the shared logic of
         visitLineElements and visitLineElementsInner."""
         elements = []
+        el_append = elements.append
         for le_child in ctx.children:
             try:
                 visit_method = visit_lookup[le_child.__class__]
@@ -119,7 +121,7 @@ class ParseConverter(zoiaVisitor):
                 raise ParseConversionError(self.make_pos(le_child),
                                            f"Unknown or invalid line element "
                                            f"'{le_child.getText()}'") from e
-            elements.append(visit_method(le_child))
+            el_append(visit_method(le_child))
         return LineElementsNode(elements, src_pos=self.make_pos(ctx))
 
     def visitEm1LineElement(self, ctx: zoiaParser.Em1LineElementContext) \
@@ -155,10 +157,11 @@ class ParseConverter(zoiaVisitor):
     def visitTextFragmentReq(self, ctx: zoiaParser.TextFragmentReqContext) \
             -> TextFragmentNode:
         s = StringIO()
+        s_write = s.write
         for tf_child in ctx.children:
             if (isinstance(tf_child, TerminalNodeImpl) and
                     tf_child.symbol.type in _text_fragment_children):
-                s.write(tf_child.getText())
+                s_write(tf_child.getText())
             else:
                 raise ParseConversionError(self.make_pos(ctx),
                                            f"Unknown or invalid required "
@@ -187,7 +190,8 @@ class ParseConverter(zoiaVisitor):
             -> list[AArgumentNode]:
         if ctx is None:
             return [] # command has an optional arguments param
-        return [self.visitArgument(a) for a in ctx.argument()]
+        visit_arg = self.visitArgument
+        return [visit_arg(a) for a in ctx.argument()]
 
     def visitArgument(self, ctx: zoiaParser.ArgumentContext) -> AArgumentNode:
         std_argument = ctx.stdArgument()

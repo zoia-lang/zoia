@@ -50,7 +50,7 @@ class _RaiseErrorListener(SA_ErrorListener):
                     origin_path.is_relative_to(self._project_folder)):
                 origin_path = origin_path.relative_to(self._project_folder)
             origin_file = str(origin_path)
-        except (AttributeError, KeyError, TypeError):
+        except (AttributeError, KeyError, IndexError, TypeError):
             origin_file = '<unknown file>'
         # 'from None' to hide the pointless, messageless error that we're in
         # the middle of handling while this gets called
@@ -65,11 +65,14 @@ def _process_shared(parse_tree: ParseTree, src_name: str) -> ZoiaFileNode:
 def process_zoia_file(zoia_path: Path, project_folder: Path) -> ZoiaFileNode:
     """Parses the Zoia file at the specified path and converts it into a Zoia
     AST. Also performs validation on the resulting AST."""
+    origin_path = str(zoia_path)
     # UTF-8 required by specification, so this is fine
-    ins = FileStream(str(zoia_path), encoding='utf-8')
+    ins = FileStream(origin_path, encoding='utf-8')
+    if zoia_path.is_relative_to(project_folder):
+        origin_path = str(zoia_path.relative_to(project_folder))
     parse_tree = parse(ins, 'zoiaFile',
                        sa_err_listener=_RaiseErrorListener(project_folder))
-    return _process_shared(parse_tree, ins.fileName)
+    return _process_shared(parse_tree, origin_path)
 
 def process_zoia_string(zoia_src: str, src_name: str) -> ZoiaFileNode:
     """Parses the specified string representation of a Zoia file and converts
