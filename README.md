@@ -53,13 +53,17 @@ Named after [Zoia Markovna Horn](https://en.wikipedia.org/wiki/Zoia_Horn),
 an American librarian and advocate for intellectual freedom.
 
 ## License
-Zoia itself is licensed [under the GPLv3](LICENSE).
+Zoia itself is licensed [under the GPLv3](LICENSE), except for the files and
+folders inside [src/antlr4](src/antlr4), which are licensed under the
+[BSD-3-Clause license](src/antlr4/LICENSE).
 
-This does not extend to fiction you write using it, nor does it extend to
-the output generated from such fiction once Zoia compiles it. You may
-license such data however you like.
+None of this affects fiction you write using it, nor does it affect the
+output generated from such fiction once Zoia compiles it. You may license
+such data however you like.
 
-Note that some files in this repository are licensed under other licenses.
-None of them are part of Zoia itself, they function purely as examples.
-See the [examples directory](doc/examples) and the LICENSE files in there for
-more information.
+For information on third party dependencies and their licenses, please see
+[LICENSE-3RD-PARTY](LICENSE-3RD-PARTY).
+
+The examples inside [doc/examples](doc/examples) are not part of Zoia itself
+and are licensed under other licenses. See the LICENSE files inside those
+folders for more information.

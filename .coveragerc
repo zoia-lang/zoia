@@ -7,6 +7,9 @@ omit =
     # Exclude the generated parser/lexer files
     src/grammar/*
 
+    # Exclude the vendored ANTLR files
+    src/antlr4/*
+
 [report]
 exclude_lines =
     # Re-enable the standard pragma since we're overriding exclude_lines

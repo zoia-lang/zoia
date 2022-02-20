@@ -50,9 +50,7 @@ def run_setup(with_binary):
         packages=setuptools.find_packages("src"),
         package_dir={"": "src"},
         include_package_data=True,
-        install_requires=[
-            "antlr4-python3-runtime >= 4.9.3",
-        ],
+        install_requires=[],
         ext_modules=ext_modules,
         cmdclass={"build_ext": ve_build_ext},
     )
