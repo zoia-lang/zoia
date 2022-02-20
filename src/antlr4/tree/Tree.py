@@ -85,8 +85,6 @@ class TerminalNodeImpl(TerminalNode):
     def __init__(self, symbol:Token):
         self.parentCtx = None
         self.symbol = symbol
-    def __setattr__(self, key, value):
-        super().__setattr__(key, value)
 
     def getChild(self, i:int):
         return None
