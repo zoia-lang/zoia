@@ -30,8 +30,8 @@ A language for writing fiction.
 - [x] Come up with mockup classes to model this (series, story, chapter)
 - [x] Write tests for these mockup classes (not really mockup anymore, so hey)
 - [ ] Model how we want the whole system to process our nodes (rough draft):
-  - [ ] 1. Parse aliases
-  - [ ] 2. Parse dict
+  - [x] 1. Evaluate aliases
+  - [ ] 2. Evaluate dictionary
   - [ ] 3. Insert fragments
   - [ ] 4. Resolve aliases (repeat until no more alias nodes left)
   - At this point, we hand off to the separate backends
