@@ -1,1 +1,3 @@
 \header[aliases]
+
+\def_alias[A; B]

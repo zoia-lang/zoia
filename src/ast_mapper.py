@@ -37,6 +37,8 @@ class AASTMapper(AASTVisitor):
 
     def _visit_default(self, node: AASTNode):
         for node_attr in node.__slots__:
+            if not hasattr(node, node_attr):
+                continue # Member descriptor, ignore
             setattr(node, node_attr,
                     self._try_visit_val(getattr(node, node_attr)))
         return node

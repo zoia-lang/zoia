@@ -31,7 +31,7 @@ from project.zoia_file import ZoiaFile
 class _ADirBase:
     """Base class for all project folders."""
     zoia_files: list[ZoiaFile] = field(kw_only=True)
-    _id_zoia: defaultdict[str, ZoiaFile | None] = field(init=False)
+    _id_zoia: defaultdict[str, ZoiaFile | None] = field(init=False, repr=False)
 
     def __post_init__(self):
         self._id_zoia = defaultdict(lambda: None, {

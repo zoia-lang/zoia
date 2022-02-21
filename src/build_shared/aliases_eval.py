@@ -23,18 +23,10 @@
 'aliases.zoia' by default)."""
 import log
 from ast_nodes import AASTNode, ZoiaFileNode, HeaderNode, LineNode, \
-    LineElementsNode, CommandNode, TextFragmentNode
+    LineElementsNode, CommandNode
 from ast_visitor import AASTVisitor
-from cmd_validation import Signature, WordTy, ContentTy
 from exception import EvalError, ValidationError
 from src_pos import SourcePos
-
-_def_alias_sig = Signature(
-    std_only={
-        'key': WordTy(),
-        'val': ContentTy(),
-    },
-)
 
 class AliasesEvaluator(AASTVisitor):
     r"""Evaluates an aliases file to resolve all \def_alias commands in it and
@@ -49,8 +41,8 @@ class AliasesEvaluator(AASTVisitor):
             #  it easier too
             p = e.src_pos
             log.error(f'Failed to validate $fWl${p.src_file}$fT$ at line '
-                      f'$fWl${p.src_line}$fT$, column $fWl${p.src_char}$fT$: '
-                      f'$fRl${e.orig_msg}$fT$')
+                      f'$fWl${p.src_line}$fT$, column '
+                      f'$fWl${p.src_char + 1}$fT$: $fRl${e.orig_msg}$fT$')
             return None
 
     def _visit_default(self, node: AASTNode):
@@ -59,41 +51,28 @@ class AliasesEvaluator(AASTVisitor):
             f"Unexpected node of type {node.__class__.__name__} in an aliases "
             f"file. Only \\def_alias commands are allowed")
 
-    def visit_zoia_file(self, node: ZoiaFileNode) \
-            -> dict[str, LineElementsNode]:
+    def visit_zoia_file(self, node: ZoiaFileNode):
         self.visit_header(node.header)
-        final_aliases = []
         for l in node.lines:
-            final_aliases.extend(self.visit_line(l))
-        ret_dict = {}
-        seen_alias_keys = set()
-        for alias_key_tup, alias_val_tup in final_aliases:
-            alias_key = alias_key_tup[0]
-            if alias_key in seen_alias_keys:
-                raise EvalError(alias_key_tup[1], f"Duplicate alias key "
-                                                  f"'{alias_key}'")
-            else:
-                seen_alias_keys.add(alias_key)
-                ret_dict[alias_key] = alias_val_tup[0]
-        return ret_dict
+            self.visit_line(l)
 
     def visit_header(self, node: HeaderNode):
-        if node.header_type != 'aliases':
+        header_kind = node.proc_cmd.cmd_args['header_kind']
+        if header_kind != 'aliases':
             raise EvalError(
                 node.arguments[0].arg_value.elements[0].src_pos,
-                f"Aliases files must have header type 'aliases', but had "
-                f"header type '{node.header_type}' instead")
+                f"Aliases files must have header kind 'aliases', but had "
+                f"header kind '{header_kind}' instead")
+        pass
 
     def visit_line(self, node: LineNode) \
-            -> list[tuple[tuple[str, SourcePos],
-                          tuple[LineElementsNode, SourcePos]]]:
+            -> list[tuple[str, SourcePos, LineElementsNode, SourcePos]]:
         if n_elements := node.elements:
             return self.visit_line_elements(n_elements)
         return []
 
     def visit_line_elements(self, node: LineElementsNode) \
-            -> list[tuple[tuple[str, SourcePos],
-                          tuple[LineElementsNode, SourcePos]]]:
+            -> list[tuple[str, SourcePos, LineElementsNode, SourcePos]]:
         ret_aliases = []
         for line_el in node.elements:
             if isinstance(line_el, CommandNode):
@@ -104,12 +83,14 @@ class AliasesEvaluator(AASTVisitor):
         return ret_aliases
 
     def visit_command(self, node: CommandNode) \
-            -> tuple[tuple[str, SourcePos],
-                     tuple[LineElementsNode, SourcePos]]:
+            -> tuple[str, SourcePos, LineElementsNode, SourcePos]:
         if node.cmd_name != 'def_alias':
             raise EvalError(
                 node.src_pos,
                 f"Unexpected '\\{node.cmd_name}' command in an aliases file. "
                 f"Only \\def_alias commands are allowed")
-        proc_args = _def_alias_sig.process_args(node.arguments)[0]
-        return proc_args['key'], proc_args['val']
+        # No need to worry about None source positions, both are required
+        proc_args = node.proc_cmd.cmd_args
+        proc_pos = node.proc_cmd.cmd_args_pos
+        return (proc_args['key'], proc_pos['key'], proc_args['val'],
+                proc_pos['val'])

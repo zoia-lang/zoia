@@ -48,21 +48,21 @@ class EvalError(_SrcPosError):
     """An error that occurred during evaluation."""
     def __init__(self, pos: SourcePos, msg: str) -> None:
         super().__init__(f'Failed to evaluate {pos.src_file} at line '
-                         f'{pos.src_line}, column {pos.src_char}: {msg}',
+                         f'{pos.src_line}, column {pos.src_char + 1}: {msg}',
                          pos, msg)
 
 class ParseConversionError(_SrcPosError):
     """An error that occurred during parse-to-AST conversion."""
     def __init__(self, pos: SourcePos, msg: str) -> None:
         super().__init__(f'Failed to AST-convert {pos.src_file} at line '
-                         f'{pos.src_line}, column {pos.src_char}: {msg}',
+                         f'{pos.src_line}, column {pos.src_char + 1}: {msg}',
                          pos, msg)
 
 class ParsingError(_SrcPosError):
     """An error that occurred during parsing of a Zoia file."""
     def __init__(self, pos: SourcePos, msg: str) -> None:
         super().__init__(f'Failed to parse {pos.src_file} at line '
-                         f'{pos.src_line}, column {pos.src_char}: {msg}',
+                         f'{pos.src_line}, column {pos.src_char + 1}: {msg}',
                          pos, msg)
 
 class ProjectStructureError(Exception):
@@ -75,5 +75,5 @@ class ValidationError(_SrcPosError):
     """Error while validating Zoia AST nodes."""
     def __init__(self, pos: SourcePos, msg: str) -> None:
         super().__init__(f'Failed to validate {pos.src_file} at line '
-                         f'{pos.src_line}, column {pos.src_char}: {msg}',
+                         f'{pos.src_line}, column {pos.src_char + 1}: {msg}',
                          pos, msg)

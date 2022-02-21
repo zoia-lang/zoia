@@ -27,7 +27,7 @@ from pathlib import Path
 from antlr4 import FileStream, InputStream, Token
 from antlr4.tree.Tree import ParseTree
 
-from ast_nodes import ZoiaFileNode
+from ast_nodes import ZoiaFileNode, LineElementsNode
 from ast_validator import ASTValidator
 from exception import ParsingError
 from grammar import parse, SA_ErrorListener
@@ -56,13 +56,18 @@ class _RaiseErrorListener(SA_ErrorListener):
         # the middle of handling while this gets called
         raise ParsingError(SourcePos(origin_file, line, column), msg) from None
 
-def _process_shared(parse_tree: ParseTree, src_name: str) -> ZoiaFileNode:
+_validate_ast = ASTValidator().visit
+
+def _process_shared(parse_tree: ParseTree, src_name: str,
+                    skip_validation: bool):
     """Shared code of process_zoia_file and process_zoia_string."""
     ret_ast = ParseConverter(src_name).visit(parse_tree)
-    ASTValidator().visit(ret_ast)
+    if not skip_validation:
+        _validate_ast(ret_ast)
     return ret_ast
 
-def process_zoia_file(zoia_path: Path, project_folder: Path) -> ZoiaFileNode:
+def process_zoia_file(zoia_path: Path, project_folder: Path, *,
+                        skip_validation: bool = False) -> ZoiaFileNode:
     """Parses the Zoia file at the specified path and converts it into a Zoia
     AST. Also performs validation on the resulting AST."""
     origin_path = str(zoia_path)
@@ -72,12 +77,24 @@ def process_zoia_file(zoia_path: Path, project_folder: Path) -> ZoiaFileNode:
         origin_path = str(zoia_path.relative_to(project_folder))
     parse_tree = parse(ins, 'zoiaFile',
                        sa_err_listener=_RaiseErrorListener(project_folder))
-    return _process_shared(parse_tree, origin_path)
+    return _process_shared(parse_tree, origin_path, skip_validation)
 
-def process_zoia_string(zoia_src: str, src_name: str) -> ZoiaFileNode:
+def process_zoia_string(zoia_src: str, src_name: str, *,
+                        skip_validation: bool = False) -> ZoiaFileNode:
     """Parses the specified string representation of a Zoia file and converts
     it into a Zoia AST. src_name specifies the name of the source to use in
     errors etc. Also performs validation on the resulting AST."""
     ins = InputStream(zoia_src)
     parse_tree = parse(ins, 'zoiaFile', sa_err_listener=_RaiseErrorListener())
-    return _process_shared(parse_tree, src_name)
+    return _process_shared(parse_tree, src_name, skip_validation)
+
+def process_zoia_arg(zoia_line: str, src_name: str, *,
+                        skip_validation: bool = False) -> LineElementsNode:
+    """Parses the specified string representation of a Zoia command argument
+    value and converts it into a Zoia AST. src_name specifies the name of the
+    source to use in errors etc. Also performs validation on the resulting
+    AST."""
+    ins = InputStream(zoia_line)
+    parse_tree = parse(ins, 'lineElementsArg',
+                       sa_err_listener=_RaiseErrorListener())
+    return _process_shared(parse_tree, src_name, skip_validation)

@@ -34,7 +34,7 @@ class Series(_ADirBase):
     """A series is the main 'src' folder, containing one or more works in
     it."""
     works: list[Work]
-    _id_works: defaultdict[int, Work | None] = field(init=False)
+    _id_works: defaultdict[int, Work | None] = field(init=False, repr=False)
 
     def __post_init__(self):
         # @dataclass with slots=True breaks argument-less super

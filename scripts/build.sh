@@ -49,9 +49,9 @@ python <<EOF
 from speedy_antlr_tool import generate
 
 generate(
-    py_parser_path="src/grammar/zoiaParser.py",
-    cpp_output_dir="src/grammar/cpp",
-    entry_rule_names=["zoiaFile"],
+    py_parser_path='src/grammar/zoiaParser.py',
+    cpp_output_dir='src/grammar/cpp',
+    entry_rule_names=['zoiaFile', 'lineElementsArg'],
 )
 EOF
 

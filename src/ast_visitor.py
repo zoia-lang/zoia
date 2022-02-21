@@ -53,6 +53,8 @@ class AASTVisitor:
         to do something different."""
         last_tf = None
         for node_attr in node.__slots__:
+            if not hasattr(node, node_attr):
+                continue # Member descriptor, ignore
             # Do not override a present value with None
             last_tf = self._try_visit_val(getattr(node, node_attr)) or last_tf
         return last_tf
@@ -120,3 +122,38 @@ class AASTVisitor:
     def visit_std_argument(self, node: StdArgumentNode):
         """Visits a StdArgumentNode."""
         return self._visit_argument(node)
+
+class ACommandVisitor(AASTVisitor):
+    """Version of AASTVisitor meant to be used for visiting commands. Much
+    faster than the naive approach since it can skip over things like text
+    fragments and aliases. Override visit_command (and visit_header, if
+    needed), perform your logic, then call the super method."""
+    def visit_zoia_file(self, node: ZoiaFileNode):
+        self.visit_header(node.header)
+        for l in node.lines:
+            if l_elems := l.elements:
+                self.visit_line_elements(l_elems)
+
+    def visit_header(self, node: HeaderNode):
+        for a in node.arguments:
+            self.visit_line_elements(a.arg_value)
+
+    def visit_line_elements(self, node: LineElementsNode):
+        for e in node.elements:
+            if isinstance(e, CommandNode):
+                self.visit_command(e)
+            elif isinstance(e, AEmLineElementNode):
+                self._visit_line_elements_inner(e.elements)
+
+    def _visit_line_elements_inner(self, node: LineElementsNode):
+        """Version of visit_line_elements that may only be called to handle
+        a LineElementsNode that originated from an AEmLineElementNode."""
+        for e in node.elements:
+            # AEmLineElementNode.elements may not contain another
+            # AEmLineElementNode, so no need to check for it
+            if isinstance(e, CommandNode):
+                self.visit_command(e)
+
+    def visit_command(self, node: CommandNode):
+        for a in node.arguments:
+            self.visit_line_elements(a.arg_value)

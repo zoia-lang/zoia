@@ -19,7 +19,7 @@
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # =============================================================================
-"""This module houses tests related to ast_validator."""
+"""This module houses tests related to validation of Zoia code."""
 from test.base import ATestParser
 
 import pytest
@@ -30,7 +30,7 @@ class _ATestValidatorPass(ATestParser):
     """Base class for passing validator tests."""
     def test_validator_passes(self):
         """Asserts that parsing and validating the source works."""
-        assert self._parse_src()
+        assert self._parse_src(skip_validation=False)
 
 class _ATestValidatorFail(ATestParser):
     """Base class for failing validator tests."""
@@ -39,7 +39,7 @@ class _ATestValidatorFail(ATestParser):
     def test_validator_fails(self):
         """Asserts that parsing the source works, but validation fails."""
         try:
-            self._parse_src()
+            self._parse_src(skip_validation=False)
             pytest.fail('Validation was supposed to fail, but succeeded '
                         'instead')
         except ValidationError as e:
@@ -51,7 +51,7 @@ class TestHeaderSimple(_ATestValidatorPass):
     accepted."""
     _test_src = '\\header[fragment]'
 
-# TODO See ast_validator re: if we even want this behavior
+# TODO See commands.header re: if we even want this behavior
 class TestHeaderMultiArgStd(_ATestValidatorPass):
     """A header with a valid type and a second standard argument should be
     accepted."""
@@ -67,19 +67,17 @@ class TestHeaderKwdArg(_ATestValidatorFail):
     """A header with a keyword argument as its first argument should be
     rejected."""
     _test_src = '\\header[type = fragment]'
-    _exp_error = ('The first argument passed to \\header must be a standard '
-                  'argument')
+    _exp_error = "The required argument 'header_kind' is missing"
 
 class TestHeaderMultiStdArg(_ATestValidatorFail):
     """A header with a multi-word text fragment as its first argument should be
     rejected."""
     _test_src = '\\header[fragment one]'
-    _exp_error = ('The first argument passed to \\header must be a single '
-                  'text fragment containing one word')
+    _exp_error = ("Parameters of type HeaderKind only accept single words - "
+                  "'one' is extraneous")
 
 class TestHeaderNoTextFragment(_ATestValidatorFail):
     """A header with something other than a text fragment as its first argument
     should be rejected."""
     _test_src = '\\header[@some_alias]'
-    _exp_error = ('The first argument passed to \\header must be a single '
-                  'text fragment containing one word')
+    _exp_error = 'Parameters of type HeaderKind only accept text fragments'

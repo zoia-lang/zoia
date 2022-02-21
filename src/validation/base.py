@@ -1,14 +1,13 @@
-from ast_nodes import AArgumentNode
+from ast_nodes import LineElementsNode
 from exception import AbstractError
 
 # NO IMPORTS FROM CMD_VALIDATION! This has to be importable in the entire
 # package, including cmd_validation.tys
 
 class CmdValidator:
-    has_default: bool = False
     __slots__ = ()
 
-    def process_arg(self, cmd_arg: AArgumentNode):
+    def validate_arg(self, cmd_arg: LineElementsNode):
         raise AbstractError()
 
     def compact(self) -> str:

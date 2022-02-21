@@ -60,23 +60,23 @@ class ZoiaFile:
                 raise
             p = e.src_pos
             log.error(f'Failed to parse $fWl${p.src_file}$fT$ at line '
-                      f'$fWl${p.src_line}$fT$, column $fWl${p.src_char}$fT$: '
-                      f'$fRl${e.orig_msg}$fT$')
+                      f'$fWl${p.src_line}$fT$, column '
+                      f'$fWl${p.src_char + 1}$fT$: $fRl${e.orig_msg}$fT$')
             return None
         except ParseConversionError as e:
             if raise_errors:
                 raise
             p = e.src_pos
             log.error(f'Failed to AST-convert $fWl${p.src_file}$fT$ at line '
-                      f'$fWl${p.src_line}$fT$, column $fWl${p.src_char}$fT$: '
-                      f'$fRl${e.orig_msg}$fT$')
+                      f'$fWl${p.src_line}$fT$, column '
+                      f'$fWl${p.src_char + 1}$fT$: $fRl${e.orig_msg}$fT$')
             return None
         except ValidationError as e:
             if raise_errors:
                 raise
             p = e.src_pos
             log.error(f'Failed to validate $fWl${p.src_file}$fT$ at line '
-                      f'$fWl${p.src_line}$fT$, column $fWl${p.src_char}$fT$: '
-                      f'$fRl${e.orig_msg}$fT$')
+                      f'$fWl${p.src_line}$fT$, column '
+                      f'$fWl${p.src_char + 1}$fT$: $fRl${e.orig_msg}$fT$')
             return None
         return cls(file_path, processed_file)

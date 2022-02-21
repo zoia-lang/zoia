@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from cmd_validation.base import CmdValidator
+from validation.base import CmdValidator
 
 class Ty(CmdValidator):
     _ty_name: str

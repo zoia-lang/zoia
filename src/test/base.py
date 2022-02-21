@@ -43,7 +43,8 @@ class ATestParser:
     # Set in _parse_src if a fixup to the header was performed
     _added_header: bool = False
 
-    def _parse_src(self, test_src: str = None) -> ZoiaFileNode:
+    def _parse_src(self, test_src: str = None,
+                   skip_validation: bool = True) -> ZoiaFileNode:
         """Creates a new zoiaParser instance with the specified source code
         (falling back to self._test_src if it is None)."""
         if test_src is None:
@@ -55,7 +56,8 @@ class ATestParser:
         # For convenience, an ending \n can be elided in tests
         if self._do_fixups and not test_src.endswith('\n'):
             test_src += '\n'
-        return process_zoia_string(test_src, f"<{self.__class__.__name__}>")
+        return process_zoia_string(test_src, f"<{self.__class__.__name__}>",
+                                   skip_validation=skip_validation)
 
 def _get_proj_path(test_name: str, py_file_path: str) -> Path:
     """Retrieves the full path to the project folder for the test with the

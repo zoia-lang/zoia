@@ -27,8 +27,6 @@ ANTLR parse tree."""
 #  - Avoid getText() outside errors - use symbol.text instead
 from io import StringIO
 
-from antlr4.tree.Tree import ParseTree
-
 from ast_nodes import AliasNode, CommandNode, HeaderNode, KwdArgumentNode, \
     LineNode, StdArgumentNode, TextFragmentNode, ZoiaFileNode, \
     LineElementsNode, AArgumentNode, Em1LineElementNode, Em2LineElementNode, \
@@ -71,11 +69,6 @@ class ParseConverter(zoiaVisitor):
         ctx_start = ctx.start
         return SourcePos(src_file=self.parsed_file, src_line=ctx_start.line,
                          src_char=ctx_start.column)
-
-    # Override to add typing
-    def visit(self, tree: ParseTree) -> ZoiaFileNode:
-        # pylint: disable=useless-super-delegation
-        return super().visit(tree)
 
     # Sorted by the order in which they are defined in the grammar
     def visitZoiaFile(self, ctx: zoiaParser.ZoiaFileContext) -> ZoiaFileNode:
@@ -183,8 +176,8 @@ class ParseConverter(zoiaVisitor):
 
     def visitCommand(self, ctx: zoiaParser.CommandContext) -> CommandNode:
         # First child is Backslash, the second one is Word
-        return CommandNode(ctx.children[1].symbol.text,
-                           self.visitArguments(ctx.arguments()),
+        return CommandNode(self.visitArguments(ctx.arguments()),
+                           ctx.children[1].symbol.text,
                            src_pos=self.make_pos(ctx))
 
     def visitArguments(self, ctx: zoiaParser.ArgumentsContext) \

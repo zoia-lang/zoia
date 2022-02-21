@@ -27,11 +27,17 @@ from ast_nodes.argument import AArgumentNode
 from ast_nodes.base import _write_arguments
 from ast_nodes.line_element import ALineElementNode
 
-@dataclass(slots=True)
+@dataclass
 class CommandNode(ALineElementNode):
     """AST node for commands."""
-    cmd_name: str
     arguments: list[AArgumentNode]
+    cmd_name: str
+    __slots__ = ('arguments', 'cmd_name', 'proc_cmd')
+
+    def accept_command(self, proc_cmd):
+        """Called during validation - stores the processed version of this
+        command in the node."""
+        self.proc_cmd = proc_cmd
 
     def accept(self, visitor):
         return visitor.visit_command(self)

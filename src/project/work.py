@@ -41,7 +41,8 @@ class Work(_ADirBase):
     """A work folder is a folder containing one or more chapters."""
     chapters: list[Chapter]
     work_index: int
-    _id_chapters: defaultdict[int, Chapter | None] = field(init=False)
+    _id_chapters: defaultdict[int, Chapter | None] = field(init=False,
+                                                           repr=False)
 
     def __post_init__(self):
         # @dataclass with slots=True breaks argument-less super

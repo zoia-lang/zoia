@@ -66,3 +66,16 @@ def valid_zoia_path(zoia_path: str):
     """Returns True if the specified string path is valid as a src-relative
     path to a Zoia file."""
     return valid_src_path(zoia_path) and zoia_path.endswith('.zoia')
+
+def format_word_list(word_list: list[str]) -> str:
+    """Creates a human-readable version of the specified list of words."""
+    quoted_words = [f"'{w}'" for w in word_list]
+    if len(word_list) < 2:
+        return ''.join(quoted_words)
+    # Put an 'and' between the last two words
+    last_two = ' and '.join(quoted_words[-2:])
+    if len(word_list) == 2:
+        return last_two
+    # We have more than two words, so put commas between all the others
+    first_few = ', '.join(quoted_words[:-2])
+    return f'{first_few}, {last_two}'

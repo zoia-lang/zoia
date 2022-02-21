@@ -15,11 +15,13 @@
 
 #include "sa_zoia_translator.h"
 antlr4::tree::ParseTree* get_parse_tree_zoiaFile(zoiaParser *parser) {return parser->zoiaFile();}
+antlr4::tree::ParseTree* get_parse_tree_lineElementsArg(zoiaParser *parser) {return parser->lineElementsArg();}
 
 antlr4::tree::ParseTree* get_parse_tree(zoiaParser *parser, const char *entry_rule_name) {
     static std::map<std::string, antlr4::tree::ParseTree* (*)(zoiaParser*)> table
     {
-        {"zoiaFile", &get_parse_tree_zoiaFile}
+        {"zoiaFile", &get_parse_tree_zoiaFile},
+        {"lineElementsArg", &get_parse_tree_lineElementsArg}
     };
 
     auto entry = table.find(entry_rule_name);

@@ -2,14 +2,16 @@ from dataclasses import dataclass, field
 from io import StringIO
 from typing import Any
 
-from cmd_validation.base import CmdValidator
-from cmd_validation.tys import Ty, NoneTy
-from cmd_validation.varargs import Varargs, VARARGS_EITHER_OR, VARARGS_KWD, \
+from validation.base import CmdValidator
+from validation.default import Default
+from validation.tys import Ty, NoneTy
+from validation.varargs import Varargs, VARARGS_EITHER_OR, VARARGS_KWD, \
     VARARGS_STD
 
 from ast_nodes import AArgumentNode, KwdArgumentNode
 from exception import ValidationError
 from src_pos import SourcePos
+from utils import format_word_list
 
 _varargs_sentinel = object()
 
@@ -27,7 +29,7 @@ class Signature:
         def _check_defaults(cv_dict: dict[str, CmdValidator]):
             nonlocal found_default
             for cv in cv_dict.values():
-                if cv.has_default:
+                if isinstance(cv, Default):
                     found_default = True
                 elif found_default:
                     raise SyntaxError('A Signature may not have non-Default '
@@ -68,13 +70,12 @@ class Signature:
                                                          VARARGS_KWD)
 
     def _accepts_standards(self):
-        return (self.std_only or self.either_or or
-                self._varargs_accept_standards())
+        return bool(self.std_only or self.either_or or
+                    self._varargs_accept_standards())
 
     def _accepts_keywords(self):
-        if self.either_or or self.kwd_only:
-            return True
-        return
+        return bool(self.either_or or self.kwd_only or
+                    self._varargs_accept_keywords())
 
     def _num_std_params(self):
         if self._varargs_accept_standards():
@@ -114,11 +115,31 @@ class Signature:
         # No more kwd args to fill
         return None, None
 
-    def process_args(self, cmd_args: list[AArgumentNode]) \
-            -> tuple[dict[str, tuple[Any, SourcePos]],
-                     list[tuple[Any, SourcePos]]]:
+    def _fill_defaults(self, filled_args: dict[str],
+                       filled_args_pos: dict[str, SourcePos | None]) \
+            -> list[str]:
+        unfilled_args = []
+        def _fill_from_dict(cv_dict: dict[str, CmdValidator]):
+            for cv_n, cv_v in cv_dict.items():
+                if cv_n not in filled_args:
+                    if isinstance(cv_v, Default):
+                        filled_args[cv_n] = cv_v.default
+                        # No source position since it was a default argument
+                        filled_args_pos[cv_n] = None
+                    else:
+                        unfilled_args.append(cv_n)
+        _fill_from_dict(self.std_only)
+        _fill_from_dict(self.either_or)
+        _fill_from_dict(self.kwd_only)
+        return unfilled_args
+
+    def validate_args(self, cmd_args: list[AArgumentNode]) \
+            -> tuple[dict[str, Any], dict[str, SourcePos | None],
+                     list[Any], list[SourcePos]]:
         filled_args = {}
+        filled_args_pos = {}
         varargs_list = []
+        varargs_list_pos = []
         found_kwd = False
         accepts_std = self._accepts_standards()
         accepts_kwd = self._accepts_keywords()
@@ -158,13 +179,25 @@ class Signature:
                         cmd_arg.src_pos,
                         f'All {self._num_std_params()} parameters that accept '
                         f'standard arguments have been filled')
-            processed_arg = next_validator.process_arg(cmd_arg)
+            processed_arg = next_validator.validate_arg(cmd_arg.arg_value)
             if next_param_name is _varargs_sentinel:
-                varargs_list.append((processed_arg, cmd_arg.src_pos))
+                varargs_list.append(processed_arg)
+                varargs_list_pos.append(cmd_arg.src_pos)
             else:
-                filled_args[next_param_name] = (processed_arg, cmd_arg.src_pos)
-        # TODO Check unfilled args and fill with defaults if not validate_only
-        return filled_args, varargs_list
+                filled_args[next_param_name] = processed_arg
+                filled_args_pos[next_param_name] = cmd_arg.src_pos
+        unfilled_args = self._fill_defaults(filled_args, filled_args_pos)
+        if unfilled_args:
+            fmt_unfilled = format_word_list(unfilled_args)
+            # Show marker at the last arg since that's most likely where the
+            # missing args have to be inserted
+            error_pos = cmd_args[-1].src_pos
+            if len(unfilled_args) == 1:
+                raise ValidationError(error_pos, f'The required argument '
+                                                 f'{fmt_unfilled} is missing')
+            raise ValidationError(error_pos, f'The required arguments '
+                                             f'{fmt_unfilled} are missing')
+        return filled_args, filled_args_pos, varargs_list, varargs_list_pos
 
     def compact(self) -> str:
         s = StringIO()
