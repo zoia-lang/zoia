@@ -43,7 +43,7 @@ class ParserRuleContext(RuleContext):
         #  operation because we don't the need to track the details about
         #  how we parse this rule.
         #/
-        self.children = None
+        self.children = []
         self.start = None
         self.stop = None
         # The exception that forced this rule to return. If the rule successfully
@@ -86,8 +86,6 @@ class ParserRuleContext(RuleContext):
 
     #* Does not set parent link; other add methods do that#/
     def addChild(self, child:ParseTree):
-        if self.children is None:
-            self.children = []
         self.children.append(child)
         return child
 
@@ -115,7 +113,7 @@ class ParserRuleContext(RuleContext):
         if ttype is None:
             return self.children[i] if len(self.children)>i else None
         else:
-            for child in self.getChildren():
+            for child in self.children:
                 if not isinstance(child, ttype):
                     continue
                 if i==0:
@@ -123,16 +121,16 @@ class ParserRuleContext(RuleContext):
                 i -= 1
             return None
 
-    def getChildren(self, predicate = None):
-        if self.children is not None:
-            if predicate is None:
-                return self.children
-            return [c for c in self.children if predicate(c)]
-        else:
-            return []
+    def getChildTyped(self, i: int, ttype: type):
+        for child in self.children:
+            if isinstance(child, ttype):
+                if i == 0:
+                    return child
+                i -= 1
+        return None
 
     def getToken(self, ttype:int, i:int):
-        for child in self.getChildren():
+        for child in self.children:
             if not isinstance(child, TerminalNode):
                 continue
             if child.symbol.type != ttype:
@@ -143,10 +141,8 @@ class ParserRuleContext(RuleContext):
         return None
 
     def getTokens(self, ttype:int ):
-        if self.getChildren() is None:
-            return []
         tokens = []
-        for child in self.getChildren():
+        for child in self.children:
             if not isinstance(child, TerminalNode):
                 continue
             if child.symbol.type != ttype:
@@ -155,14 +151,11 @@ class ParserRuleContext(RuleContext):
         return tokens
 
     def getTypedRuleContext(self, ctxType:type, i:int):
-        return self.getChild(i, ctxType)
+        return self.getChildTyped(i, ctxType)
 
     def getTypedRuleContexts(self, ctxType:type):
-        children = self.getChildren()
-        if children is None:
-            return []
         contexts = []
-        for child in children:
+        for child in self.children:
             if not isinstance(child, ctxType):
                 continue
             contexts.append(child)

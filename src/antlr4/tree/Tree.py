@@ -154,7 +154,7 @@ class ParseTreeWalker(object):
             listener.visitTerminal(t)
             return
         self.enterRule(listener, t)
-        for child in t.getChildren():
+        for child in t.children:
             self.walk(listener, child)
         self.exitRule(listener, t)
 

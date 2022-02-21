@@ -81,7 +81,7 @@ class RuleContext(RuleNode):
         if self.getChildCount() == 0:
             return ""
         with StringIO() as builder:
-            for child in self.getChildren():
+            for child in self.children:
                 builder.write(child.getText())
             return builder.getvalue()
 
@@ -110,10 +110,6 @@ class RuleContext(RuleNode):
 
     def getChildCount(self):
         return 0
-
-    def getChildren(self):
-        for c in []:
-            yield c
 
     def accept(self, visitor:ParseTreeVisitor):
         return visitor.visitChildren(self)

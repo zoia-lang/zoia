@@ -63,7 +63,7 @@ class Recognizer(object):
 
     # Get a map from rule names to rule indexes.
     #
-    # <p>Used for XPath and tree pattern compilation.</p>
+    # <p>Used for tree pattern compilation.</p>
     #
     def getRuleIndexMap(self):
         ruleNames = self.getRuleNames()
