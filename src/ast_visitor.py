@@ -40,10 +40,9 @@ class AASTVisitor:
             return node_val.accept(self)
         elif isinstance(node_val, list):
             last_tf = None
-            visit_val = self._try_visit_val
             for list_el in node_val:
                 # Do not override a present value with None
-                last_tf = visit_val(list_el) or last_tf
+                last_tf = self._try_visit_val(list_el) or last_tf
             return last_tf
         return None # Nothing to do here
 
@@ -53,10 +52,9 @@ class AASTVisitor:
         child nodes and returns the last value. You can override it if you want
         to do something different."""
         last_tf = None
-        visit_val = self._try_visit_val
         for node_attr in node.__slots__:
             # Do not override a present value with None
-            last_tf = visit_val(getattr(node, node_attr)) or last_tf
+            last_tf = self._try_visit_val(getattr(node, node_attr)) or last_tf
         return last_tf
 
     def _visit_line_element(self, node: ALineElementNode):

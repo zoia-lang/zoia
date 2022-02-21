@@ -36,12 +36,11 @@ class Signature:
         _check_defaults(self.either_or)
         _check_defaults(self.kwd_only)
         seen_names = set()
-        add_seen_name = seen_names.add
         def _check_duplicates(cv_dict: dict[str, CmdValidator]):
             for cv_name in cv_dict:
                 if cv_name in seen_names:
                     raise SyntaxError(f"Duplicate parameter name '{cv_name}'")
-                add_seen_name(cv_name)
+                seen_names.add(cv_name)
         _check_duplicates(self.std_only)
         if self.varargs:
             # std-only varargs are only allowed if we have no either-or
@@ -120,52 +119,50 @@ class Signature:
                      list[tuple[Any, SourcePos]]]:
         filled_args = {}
         varargs_list = []
-        append_vararg = varargs_list.append
         found_kwd = False
-        next_sp = self._next_std_param
-        next_kp = self._next_kwd_param
         accepts_std = self._accepts_standards()
         accepts_kwd = self._accepts_keywords()
         for cmd_arg in cmd_args:
-            arg_src_pos = cmd_arg.src_pos
             if isinstance(cmd_arg, KwdArgumentNode):
                 if not accepts_kwd:
                     raise ValidationError(
-                        arg_src_pos,
+                        cmd_arg.src_pos,
                         'This command does not accept keyword arguments')
                 found_kwd = True
                 cmd_name = cmd_arg.kwd_name
                 if cmd_name in filled_args:
                     raise ValidationError(
-                        arg_src_pos,
+                        cmd_arg.src_pos,
                         f"Keyword argument '{cmd_name}' specified twice")
-                next_param_name, next_validator = next_kp(cmd_name)
+                next_param_name, next_validator = self._next_kwd_param(
+                    cmd_name)
                 if next_param_name is None:
                     raise ValidationError(
-                        arg_src_pos,
+                        cmd_arg.src_pos,
                         f'All {self._num_kwd_params()} parameters that accept '
                         f'keyword arguments have been filled')
             else:
                 if not accepts_std:
                     raise ValidationError(
-                        arg_src_pos,
+                        cmd_arg.src_pos,
                         'This command does not accept standard arguments')
                 if found_kwd:
                     raise ValidationError(
-                        arg_src_pos,
+                        cmd_arg.src_pos,
                         'Standard arguments may not be placed after keyword '
                         'arguments')
-                next_param_name, next_validator = next_sp(filled_args)
+                next_param_name, next_validator = self._next_std_param(
+                    filled_args)
                 if next_param_name is None:
                     raise ValidationError(
-                        arg_src_pos,
+                        cmd_arg.src_pos,
                         f'All {self._num_std_params()} parameters that accept '
                         f'standard arguments have been filled')
             processed_arg = next_validator.process_arg(cmd_arg)
             if next_param_name is _varargs_sentinel:
-                append_vararg((processed_arg, arg_src_pos))
+                varargs_list.append((processed_arg, cmd_arg.src_pos))
             else:
-                filled_args[next_param_name] = (processed_arg, arg_src_pos)
+                filled_args[next_param_name] = (processed_arg, cmd_arg.src_pos)
         # TODO Check unfilled args and fill with defaults if not validate_only
         return filled_args, varargs_list
 

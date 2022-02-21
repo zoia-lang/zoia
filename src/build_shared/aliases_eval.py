@@ -63,20 +63,17 @@ class AliasesEvaluator(AASTVisitor):
             -> dict[str, LineElementsNode]:
         self.visit_header(node.header)
         final_aliases = []
-        extend_aliases = final_aliases.extend
-        visit_ln = self.visit_line
         for l in node.lines:
-            extend_aliases(visit_ln(l))
+            final_aliases.extend(self.visit_line(l))
         ret_dict = {}
         seen_alias_keys = set()
-        add_alias_key = seen_alias_keys.add
         for alias_key_tup, alias_val_tup in final_aliases:
             alias_key = alias_key_tup[0]
             if alias_key in seen_alias_keys:
                 raise EvalError(alias_key_tup[1], f"Duplicate alias key "
                                                   f"'{alias_key}'")
             else:
-                add_alias_key(alias_key)
+                seen_alias_keys.add(alias_key)
                 ret_dict[alias_key] = alias_val_tup[0]
         return ret_dict
 
@@ -88,19 +85,19 @@ class AliasesEvaluator(AASTVisitor):
                 f"header type '{node.header_type}' instead")
 
     def visit_line(self, node: LineNode) \
-            -> list[tuple[TextFragmentNode, LineElementsNode]]:
+            -> list[tuple[tuple[str, SourcePos],
+                          tuple[LineElementsNode, SourcePos]]]:
         if n_elements := node.elements:
             return self.visit_line_elements(n_elements)
         return []
 
     def visit_line_elements(self, node: LineElementsNode) \
-            -> list[tuple[TextFragmentNode, LineElementsNode]]:
+            -> list[tuple[tuple[str, SourcePos],
+                          tuple[LineElementsNode, SourcePos]]]:
         ret_aliases = []
-        append_alias = ret_aliases.append
-        visit_cmd = self.visit_command
         for line_el in node.elements:
             if isinstance(line_el, CommandNode):
-                append_alias(visit_cmd(line_el))
+                ret_aliases.append(self.visit_command(line_el))
             else:
                 # Only \def_alias commands are OK, raise an error
                 self._visit_default(line_el)

@@ -21,11 +21,13 @@
 # =============================================================================
 """This module houses the parse tree visitor that generates an AST from the
 ANTLR parse tree."""
-# Warning: this class is pretty heavily optimized for performance, so the code
-# is somewhat ugly in places
+# Some performance considerations:
+#  - Avoid APIs dependent on getToken (e.g. Word()) - really expensive. Use
+#    children[x] directly instead
+#  - Avoid getText() outside errors - use symbol.text instead
 from io import StringIO
 
-from antlr4.tree.Tree import TerminalNodeImpl, ParseTree
+from antlr4.tree.Tree import ParseTree
 
 from ast_nodes import AliasNode, CommandNode, HeaderNode, KwdArgumentNode, \
     LineNode, StdArgumentNode, TextFragmentNode, ZoiaFileNode, \
@@ -34,9 +36,6 @@ from ast_nodes import AliasNode, CommandNode, HeaderNode, KwdArgumentNode, \
 from exception import ParseConversionError
 from grammar import zoiaParser, zoiaVisitor
 from src_pos import SourcePos
-
-# The token child types that can occur in text fragment
-_text_fragment_children = {zoiaParser.Spaces, zoiaParser.Word}
 
 # Currently, PyCharm seems to have a problem with kw_only fields in
 # dataclasses. It reports all the src_pos arguments as 'Unexpected argument'
@@ -81,8 +80,7 @@ class ParseConverter(zoiaVisitor):
     # Sorted by the order in which they are defined in the grammar
     def visitZoiaFile(self, ctx: zoiaParser.ZoiaFileContext) -> ZoiaFileNode:
         header = self.visitHeader(ctx.header())
-        visit_ln = self.visitLine
-        lines = [visit_ln(l) for l in ctx.line()]
+        lines = [self.visitLine(l) for l in ctx.line()]
         return ZoiaFileNode(header, lines, src_pos=self.make_pos(ctx))
 
     def visitHeader(self, ctx: zoiaParser.HeaderContext) -> HeaderNode:
@@ -116,7 +114,6 @@ class ParseConverter(zoiaVisitor):
         """Small helper method to deduplicate the shared logic of
         visitLineElements and visitLineElementsInner."""
         elements = []
-        el_append = elements.append
         for le_child in ctx.children:
             try:
                 visit_method = visit_lookup[le_child.__class__]
@@ -124,7 +121,7 @@ class ParseConverter(zoiaVisitor):
                 raise ParseConversionError(self.make_pos(le_child),
                                            f"Unknown or invalid line element "
                                            f"'{le_child.getText()}'") from e
-            el_append(visit_method(le_child))
+            elements.append(visit_method(le_child))
         return LineElementsNode(elements, src_pos=self.make_pos(ctx))
 
     def visitEm1LineElement(self, ctx: zoiaParser.Em1LineElementContext) \
@@ -148,9 +145,7 @@ class ParseConverter(zoiaVisitor):
     def visitTextFragment(self, ctx: zoiaParser.TextFragmentContext) \
             -> TextFragmentNode:
         try:
-            # This is done for performance - visitTextFragment gets called
-            # tens of thousands of times, so avoiding the inefficient ANTLR
-            # Python APIs (e.g. getToken()) is important
+            # First child is either Word or Spaces - same behavior for both
             return TextFragmentNode(ctx.children[0].symbol.text,
                                     src_pos=self.make_pos(ctx))
         except (AttributeError, KeyError, IndexError, TypeError):
@@ -161,12 +156,11 @@ class ParseConverter(zoiaVisitor):
     def visitTextFragmentReq(self, ctx: zoiaParser.TextFragmentReqContext) \
             -> TextFragmentNode:
         s = StringIO()
-        s_write = s.write
         for tf_child in ctx.children:
-            if (isinstance(tf_child, TerminalNodeImpl) and
-                    tf_child.symbol.type in _text_fragment_children):
-                s_write(tf_child.getText())
-            else:
+            try:
+                # One Word, between zero and two Spaces
+                s.write(tf_child.symbol.text)
+            except (AttributeError, KeyError, IndexError, TypeError):
                 raise ParseConversionError(self.make_pos(ctx),
                                            f"Unknown or invalid required "
                                            f"text fragment '{ctx.getText()}'")
@@ -175,27 +169,29 @@ class ParseConverter(zoiaVisitor):
     def visitTextFragmentWord(self, ctx: zoiaParser.TextFragmentWordContext) \
             -> TextFragmentNode:
         s = StringIO()
-        s.write(ctx.Word().getText())
-        child_spaces = ctx.Spaces()
-        if child_spaces:
-            s.write(child_spaces.getText())
+        tf_children = ctx.children
+        # First child is Word, second one (if present) is Spaces
+        s.write(tf_children[0].symbol.text)
+        if len(tf_children) > 1:
+            s.write(tf_children[1].symbol.text)
         return TextFragmentNode(s.getvalue(), src_pos=self.make_pos(ctx))
 
     def visitAlias(self, ctx: zoiaParser.AliasContext) -> AliasNode:
-        return AliasNode(ctx.Word().getText(),
+        # First child is At, second child is Word
+        return AliasNode(ctx.children[1].symbol.text,
                          src_pos=self.make_pos(ctx))
 
     def visitCommand(self, ctx: zoiaParser.CommandContext) -> CommandNode:
-        cmd_name = ctx.Word().getText()
-        arguments = self.visitArguments(ctx.arguments())
-        return CommandNode(cmd_name, arguments, src_pos=self.make_pos(ctx))
+        # First child is Backslash, the second one is Word
+        return CommandNode(ctx.children[1].symbol.text,
+                           self.visitArguments(ctx.arguments()),
+                           src_pos=self.make_pos(ctx))
 
     def visitArguments(self, ctx: zoiaParser.ArgumentsContext) \
             -> list[AArgumentNode]:
         if ctx is None:
             return [] # command has an optional arguments param
-        visit_arg = self.visitArgument
-        return [visit_arg(a) for a in ctx.argument()]
+        return [self.visitArgument(a) for a in ctx.argument()]
 
     def visitArgument(self, ctx: zoiaParser.ArgumentContext) -> AArgumentNode:
         std_argument = ctx.stdArgument()
@@ -211,7 +207,8 @@ class ParseConverter(zoiaVisitor):
 
     def visitKwdArgument(self, ctx: zoiaParser.KwdArgumentContext) \
             -> KwdArgumentNode:
-        kwd_name = ctx.Word().getText()
+        # First child is Word
+        kwd_name = ctx.children[0].symbol.text
         arg_value = self.visitLineElementsArg(ctx.lineElementsArg())
         # Reverse order due to dataclass inheritance
         return KwdArgumentNode(arg_value, kwd_name, src_pos=self.make_pos(ctx))
