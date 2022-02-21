@@ -67,12 +67,15 @@ class TestTOMLSyntaxError1(_ATestCfgFailing):
     """Invalid syntax in a TOML config file should be caught and rejected."""
     _test_name = 'toml_syntax_error_1'
     _exp_error = ("Invalid TOML syntax: Expected ']' at the end of a table "
-                  "declaration")
+                  "declaration",
+                  'Invalid TOML syntax: Expected "]" at the end of a table '
+                  'declaration')
 
 class TestTOMLSyntaxError2(_ATestCfgFailing):
     """Invalid syntax in a TOML config file should be caught and rejected."""
     _test_name = 'toml_syntax_error_2'
-    _exp_error = "Invalid TOML syntax: Illegal character '\\n'"
+    _exp_error = ("Invalid TOML syntax: Illegal character '\\n'",
+                  'Invalid TOML syntax: Illegal character "\\n"')
 
 class TestUpperPath(_ATestCfgFailing):
     """A src-relative path specified in a config file that isn't entirely

@@ -83,7 +83,7 @@ class ATestProjectPassing(_ATestProject):
 
 class ATestProjectFailing(_ATestProject):
     """Base class for failing tests that need to parse a project."""
-    _exp_error: str
+    _exp_error: str | tuple[str]
 
     def test_proj_fails(self) -> None:
         """Asserts that the series located at the specified test directory does
@@ -92,4 +92,7 @@ class ATestProjectFailing(_ATestProject):
             self._parse_project()
             pytest.fail('Parsing was supposed to fail, but succeeded instead')
         except ProjectStructureError as e:
-            assert self._exp_error in str(e)
+            if isinstance(self._exp_error, tuple):
+                assert any(exp_e in str(e) for exp_e in self._exp_error)
+            else:
+                assert self._exp_error in str(e)
