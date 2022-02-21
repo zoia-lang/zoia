@@ -24,6 +24,8 @@ import sys
 import time
 from pathlib import Path
 
+import colorama.win32
+
 import build_supervisor
 import log
 from exception import AbstractError
@@ -57,10 +59,15 @@ def _log_boot_info():
     how it's licensed, what version it has"""
     log.info('Zoia - a language for writing fiction.')
     _log_version()
+    log.info('')
     log.info('Copyright (C) 2021-2022 Infernio')
-    log.info('This is free software licensed under the GPLv3.')
-    log.info('See the LICENSE file included with this program for more '
-             'information.')
+    log.info('License GPLv3+: GNU GPL version 3 or later '
+             '<https://gnu.org/licenses/gpl.html>.')
+    log.info('This is free software: you are free to change and redistribute '
+             'it.')
+    log.info('There is NO WARRANTY, to the extent permitted by law.')
+    log.info('See the LICENSE and LICENSE-3RD-PARTY files included with this '
+             'program for more information.')
     log.info('')
 
 _ZOIA_VERSION = '0.1'
