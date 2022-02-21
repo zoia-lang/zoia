@@ -21,6 +21,8 @@
 # =============================================================================
 """This module houses the parse tree visitor that generates an AST from the
 ANTLR parse tree."""
+# Warning: this class is pretty heavily optimized for performance, so the code
+# is somewhat ugly in places
 from io import StringIO
 
 from antlr4.tree.Tree import TerminalNodeImpl, ParseTree
@@ -127,18 +129,21 @@ class ParseConverter(zoiaVisitor):
 
     def visitEm1LineElement(self, ctx: zoiaParser.Em1LineElementContext) \
             -> Em1LineElementNode:
-        elements = self.visitLineElementsInner(ctx.lineElementsInner())
-        return Em1LineElementNode(elements, src_pos=self.make_pos(ctx))
+        return Em1LineElementNode(
+            self.visitLineElementsInner(ctx.lineElementsInner()),
+            src_pos=self.make_pos(ctx))
 
     def visitEm2LineElement(self, ctx: zoiaParser.Em2LineElementContext) \
             -> Em2LineElementNode:
-        elements = self.visitLineElementsInner(ctx.lineElementsInner())
-        return Em2LineElementNode(elements, src_pos=self.make_pos(ctx))
+        return Em2LineElementNode(
+            self.visitLineElementsInner(ctx.lineElementsInner()),
+            src_pos=self.make_pos(ctx))
 
     def visitEm3LineElement(self, ctx: zoiaParser.Em3LineElementContext) \
             -> Em3LineElementNode:
-        elements = self.visitLineElementsInner(ctx.lineElementsInner())
-        return Em3LineElementNode(elements, src_pos=self.make_pos(ctx))
+        return Em3LineElementNode(
+            self.visitLineElementsInner(ctx.lineElementsInner()),
+            src_pos=self.make_pos(ctx))
 
     def visitTextFragment(self, ctx: zoiaParser.TextFragmentContext) \
             -> TextFragmentNode:
