@@ -10,8 +10,6 @@
 #
 from antlr4.tree.ParseTreePatternMatcher import ParseTreePatternMatcher
 from antlr4.tree.Tree import ParseTree
-from antlr4.xpath.XPath import XPath
-
 
 class ParseTreePattern(object):
     __slots__ = ('matcher', 'patternRuleIndex', 'pattern', 'patternTree')
@@ -51,22 +49,3 @@ class ParseTreePattern(object):
     #
     def matches(self, tree:ParseTree):
         return self.matcher.match(tree, self).succeeded()
-
-    # Find all nodes using XPath and then try to match those subtrees against
-    # this tree pattern.
-    #
-    # @param tree The {@link ParseTree} to match against this pattern.
-    # @param xpath An expression matching the nodes
-    #
-    # @return A collection of {@link ParseTreeMatch} objects describing the
-    # successful matches. Unsuccessful matches are omitted from the result,
-    # regardless of the reason for the failure.
-    #
-    def findAll(self, tree:ParseTree, xpath:str):
-        subtrees = XPath.findAll(tree, xpath, self.matcher.parser)
-        matches = list()
-        for t in subtrees:
-            match = self.match(t)
-            if match.succeeded():
-                matches.append(match)
-        return matches
