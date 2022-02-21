@@ -20,10 +20,8 @@
 #
 # =============================================================================
 """Performs validation on a parsed Zoia AST."""
-from ast_nodes import ZoiaFileNode, HeaderNode, StdArgumentNode, LineNode, \
-    LineElementsNode, Em1LineElementNode, Em2LineElementNode, \
-    Em3LineElementNode, TextFragmentNode, AliasNode, CommandNode, \
-    KwdArgumentNode
+from ast_nodes import ZoiaFileNode, HeaderNode, StdArgumentNode, \
+    LineElementsNode, TextFragmentNode, CommandNode, AEmLineElementNode
 from ast_visitor import AASTVisitor
 from exception import ValidationError
 
@@ -33,7 +31,8 @@ class ASTValidator(AASTVisitor):
     def visit_zoia_file(self, node: ZoiaFileNode):
         self.visit_header(node.header)
         for l in node.lines:
-            self.visit_line(l)
+            if l_elems := l.elements:
+                self.visit_line_elements(l_elems)
 
     # TODO We're going to have to turn this into a more general system if we
     #  want to validate arbitrary commands - some sort of signature class?
@@ -59,39 +58,26 @@ class ASTValidator(AASTVisitor):
         # TODO This should check that the header type argument is recognized
         node.header_type = txt_frag_val
         for a in node.arguments:
-            self.visit(a)
-
-    def visit_line(self, node: LineNode):
-        if n_elements := node.elements:
-            self.visit_line_elements(n_elements)
+            self.visit_line_elements(a.arg_value)
 
     def visit_line_elements(self, node: LineElementsNode):
         for e in node.elements:
-            self.visit(e)
+            if isinstance(e, CommandNode):
+                self.visit_command(e)
+            elif isinstance(e, AEmLineElementNode):
+                self._visit_line_elements_inner(e.elements)
 
-    def visit_em1_line_element(self, node: Em1LineElementNode):
-        self.visit_line_elements(node.elements)
-
-    def visit_em2_line_element(self, node: Em2LineElementNode):
-        self.visit_line_elements(node.elements)
-
-    def visit_em3_line_element(self, node: Em3LineElementNode):
-        self.visit_line_elements(node.elements)
-
-    def visit_text_fragment(self, node: TextFragmentNode):
-        pass
-
-    def visit_alias(self, node: AliasNode):
-        pass
+    def _visit_line_elements_inner(self, node: LineElementsNode):
+        """Version of visit_line_elements that may only be called to handle
+        a LineElementsNode that originated from an AEmLineElementNode."""
+        for e in node.elements:
+            # AEmLineElementNode.elements may not contain another
+            # AEmLineElementNode, so no need to check for it
+            if isinstance(e, CommandNode):
+                self.visit_command(e)
 
     def visit_command(self, node: CommandNode):
         # TODO This should check that the command exists and that the arguments
         #  passed to it are OK
         for a in node.arguments:
-            self.visit(a)
-
-    def visit_kwd_argument(self, node: KwdArgumentNode):
-        self.visit_line_elements(node.arg_value)
-
-    def visit_std_argument(self, node: StdArgumentNode):
-        self.visit_line_elements(node.arg_value)
+            self.visit_line_elements(a.arg_value)
