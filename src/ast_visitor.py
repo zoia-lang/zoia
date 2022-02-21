@@ -19,15 +19,18 @@
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # =============================================================================
-"""Provides an API for visiting Zoia AST nodes."""
+"""Provides abstract APIs for visiting Zoia ASTs."""
 from ast_nodes import AASTNode, ZoiaFileNode, HeaderNode, LineNode, \
     LineElementsNode, ALineElementNode, AEmLineElementNode, \
     Em1LineElementNode, Em2LineElementNode, Em3LineElementNode, \
     TextFragmentNode, AliasNode, CommandNode, AArgumentNode, KwdArgumentNode, \
     StdArgumentNode
+from commands import new_state_container
 
 class AASTVisitor:
     """Base class for Zoia AST visitors."""
+    __slots__ = ()
+
     def visit(self, tree: AASTNode):
         """Begins visiting an AST (which need not be a full tree beginning at
         ZoiaFileNode)."""
@@ -128,6 +131,8 @@ class ACommandVisitor(AASTVisitor):
     faster than the naive approach since it can skip over things like text
     fragments and aliases. Override visit_command (and visit_header, if
     needed), perform your logic, then call the super method."""
+    __slots__ = ()
+
     def visit_zoia_file(self, node: ZoiaFileNode):
         self.visit_header(node.header)
         for l in node.lines:
@@ -157,3 +162,14 @@ class ACommandVisitor(AASTVisitor):
     def visit_command(self, node: CommandNode):
         for a in node.arguments:
             self.visit_line_elements(a.arg_value)
+
+class ACommandEvaluator(ACommandVisitor):
+    """Version of ACommandVisitor meant for evaluating commands."""
+    __slots__ = ('_state_container',)
+
+    def __init__(self):
+        self._state_container = new_state_container()
+
+    def visit_command(self, node: CommandNode):
+        node.proc_cmd.exec_command(self._state_container)
+        super().visit_command(node)

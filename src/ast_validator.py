@@ -28,6 +28,8 @@ from commands import get_command_type
 class ASTValidator(ACommandVisitor):
     """Performs validation on a Zoia AST, detecting and reporting errors that
     cannot be detected during parsing."""
+    __slots__ = ()
+
     def visit_header(self, node: HeaderNode):
         node.accept_command(get_command_type(node)(node))
         super().visit_header(node)

@@ -36,6 +36,8 @@ from src_pos import SourcePos
 
 class _RaiseErrorListener(SA_ErrorListener):
     """Error listener that reports parsing errors to our logging framework."""
+    __slots__ = ()
+
     def __init__(self, project_folder: Path = None):
         self._project_folder = project_folder
 

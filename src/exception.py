@@ -29,6 +29,8 @@ from src_pos import SourcePos
 
 class AbstractError(Exception):
     """Abstract section of code called."""
+    __slots__ = ()
+
     def __init__(self) -> None:
         call_stack = inspect.stack()
         or_file, or_line, or_function = call_stack[1][1:4]
@@ -39,6 +41,8 @@ class AbstractError(Exception):
 class _SrcPosError(Exception):
     """Base class for errors that carry information about where in a source
     file they occurred."""
+    __slots__ = ('src_pos', 'orig_msg')
+
     def __init__(self, msg: str, pos: SourcePos, orig_msg: str) -> None:
         super().__init__(msg)
         self.src_pos = pos
@@ -46,6 +50,8 @@ class _SrcPosError(Exception):
 
 class EvalError(_SrcPosError):
     """An error that occurred during evaluation."""
+    __slots__ = ()
+
     def __init__(self, pos: SourcePos, msg: str) -> None:
         super().__init__(f'Failed to evaluate {pos.src_file} at line '
                          f'{pos.src_line}, column {pos.src_char + 1}: {msg}',
@@ -53,6 +59,8 @@ class EvalError(_SrcPosError):
 
 class ParseConversionError(_SrcPosError):
     """An error that occurred during parse-to-AST conversion."""
+    __slots__ = ()
+
     def __init__(self, pos: SourcePos, msg: str) -> None:
         super().__init__(f'Failed to AST-convert {pos.src_file} at line '
                          f'{pos.src_line}, column {pos.src_char + 1}: {msg}',
@@ -60,6 +68,8 @@ class ParseConversionError(_SrcPosError):
 
 class ParsingError(_SrcPosError):
     """An error that occurred during parsing of a Zoia file."""
+    __slots__ = ()
+
     def __init__(self, pos: SourcePos, msg: str) -> None:
         super().__init__(f'Failed to parse {pos.src_file} at line '
                          f'{pos.src_line}, column {pos.src_char + 1}: {msg}',
@@ -67,12 +77,16 @@ class ParsingError(_SrcPosError):
 
 class ProjectStructureError(Exception):
     """The project structure is invalid."""
+    __slots__ = ()
+
     def __init__(self, relevant_path: PathLike, msg: str) -> None:
         super().__init__(f"Invalid project structure at '{relevant_path}': "
                          f"{msg}")
 
 class ValidationError(_SrcPosError):
     """Error while validating Zoia AST nodes."""
+    __slots__ = ()
+
     def __init__(self, pos: SourcePos, msg: str) -> None:
         super().__init__(f'Failed to validate {pos.src_file} at line '
                          f'{pos.src_line}, column {pos.src_char + 1}: {msg}',

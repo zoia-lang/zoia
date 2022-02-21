@@ -165,6 +165,7 @@ class _Level(Enum):
     INFO = 1
     WARNING = 2
     ERROR = 3
+    __slots__ = ()
 
 _num_warnings = 0
 _num_errors = 0

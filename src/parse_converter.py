@@ -43,6 +43,8 @@ from src_pos import SourcePos
 # Ignore the non-PEP8 names, inherited from the generated code
 class ParseConverter(zoiaVisitor):
     """Converts an ANTLR parse tree into a Zoia AST."""
+    __slots__ = ()
+
     def __init__(self, parsed_file: str) -> None:
         self.parsed_file = parsed_file
         # Avoids a bunch of 'if isinstance' checks in visitLineElements,

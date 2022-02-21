@@ -70,6 +70,8 @@ def _log_version():
 
 class _Verb:
     """Base class for verbs."""
+    __slots__ = ()
+
     def run(self, args: list[str]) -> None:
         """Runs this verb on the specified arguments."""
         raise AbstractError()
@@ -77,6 +79,8 @@ class _Verb:
 class _CommonVerb(_Verb):
     """Base class for verbs that share a pattern of behavior: logging the
     standard boot info at startup and printing errors/warnings at exit."""
+    __slots__ = ()
+
     def run(self, args: list[str]) -> None:
         _log_boot_info()
         self._run_common(args)
@@ -92,6 +96,7 @@ class _ProjectVerb(_CommonVerb):
     behavior: parsing a project from the first argument or CWD, while keeping
     track of time elapsed."""
     _time_msg: str
+    __slots__ = ()
 
     def _run_common(self, args: list[str]) -> None:
         start_time = time.time()
@@ -118,6 +123,7 @@ class _ProjectVerb(_CommonVerb):
 class _Build(_ProjectVerb):
     """Verb that builds a project."""
     _time_msg = 'Build took %ss'
+    __slots__ = ()
 
     def _run_on_project(self, project: Project) -> None:
         build_supervisor.build(project)
@@ -126,12 +132,15 @@ class _Check(_ProjectVerb):
     """Verb that checks a project for spelling, grammar, style, etc.
     errors."""
     _time_msg = 'Check took %ss'
+    __slots__ = ()
 
     def _run_on_project(self, project: Path) -> None:
         pass # TODO implement checking
 
 class _Version(_Verb):
     """Verb that prints the Zoia version and exits."""
+    __slots__ = ()
+
     def run(self, args: list[str]) -> None:
         _log_version()
 

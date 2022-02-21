@@ -24,6 +24,8 @@ from ast_nodes import AASTNode
 from ast_visitor import AASTVisitor
 
 class AASTMapper(AASTVisitor):
+    __slots__ = ()
+
     """Base class for Zoia AST mappers. Based on AASTVisitor."""
     def _try_visit_val(self, node_val):
         if isinstance(node_val, AASTNode):
