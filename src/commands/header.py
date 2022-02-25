@@ -36,7 +36,4 @@ class HeaderCmd(_ACommand):
     )
     __slots__ = ()
 
-    def exec_command(self):
-        pass
-
 CMD_TYPE = HeaderCmd

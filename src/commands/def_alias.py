@@ -43,7 +43,7 @@ class DefAliasCmd(_ACommand):
     )
     __slots__ = ()
 
-    def exec_command(self, state: _StateExtDA):
+    def eval_command(self, state: _StateExtDA):
         alias_key = self.cmd_args['key']
         seen_alias_keys = state.seen_alias_keys
         if alias_key in seen_alias_keys:

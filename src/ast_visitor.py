@@ -163,13 +163,34 @@ class ACommandVisitor(AASTVisitor):
         for a in node.arguments:
             self.visit_line_elements(a.arg_value)
 
-class ACommandEvaluator(ACommandVisitor):
-    """Version of ACommandVisitor meant for evaluating commands."""
+class ACommandEvaluator(AASTVisitor):
+    """Version of AASTVisitor meant for evaluating files like aliases.zoia and
+    dictionary.zoia that may only contain certain command nodes and nothing
+    else."""
     __slots__ = ('_state_container',)
 
     def __init__(self):
         self._state_container = new_state_container()
 
+    def visit_zoia_file(self, node: ZoiaFileNode):
+        self.visit_header(node.header)
+        for l in node.lines:
+            self.visit_line(l)
+
+    def visit_header(self, node: HeaderNode):
+        pass
+
+    def visit_line(self, node: LineNode):
+        if n_elements := node.elements:
+            self.visit_line_elements(n_elements)
+
+    def visit_line_elements(self, node: LineElementsNode):
+        for line_el in node.elements:
+            if isinstance(line_el, CommandNode):
+                self.visit_command(line_el)
+            else:
+                # Only commands are OK, raise an error
+                self._visit_default(line_el)
+
     def visit_command(self, node: CommandNode):
-        node.proc_cmd.exec_command(self._state_container)
-        super().visit_command(node)
+        node.proc_cmd.eval_command(self._state_container)

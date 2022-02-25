@@ -25,8 +25,9 @@ from build_shared import AliasesEvaluator
 from project import Project
 
 def build(project: Project):
-    """Begins building the specified project based on its config."""
+    """Builds the specified project based on its config."""
     # Stage 1: Evaluating the aliases.zoia file
     als_tree = project.aliases_file.file_ast
     als_eval = AliasesEvaluator()
-    als_eval.visit(als_tree)
+    aliases = als_eval.visit(als_tree)
+    print(aliases)

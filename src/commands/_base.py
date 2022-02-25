@@ -48,7 +48,7 @@ class _ACommand:
         self.cmd_varargs = c_v
         self.cmd_varargs_pos = c_vp
 
-    def exec_command(self, ctx: _AStateExt):
+    def eval_command(self, ctx: _AStateExt):
         raise AbstractError()
 
     def compact(self):
