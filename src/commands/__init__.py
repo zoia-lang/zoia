@@ -53,6 +53,7 @@ def _init_commands():
     state_exts = []
     commands_name = __name__
     commands_path = sys.modules[commands_name].__path__
+    # First collect all modules in this package that define a command
     for _imp, mod_name, _is_pkg in pkgutil.iter_modules(commands_path):
         # Internal module, does not define a command
         if mod_name.startswith('_'):
@@ -60,9 +61,15 @@ def _init_commands():
         module = importlib.import_module(f'{commands_name}.{mod_name}')
         cmd_type = getattr(module, 'CMD_TYPE')
         _cmd_map[cmd_type.cmd_name] = cmd_type
+        # If the command defines a state extension, we need to include it in
+        # the base classes for the state class later
         cmd_ext = cmd_type.state_ext
         if cmd_ext:
             state_exts.append(cmd_ext)
+    # All modules have been imported and all signatures created, so we can now
+    # finalize the commands we've collected and create the state class
+    for cmd_type in _cmd_map.values():
+        cmd_type.finalize_command()
     @dataclass(slots=True)
     class _StateClass(*state_exts):
         pass

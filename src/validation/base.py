@@ -19,21 +19,27 @@
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # =============================================================================
+"""This module provides an abstract base class for every kind of validator."""
+from typing import Any
+
 from ast_nodes import LineElementsNode
 from exception import AbstractError
 
 # NO IMPORTS FROM CMD_VALIDATION! This has to be importable in the entire
 # package, including cmd_validation.tys
 
-class CmdValidator:
+class _ACmdValidator:
+    """Abstract base class for validators."""
     __slots__ = ()
 
-    def validate_arg(self, cmd_arg: LineElementsNode):
+    def validate_arg(self, cmd_arg: LineElementsNode) -> Any:
+        """Validates the specified argument (a LineElementsNode) and transforms
+        it into a more convenient internal representation, if possible."""
         raise AbstractError()
 
     def compact(self) -> str:
-        """Returns the compact signature representation of this Signature
-        object as a string."""
+        """Returns the compact signature representation of this validator as a
+        string."""
         raise AbstractError()
 
     def __repr__(self):

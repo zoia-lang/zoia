@@ -19,22 +19,33 @@
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # =============================================================================
+"""This module provides the ability to specify optional parameters by provding
+default values for validators."""
 from dataclasses import dataclass, field
+from typing import Any
 
-from validation.base import CmdValidator
-from validation.tys import Ty
+from validation.base import _ACmdValidator
+from validation.tys import ATy
 
 from ast_nodes import LineElementsNode
 from exception import ValidationError
 from zoia_processor import process_zoia_arg
 
 @dataclass(slots=True)
-class Default(CmdValidator):
-    ty: Ty
+class Default(_ACmdValidator):
+    """A validator that provides a default value for a validator, thereby
+    making a parameter optional. Optional values are specified as a Zoia
+    string, which is then parsed as if it were a lineElementsArg. See
+    zoia_processor.process_zoia_arg."""
+    ty: ATy
     _default_str: str = field(repr=False)
-    default: LineElementsNode = field(init=False)
+    default: Any = field(init=False)
 
-    def __post_init__(self):
+    def init_default_value(self):
+        """Parses and validates this Default's argument string into an actual
+        default value. Called once all signatures are defined to avoid
+        situations where validation of a value may end up needing to validate
+        itself, which would cause a stack overflow."""
         try:
             self.default = self.validate_arg(process_zoia_arg(
                 self._default_str, '<Signature default>'))

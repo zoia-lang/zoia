@@ -23,9 +23,9 @@ from dataclasses import dataclass, field
 from io import StringIO
 from typing import Any
 
-from validation.base import CmdValidator
+from validation.base import _ACmdValidator
 from validation.default import Default
-from validation.tys import Ty, NoneTy
+from validation.tys import ATy, NoneTy
 from validation.varargs import Varargs, VARARGS_EITHER_OR, VARARGS_KWD, \
     VARARGS_STD
 
@@ -38,16 +38,16 @@ _varargs_sentinel = object()
 
 @dataclass(slots=True)
 class Signature:
-    std_only: dict[str, CmdValidator] = field(default_factory=dict)
-    either_or: dict[str, CmdValidator] = field(default_factory=dict)
-    kwd_only: dict[str, CmdValidator] = field(default_factory=dict)
+    std_only: dict[str, _ACmdValidator] = field(default_factory=dict)
+    either_or: dict[str, _ACmdValidator] = field(default_factory=dict)
+    kwd_only: dict[str, _ACmdValidator] = field(default_factory=dict)
     varargs: Varargs = None
-    ret_ty: Ty = NoneTy()
+    ret_ty: ATy = field(default_factory=NoneTy)
 
     def __post_init__(self):
         # Once we've found a Default, all later validators must be Defaults too
         found_default = False
-        def _check_defaults(cv_dict: dict[str, CmdValidator]):
+        def _check_defaults(cv_dict: dict[str, _ACmdValidator]):
             nonlocal found_default
             for cv in cv_dict.values():
                 if isinstance(cv, Default):
@@ -59,7 +59,7 @@ class Signature:
         _check_defaults(self.either_or)
         _check_defaults(self.kwd_only)
         seen_names = set()
-        def _check_duplicates(cv_dict: dict[str, CmdValidator]):
+        def _check_duplicates(cv_dict: dict[str, _ACmdValidator]):
             for cv_name in cv_dict:
                 if cv_name in seen_names:
                     raise SyntaxError(f"Duplicate parameter name '{cv_name}'")
@@ -68,7 +68,7 @@ class Signature:
         if self.varargs:
             # std-only varargs are only allowed if we have no either-or
             # validators and no kwd-only validators
-            if self.varargs.va_type is VARARGS_STD:
+            if self.varargs.va_kind is VARARGS_STD:
                 if self.either_or:
                     raise SyntaxError('Std-only varargs are not allowed when '
                                       'either-or validators are present')
@@ -77,17 +77,17 @@ class Signature:
                                       'kwd-only validators are present')
             # either-or varargs are only allowed if we have no kwd-only
             # validators
-            elif self.varargs.va_type is VARARGS_EITHER_OR:
+            elif self.varargs.va_kind is VARARGS_EITHER_OR:
                 if self.kwd_only:
                     raise SyntaxError('Either-or varargs are not allowed when '
                                       'kwd-only validators are present')
 
     def _varargs_accept_standards(self):
-        return self.varargs and self.varargs.va_type in (VARARGS_STD,
+        return self.varargs and self.varargs.va_kind in (VARARGS_STD,
                                                          VARARGS_EITHER_OR)
 
     def _varargs_accept_keywords(self):
-        return self.varargs and self.varargs.va_type in (VARARGS_EITHER_OR,
+        return self.varargs and self.varargs.va_kind in (VARARGS_EITHER_OR,
                                                          VARARGS_KWD)
 
     def _accepts_standards(self):
@@ -109,28 +109,28 @@ class Signature:
         return len(self.either_or) + len(self.kwd_only)
 
     def _next_std_param(self, filled_args: dict[str]) \
-            -> tuple[str | object | None, CmdValidator | None]:
+            -> tuple[str | object | None, _ACmdValidator | None]:
         for std_n, std_v in self.std_only.items():
             if std_n not in filled_args:
                 return std_n, std_v
         for eo_n, eo_v in self.either_or.items():
             if eo_n not in filled_args:
                 return eo_n, eo_v
-        if self.varargs and self.varargs.va_type in (VARARGS_STD,
+        if self.varargs and self.varargs.va_kind in (VARARGS_STD,
                                                      VARARGS_EITHER_OR):
             return _varargs_sentinel, self.varargs
         # No more std args to fill
         return None, None
 
     def _next_kwd_param(self, cmd_name: str) \
-            -> tuple[str | object | None, CmdValidator | None]:
+            -> tuple[str | object | None, _ACmdValidator | None]:
         kwd_validator = self.either_or.get(cmd_name)
         if kwd_validator is not None:
             return cmd_name, kwd_validator
         kwd_validator = self.kwd_only.get(cmd_name)
         if kwd_validator is not None:
             return cmd_name, kwd_validator
-        if self.varargs and self.varargs.va_type in (VARARGS_EITHER_OR,
+        if self.varargs and self.varargs.va_kind in (VARARGS_EITHER_OR,
                                                      VARARGS_KWD):
             return _varargs_sentinel, self.varargs
         # No more kwd args to fill
@@ -140,7 +140,7 @@ class Signature:
                        filled_args_pos: dict[str, SourcePos | None]) \
             -> list[str]:
         unfilled_args = []
-        def _fill_from_dict(cv_dict: dict[str, CmdValidator]):
+        def _fill_from_dict(cv_dict: dict[str, _ACmdValidator]):
             for cv_n, cv_v in cv_dict.items():
                 if cv_n not in filled_args:
                     if isinstance(cv_v, Default):
@@ -153,6 +153,15 @@ class Signature:
         _fill_from_dict(self.either_or)
         _fill_from_dict(self.kwd_only)
         return unfilled_args
+
+    def init_default_values(self):
+        def _init_defaults(cv_dict: dict[str, _ACmdValidator]):
+            for cv_v in cv_dict.values():
+                if isinstance(cv_v, Default):
+                    cv_v.init_default_value()
+        _init_defaults(self.std_only)
+        _init_defaults(self.either_or)
+        _init_defaults(self.kwd_only)
 
     def validate_args(self, cmd_args: list[AArgumentNode]) \
             -> tuple[dict[str, Any], dict[str, SourcePos | None],

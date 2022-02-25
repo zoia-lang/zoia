@@ -19,6 +19,7 @@
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # =============================================================================
+"""This module implements the Word type."""
 from validation.tys.text import TextTy
 
 from ast_nodes import LineElementsNode
@@ -27,6 +28,8 @@ from utils import format_word_list
 
 # TextTy that is restricted to only one word
 class WordTy(TextTy):
+    """A parameter of type Word will accept any Text that consists of only one
+    word (with whitespace trimmed). Specialization of Text."""
     _ty_name = 'Word'
     __slots__ = ()
 

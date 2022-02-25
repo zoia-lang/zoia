@@ -22,10 +22,10 @@
 """Implements evaluation of Zoia file of type 'aliases' (also named
 'aliases.zoia' by default)."""
 import log
-from ast_nodes import AASTNode, HeaderNode, LineNode, \
-    LineElementsNode, CommandNode
+from ast_nodes import AASTNode, HeaderNode, LineElementsNode
 from ast_visitor import ACommandEvaluator
 from exception import EvalError, ValidationError
+from validation import HeaderKind
 
 class AliasesEvaluator(ACommandEvaluator):
     r"""Evaluates an aliases file to resolve all \def_alias commands in it and
@@ -52,7 +52,7 @@ class AliasesEvaluator(ACommandEvaluator):
 
     def visit_header(self, node: HeaderNode):
         header_kind = node.proc_cmd.cmd_args['header_kind']
-        if header_kind != 'aliases':
+        if header_kind != HeaderKind.ALIASES:
             raise EvalError(
                 node.arguments[0].arg_value.elements[0].src_pos,
                 f"Aliases files must have header kind 'aliases', but had "

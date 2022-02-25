@@ -21,7 +21,6 @@
 # =============================================================================
 """High-level interface for parsing a Zoia file and converting it into an
 AST."""
-
 from pathlib import Path
 
 from antlr4 import FileStream, InputStream, Token

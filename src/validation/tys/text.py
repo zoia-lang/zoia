@@ -19,6 +19,7 @@
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # =============================================================================
+"""This module implements the Text type."""
 from io import StringIO
 
 from validation.tys.content import ContentTy
@@ -26,8 +27,13 @@ from validation.tys.content import ContentTy
 from ast_nodes import LineElementsNode, TextFragmentNode
 from exception import ValidationError
 
-# Any number of text fragments in a row
+# TODO We will probably want at least one more type between Text and Content -
+#  ToText? Would accept commands that have Text or ToText as return type.
+#  Basically anything that will *become* pure text during evaluation, no
+#  backend-specific nodes?
 class TextTy(ContentTy):
+    """A parameter of type Text will accept any Content that consists purely
+    of text fragments. Specialization of Content."""
     _ty_name = 'Text'
     __slots__ = ()
 

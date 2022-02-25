@@ -48,6 +48,12 @@ class _ACommand:
         self.cmd_varargs = c_v
         self.cmd_varargs_pos = c_vp
 
+    @classmethod
+    def finalize_command(cls):
+        """Called once all command modules have been imported and all command
+        signatures have been created. Finalizes this command class."""
+        cls.signature.init_default_values()
+
     def eval_command(self, ctx: _AStateExt):
         raise AbstractError()
 

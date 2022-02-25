@@ -19,8 +19,11 @@
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # =============================================================================
+"""This package provides definitions for all types ('tys') supported by the
+Zoia language."""
 from validation.tys.any_ty import *
 from validation.tys.content import *
+from validation.tys.floating_point import *
 from validation.tys.integer import *
 from validation.tys.header_kind import *
 from validation.tys.none_ty import *

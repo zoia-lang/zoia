@@ -19,11 +19,11 @@
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # =============================================================================
-from dataclasses import dataclass
+"""This module provides an abstract base class for types."""
+from validation.base import _ACmdValidator
 
-from validation.base import CmdValidator
-
-class Ty(CmdValidator):
+class ATy(_ACmdValidator):
+    """Base class for Zoia types."""
     _ty_name: str
     __slots__ = ()
 

@@ -19,13 +19,16 @@
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # =============================================================================
+"""This module implements the None type."""
 from validation.tys.any_ty import AnyTy
 
 from ast_nodes import LineElementsNode
 from exception import ValidationError
 
-# Special type - only to be used as a return type for commands
 class NoneTy(AnyTy):
+    """There are no parameters of type None. It is a special type, only to be
+    used as a return type for commands. Commands that return None cannot be
+    used in a value of type Content."""
     _ty_name = 'None'
     __slots__ = ()
 

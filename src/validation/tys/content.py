@@ -19,6 +19,7 @@
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # =============================================================================
+"""This module implements the Content type."""
 from dataclasses import dataclass
 
 from validation.tys.any_ty import AnyTy
@@ -31,6 +32,8 @@ from exception import ValidationError
 
 @dataclass(slots=True)
 class _ContentValidator(ACommandVisitor):
+    """Command visitor that ensures every command in the value has a non-None
+    return type."""
     parent_ty_name: str
 
     def visit_command(self, node: CommandNode):
@@ -42,8 +45,10 @@ class _ContentValidator(ACommandVisitor):
                 f'{get_command_type(node).signature.ret_ty.compact()}')
         super().visit_command(node)
 
-# Any type that will result in something visible in the output
 class ContentTy(AnyTy):
+    """A parameter of type Content will accept any value that will directly
+    result in something visible in the output (in at least one backend - not
+    every backend will support every kind of Content)."""
     _ty_name = 'Content'
     __slots__ = ()
 

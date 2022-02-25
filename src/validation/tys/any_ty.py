@@ -19,12 +19,14 @@
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # =============================================================================
-from validation.tys.ty import Ty
+"""This module implements the Any type."""
+from validation.tys.ty import ATy
 
 from ast_nodes import LineElementsNode
 
-# Absolutely any type - basically ContentTy + NoneTy
-class AnyTy(Ty):
+class AnyTy(ATy):
+    """A parameter of type Any accepts absolutely any value. In type theory
+    terms, Any = Content + None."""
     _ty_name = 'Any'
     __slots__ = ()
 

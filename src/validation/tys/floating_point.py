@@ -19,37 +19,32 @@
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # =============================================================================
-"""This module implements the HeaderKind type."""
-from enum import Enum
-
+"""This module implements the Float type."""
 from validation.tys.word import WordTy
 
 from ast_nodes import LineElementsNode
 from exception import ValidationError
-from utils import format_word_list
 
-class HeaderKind(Enum):
-    """The possible header kinds"""
-    ALIASES = 'aliases'
-    CHAPTER = 'chapter'
-    DICTIONARY = 'dictionary'
-    FRAGMENT = 'fragment'
+class FloatTy(WordTy):
+    """A parameter of type Float will accept any valid float, which is defined
+    by the following ANTLR-like grammar:
 
-_str_to_hk = {h.value: h for h in HeaderKind.__members__.values()}
+        float: '-'? (stdFloat | expFloat | floatConst);
+        stdFloat: digits '.' digits;
+        expFloat: (digits | stdFloat) [eE] [+-]? digits;
+        digits: [0-9] ('_'? [0-9])*;
+        floatConst: ([nN] [aA] [nN]) | ([iI] [nN] [fF]);
 
-class HeaderKindTy(WordTy):
-    """A parameter of type HeaderKind will accept any header kind (see
-    HeaderKind enum). Specialization of Word."""
-    _ty_name = 'HeaderKind'
+    Specialization of Word."""
+    _ty_name = 'Float'
     __slots__ = ()
 
     def validate_arg(self, cmd_arg: LineElementsNode):
         txt_str = super().validate_arg(cmd_arg)
         try:
-            return _str_to_hk[txt_str]
-        except KeyError as e:
-            fmt_header_kinds = format_word_list(list(_str_to_hk))
+            return float(txt_str)
+        except ValueError as e:
             raise ValidationError(
                 cmd_arg.src_pos,
-                f'Parameters of type {self._ty_name} only accept valid header '
-                f'kinds ({fmt_header_kinds})') from e
+                f"Parameters of type {self._ty_name} only accept valid "
+                f"floats, which {txt_str} is not") from e
