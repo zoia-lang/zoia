@@ -55,6 +55,7 @@ from io import StringIO
 
 from colorama import Back, Fore, Style
 from colorama.initialise import wrap_stream
+from exception import SrcPosError
 
 # NO LOCAL IMPORTS! This has to be importable from any module/package.
 
@@ -208,6 +209,14 @@ def warning(s: str, /, *, count_warning: bool = True) -> None:
     if count_warning:
         global _num_warnings
         _num_warnings += 1
+
+def source_pos_error(e: SrcPosError, verb: str):
+    """Logs an error for the specified SrcPosError with the specified verb
+    describing the action that failed and caused the error."""
+    p = e.src_pos
+    error(f'Failed to {verb} $fWl${p.src_file}$fT$ at line '
+            f'$fWl${p.src_line}$fT$, column $fWl${p.src_char + 1}$fT$: '
+            f'$fRl${e.orig_msg}$fT$')
 
 def log_stats() -> None:
     """Prints out error/warning statistics based on the internal error/warning

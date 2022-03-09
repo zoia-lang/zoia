@@ -19,6 +19,7 @@
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # =============================================================================
+r"""This module implements the \\def_alias command."""
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -33,6 +34,8 @@ class _StateExtDA(_AStateExt):
     alias_dict: dict[str, Any] = field(default_factory=dict)
 
 class DefAliasCmd(_ACommand):
+    r"""The \\def_alias command. Creates a new alias. May only occur in Zoia
+    files with header kind 'aliases'."""
     state_ext = _StateExtDA
     cmd_name = 'def_alias'
     signature = Signature(

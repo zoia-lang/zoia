@@ -59,10 +59,7 @@ class ZoiaFile:
         except ParsingError as e:
             if raise_errors:
                 raise
-            p = e.src_pos
-            log.error(f'Failed to parse $fWl${p.src_file}$fT$ at line '
-                      f'$fWl${p.src_line}$fT$, column '
-                      f'$fWl${p.src_char + 1}$fT$: $fRl${e.orig_msg}$fT$')
+            log.source_pos_error(e, 'parse')
             return None
         except ParseConversionError as e:
             # Reraise as an internal error, this should not happen and probably
@@ -71,9 +68,6 @@ class ZoiaFile:
         except ValidationError as e:
             if raise_errors:
                 raise
-            p = e.src_pos
-            log.error(f'Failed to validate $fWl${p.src_file}$fT$ at line '
-                      f'$fWl${p.src_line}$fT$, column '
-                      f'$fWl${p.src_char + 1}$fT$: $fRl${e.orig_msg}$fT$')
+            log.source_pos_error(e, 'validate')
             return None
         return cls(file_path, processed_file)

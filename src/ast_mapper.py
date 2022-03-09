@@ -24,6 +24,7 @@ from ast_nodes import AASTNode
 from ast_visitor import AASTVisitor
 
 class AASTMapper(AASTVisitor):
+    """Abstract base class for Zoia AST mappers."""
     __slots__ = ()
 
     """Base class for Zoia AST mappers. Based on AASTVisitor."""

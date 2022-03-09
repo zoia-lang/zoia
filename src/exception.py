@@ -46,7 +46,7 @@ class InternalError(Exception):
                          f'traceback(s) above, to '
                          f'https://github.com/Infernio/zoia/issues')
 
-class _SrcPosError(Exception):
+class SrcPosError(Exception):
     """Base class for errors that carry information about where in a source
     file they occurred."""
     __slots__ = ('src_pos', 'orig_msg')
@@ -56,7 +56,7 @@ class _SrcPosError(Exception):
         self.src_pos = pos
         self.orig_msg = orig_msg
 
-class EvalError(_SrcPosError):
+class EvalError(SrcPosError):
     """An error that occurred during evaluation."""
     __slots__ = ()
 
@@ -65,7 +65,7 @@ class EvalError(_SrcPosError):
                          f'{pos.src_line}, column {pos.src_char + 1}: {msg}',
                          pos, msg)
 
-class ParseConversionError(_SrcPosError):
+class ParseConversionError(SrcPosError):
     """An error that occurred during parse-to-AST conversion."""
     __slots__ = ()
 
@@ -74,7 +74,7 @@ class ParseConversionError(_SrcPosError):
                          f'{pos.src_line}, column {pos.src_char + 1}: {msg}',
                          pos, msg)
 
-class ParsingError(_SrcPosError):
+class ParsingError(SrcPosError):
     """An error that occurred during parsing of a Zoia file."""
     __slots__ = ()
 
@@ -91,7 +91,7 @@ class ProjectStructureError(Exception):
         super().__init__(f"Invalid project structure at '{relevant_path}': "
                          f"{msg}")
 
-class ValidationError(_SrcPosError):
+class ValidationError(SrcPosError):
     """Error while validating Zoia AST nodes."""
     __slots__ = ()
 

@@ -28,19 +28,14 @@ from exception import EvalError, ValidationError
 from validation import HeaderKind
 
 class AliasesEvaluator(ACommandEvaluator):
-    r"""Evaluates an aliases file to resolve all \def_alias commands in it and
+    r"""Evaluates an aliases file to resolve all \\def_alias commands in it and
     return them in the form of an easy to process dict."""
     # Override to add return value type
     def visit(self, tree: AASTNode) -> dict[str, LineElementsNode] | None:
         try:
             super().visit(tree)
         except ValidationError as e:
-            # TODO Move this to log - duplicate and doing so will make testing
-            #  it easier too
-            p = e.src_pos
-            log.error(f'Failed to validate $fWl${p.src_file}$fT$ at line '
-                      f'$fWl${p.src_line}$fT$, column '
-                      f'$fWl${p.src_char + 1}$fT$: $fRl${e.orig_msg}$fT$')
+            log.source_pos_error(e, 'validate')
             return None
         return self._state_container.alias_dict
 
@@ -57,4 +52,3 @@ class AliasesEvaluator(ACommandEvaluator):
                 node.arguments[0].arg_value.elements[0].src_pos,
                 f"Aliases files must have header kind 'aliases', but had "
                 f"header kind '{header_kind}' instead")
-        pass

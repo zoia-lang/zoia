@@ -34,9 +34,11 @@ class CommandNode(ALineElementNode):
     cmd_name: str
     __slots__ = ('arguments', 'cmd_name', 'proc_cmd')
 
+    # TODO I want this gone
     def accept_command(self, proc_cmd):
         """Called during validation - stores the processed version of this
         command in the node."""
+        # pylint: disable=attribute-defined-outside-init
         self.proc_cmd = proc_cmd
 
     def accept(self, visitor):

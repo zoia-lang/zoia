@@ -143,10 +143,10 @@ class ParseConverter(zoiaVisitor):
             # First child is either Word or Spaces - same behavior for both
             return TextFragmentNode(ctx.children[0].symbol.text,
                                     src_pos=self.make_pos(ctx))
-        except (AttributeError, KeyError, IndexError, TypeError):
-            raise ParseConversionError(self.make_pos(ctx),
-                                       f"Unknown or invalid text fragment "
-                                       f"'{ctx.getText()}'")
+        except (AttributeError, KeyError, IndexError, TypeError) as e:
+            raise ParseConversionError(
+                self.make_pos(ctx), f"Unknown or invalid text fragment "
+                                    f"'{ctx.getText()}'") from e
 
     def visitTextFragmentReq(self, ctx: zoiaParser.TextFragmentReqContext) \
             -> TextFragmentNode:
@@ -155,10 +155,10 @@ class ParseConverter(zoiaVisitor):
             try:
                 # One Word, between zero and two Spaces
                 s.write(tf_child.symbol.text)
-            except (AttributeError, KeyError, IndexError, TypeError):
-                raise ParseConversionError(self.make_pos(ctx),
-                                           f"Unknown or invalid required "
-                                           f"text fragment '{ctx.getText()}'")
+            except (AttributeError, KeyError, IndexError, TypeError) as e:
+                raise ParseConversionError(
+                    self.make_pos(ctx), f"Unknown or invalid required text "
+                                        f"fragment '{ctx.getText()}'") from e
         return TextFragmentNode(s.getvalue(), src_pos=self.make_pos(ctx))
 
     def visitTextFragmentWord(self, ctx: zoiaParser.TextFragmentWordContext) \

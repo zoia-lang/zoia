@@ -24,8 +24,6 @@ import sys
 import time
 from pathlib import Path
 
-import colorama.win32
-
 import build_supervisor
 import log
 from exception import AbstractError

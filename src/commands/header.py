@@ -19,12 +19,16 @@
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # =============================================================================
+r"""This module implements the \\header pseudo-command."""
 from commands._base import _ACommand
 
 from validation import Signature, HeaderKindTy, AnyTy, Varargs, \
     VARARGS_EITHER_OR
 
 class HeaderCmd(_ACommand):
+    r"""The \\header pseudo-command. This has no functionality since it can
+    only occur at the start of a file to indicate the type of Zoia file we're
+    dealing with."""
     cmd_name = 'header'
     signature = Signature(
         std_only={

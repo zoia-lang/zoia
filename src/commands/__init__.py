@@ -19,6 +19,10 @@
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # =============================================================================
+"""This package implements the various commands that Zoia supports.
+
+All imports should come directly from here - *never* import from the actual
+files that define the classes. That way they can be moved around easily."""
 from dataclasses import dataclass
 import importlib
 import pkgutil
@@ -26,18 +30,29 @@ import sys
 
 from exception import ValidationError
 
+# Disable some pylint warnings for this file only:
+#  - global-statement: This is a lazily loaded framework for creating commands,
+#    so needs to use globals to make that happen.
+#  - invalid-name: Those aren't constants, they're global variables. Yeah,
+#    spooky.
+# pylint: disable=global-statement,invalid-name
+
 def get_command_type(node):
+    """Returns the command class matching the command describes by the
+    specified CommandNode. Raises a ValidationError if it could not be found
+    (indicating an unknown command)."""
     try:
         return _cmd_map[node.cmd_name]
     except TypeError: # _cmd_map is None
         _init_commands()
         return get_command_type(node)
-    except KeyError: # node.cmd_name not in _cmd_map
+    except KeyError as e: # node.cmd_name not in _cmd_map
         raise ValidationError(
             node.src_pos,
-            f"Unknown command '\\{node.cmd_name}'")
+            f"Unknown command '\\{node.cmd_name}'") from e
 
 def new_state_container():
+    """Returns a new instance of the state container class."""
     try:
         return _state_class()
     except TypeError:

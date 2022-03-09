@@ -193,7 +193,9 @@ class-naming-style=PascalCase
 
 # Regular expression matching correct class names. Overrides class-naming-
 # style.
-#class-rgx=
+# Allow CMD_TYPE, used in commands pacakge - TODO not actually a class
+# name, it's a constant that I'm assigning a class to - pylint bug?
+class-rgx=(?:CMD_TYPE|[^\W\da-z][^\W_]+)$
 
 # Naming style matching correct constant names.
 const-naming-style=UPPER_CASE
