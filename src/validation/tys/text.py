@@ -33,7 +33,7 @@ from exception import ValidationError
 #  backend-specific nodes?
 class TextTy(ContentTy):
     """A parameter of type Text will accept any Content that consists purely
-    of text fragments. Specialization of Content."""
+    of text fragments. Subtype of Content."""
     _ty_name = 'Text'
     __slots__ = ()
 

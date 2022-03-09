@@ -39,7 +39,7 @@ _str_to_hk = {h.value: h for h in HeaderKind.__members__.values()}
 
 class HeaderKindTy(WordTy):
     """A parameter of type HeaderKind will accept any header kind (see
-    HeaderKind enum). Specialization of Word."""
+    HeaderKind enum). Subtype of Word."""
     _ty_name = 'HeaderKind'
     __slots__ = ()
 

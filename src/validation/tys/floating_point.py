@@ -20,31 +20,38 @@
 #
 # =============================================================================
 """This module implements the Float type."""
+import re
+
 from validation.tys.word import WordTy
 
 from ast_nodes import LineElementsNode
 from exception import ValidationError
 
+# This defines the valid types of floats. This does not match Python's float
+# syntax exactly, e.g. '1.' and '.0' are removed
+_STD_FLOAT = re.compile(r'-?[0-9](?:_?[0-9])*\.[0-9](?:_?[0-9])*')
+_EXP_FLOAT = re.compile(r'-?[0-9](?:_?[0-9])*(?:\.[0-9](?:_?[0-9])*)?e[+-]?'
+                        r'[0-9](?:_?[0-9])*', re.I)
+_FLT_CONST = re.compile('-?(?:nan|inf)', re.I)
+
 class FloatTy(WordTy):
-    """A parameter of type Float will accept any valid float, which is defined
-    by the following ANTLR-like grammar:
-
-        float: '-'? (stdFloat | expFloat | floatConst);
-        stdFloat: digits '.' digits;
-        expFloat: (digits | stdFloat) [eE] [+-]? digits;
-        digits: [0-9] ('_'? [0-9])*;
-        floatConst: ([nN] [aA] [nN]) | ([iI] [nN] [fF]);
-
-    Specialization of Word."""
+    """A parameter of type Float will accept any valid float (see regexes
+    above). Subtype of Word."""
     _ty_name = 'Float'
     __slots__ = ()
 
     def validate_arg(self, cmd_arg: LineElementsNode):
         txt_str = super().validate_arg(cmd_arg)
+        invalid_float_msg = (f"Parameters of type {self._ty_name} only accept "
+                             f"valid floats, which {txt_str} is not")
+        # Validate the string against our regexes, then let Python parse it
+        if (not _STD_FLOAT.match(txt_str) and
+                not _EXP_FLOAT.match(txt_str) and
+                not _FLT_CONST.match(txt_str)):
+            raise ValidationError(cmd_arg.src_pos, invalid_float_msg)
         try:
             return float(txt_str)
         except ValueError as e:
-            raise ValidationError(
-                cmd_arg.src_pos,
-                f"Parameters of type {self._ty_name} only accept valid "
-                f"floats, which {txt_str} is not") from e
+            # This shouldn't happen since we validated the float up above, but
+            # raise a validation error just in case
+            raise ValidationError(cmd_arg.src_pos, invalid_float_msg) from e

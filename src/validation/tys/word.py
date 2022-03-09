@@ -29,7 +29,7 @@ from utils import format_word_list
 # TextTy that is restricted to only one word
 class WordTy(TextTy):
     """A parameter of type Word will accept any Text that consists of only one
-    word (with whitespace trimmed). Specialization of Text."""
+    word (with whitespace trimmed). Subtype of Text."""
     _ty_name = 'Word'
     __slots__ = ()
 

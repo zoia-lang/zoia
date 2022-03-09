@@ -20,45 +20,47 @@
 #
 # =============================================================================
 """This module implements the Int type."""
-from collections import defaultdict
+import re
 
 from validation.tys.word import WordTy
 
 from ast_nodes import LineElementsNode
 from exception import ValidationError
 
-# The valid base prefixes that Zoia integers may have
-_base_prefix = defaultdict(lambda: 10, {
-    '0b': 2,
-    '0o': 8,
-    '0x': 16,
-})
+# This defines the valid types of integers. They must be regex-matched one at a
+# time to avoid overlaps (e.g. 0b12423 producing two matches, one for
+# _BIN_INT -> 0b1 and one for _DEC_INT -> 2423)
+_DEC_INT = re.compile('-?[0-9](?:_?[0-9])*')
+_HEX_INT = re.compile('-?0x(?:_?[0-9A-F])+', re.I)
+_OCT_INT = re.compile('-?0o(?:_?[0-7])+', re.I)
+_BIN_INT = re.compile('-?0b(?:_?[01])+', re.I)
 
 class IntTy(WordTy):
-    """A parameter of type Int will accept any valid integer, which is defined
-    by the following ANTLR-like grammar:
-
-        int: '-'? (binInt | octInt | hexInt | decInt);
-        binInt: '0' [bB] ('_'? [01])+;
-        octInt: '0' [oO] ('_'? [0-7])+;
-        hexInt: '0' [xX] ('_'? [0-9a-fA-F])+;
-        decInt: [0-9] ('_'? [0-9])*;
-
-    Specialization of Word."""
+    """A parameter of type Int will accept any valid integer (see regexes
+    above). Subtype of Word."""
     _ty_name = 'Int'
     __slots__ = ()
 
     def validate_arg(self, cmd_arg: LineElementsNode):
         txt_str = super().validate_arg(cmd_arg)
-        is_negative = txt_str.startswith('-')
-        if is_negative:
-            txt_str = txt_str[1:]
-        int_base = _base_prefix[txt_str[:2].lower()]
+        invalid_int_msg = (f"Parameters of type {self._ty_name} only accept "
+                           f"valid integers, which {txt_str} is not")
+        # Check that this is a valid integer and determine its base while we're
+        # at it (so that Python can handle leading zeroes for decimal ints)
+        if _DEC_INT.match(txt_str):
+            int_base = 10
+        elif _HEX_INT.match(txt_str):
+            int_base = 16
+        elif _OCT_INT.match(txt_str):
+            int_base = 8
+        elif _BIN_INT.match(txt_str):
+            int_base = 2
+        else:
+            raise ValidationError(cmd_arg.src_pos, invalid_int_msg)
+        # The integer is valid, so we can let Python handle it from here
         try:
-            parsed_int = int(txt_str, base=int_base)
+            return int(txt_str, base=int_base)
         except ValueError as e:
-            raise ValidationError(
-                cmd_arg.src_pos,
-                f"Parameters of type {self._ty_name} only accept valid "
-                f"integers, which {txt_str} is not") from e
-        return -parsed_int if is_negative else parsed_int
+            # This shouldn't happen since we validated the integer up above,
+            # but raise a validation error just in case
+            raise ValidationError(cmd_arg.src_pos, invalid_int_msg) from e

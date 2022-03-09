@@ -28,7 +28,7 @@ from exception import ValidationError
 # TextTy that may not contain commas
 class TagTy(TextTy):
     """A parameter of type Tag will accept any Text that does not contain
-    commas. Specialization of Text."""
+    commas. Subtype of Text."""
     _ty_name = 'Tag'
     __slots__ = ()
 
