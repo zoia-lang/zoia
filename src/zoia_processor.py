@@ -37,7 +37,7 @@ class _RaiseErrorListener(SA_ErrorListener):
     """Error listener that reports parsing errors to our logging framework."""
     __slots__ = ()
 
-    def __init__(self, project_folder: Path = None):
+    def __init__(self, project_folder: Path = None) -> None:
         self._project_folder = project_folder
 
     # No point in pylint complaining about this - it's inherited from generated

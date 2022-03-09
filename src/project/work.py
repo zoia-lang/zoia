@@ -44,7 +44,7 @@ class Work(_ADirBase):
     _id_chapters: defaultdict[int, Chapter | None] = field(init=False,
                                                            repr=False)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         # @dataclass with slots=True breaks argument-less super
         # pylint: disable=super-with-arguments
         super(Work, self).__post_init__()

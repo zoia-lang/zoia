@@ -36,7 +36,7 @@ class _VarArgsKind(Enum):
     VA_EITHER_OR = 1
     VA_KWD = 2
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return self.name
 
 VARARGS_STD = _VarArgsKind.VA_STD
@@ -51,7 +51,7 @@ class Varargs(_ACmdValidator):
     va_kind: _VarArgsKind
     ty: ATy
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         # This is nonsense type-wise, but Python does not have static typing,
         # so we'll have to do it manually...
         if isinstance(self.ty, Default):

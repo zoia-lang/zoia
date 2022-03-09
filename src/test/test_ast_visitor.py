@@ -28,7 +28,7 @@ from ast_visitor import AASTVisitor
 class _VisitorTest(AASTVisitor):
     """Test visitor implementation that simply logs the class names of every
     node it visits."""
-    def __init__(self):
+    def __init__(self) -> None:
         self.visit_log = []
 
     def _visit_default(self, node: AASTNode):

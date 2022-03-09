@@ -33,7 +33,7 @@ class _ADirBase:
     zoia_files: list[ZoiaFile] = field(kw_only=True)
     _id_zoia: defaultdict[str, ZoiaFile | None] = field(init=False, repr=False)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self._id_zoia = defaultdict(lambda: None, {
             z.file_path.name: z for z in self.zoia_files})
 

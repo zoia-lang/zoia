@@ -36,7 +36,7 @@ class Series(_ADirBase):
     works: list[Work]
     _id_works: defaultdict[int, Work | None] = field(init=False, repr=False)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         # @dataclass with slots=True breaks argument-less super
         # pylint: disable=super-with-arguments
         super(Series, self).__post_init__()

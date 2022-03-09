@@ -42,5 +42,5 @@ class _ACmdValidator:
         string."""
         raise AbstractError()
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return self.compact()

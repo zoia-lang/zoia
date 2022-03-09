@@ -41,15 +41,15 @@ class _ACommand:
     cmd_varargs_pos: list[SourcePos]
     __slots__ = ('cmd_args', 'cmd_args_pos', 'cmd_varargs', 'cmd_varargs_pos')
 
-    def __init__(self, node: CommandNode):
-        c_a, c_ap, c_v, c_vp = self.signature.validate_args(node.arguments)
+    def __init__(self, node: CommandNode) -> None:
+        c_a, c_ap, c_v, c_vp = self.signature.validate_args(node)
         self.cmd_args = c_a
         self.cmd_args_pos = c_ap
         self.cmd_varargs = c_v
         self.cmd_varargs_pos = c_vp
 
     @classmethod
-    def finalize_command(cls):
+    def finalize_command(cls) -> None:
         """Called once all command modules have been imported and all command
         signatures have been created. Finalizes this command class."""
         cls.signature.init_default_values()
@@ -57,8 +57,8 @@ class _ACommand:
     def eval_command(self, ctx: _AStateExt):
         raise AbstractError()
 
-    def compact(self):
+    def compact(self) -> str:
         return f'\\{self.cmd_name}{self.signature.compact()}'
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return self.compact()

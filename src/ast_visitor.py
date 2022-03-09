@@ -169,7 +169,7 @@ class ACommandEvaluator(AASTVisitor):
     else."""
     __slots__ = ('_state_container',)
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._state_container = new_state_container()
 
     def visit_zoia_file(self, node: ZoiaFileNode):
