@@ -25,7 +25,7 @@ import re
 from validation.tys.word import WordTy
 
 from ast_nodes import LineElementsNode
-from exception import ValidationError
+from exception import ValidationError, InternalError
 
 # This defines the valid types of floats. This does not match Python's float
 # syntax exactly, e.g. '1.' and '.0' are removed
@@ -45,13 +45,13 @@ class FloatTy(WordTy):
         invalid_float_msg = (f"Parameters of type {self._ty_name} only accept "
                              f"valid floats, which {txt_str} is not")
         # Validate the string against our regexes, then let Python parse it
-        if (not _STD_FLOAT.match(txt_str) and
-                not _EXP_FLOAT.match(txt_str) and
-                not _FLT_CONST.match(txt_str)):
+        if (not _STD_FLOAT.fullmatch(txt_str) and
+                not _EXP_FLOAT.fullmatch(txt_str) and
+                not _FLT_CONST.fullmatch(txt_str)):
             raise ValidationError(cmd_arg.src_pos, invalid_float_msg)
         try:
             return float(txt_str)
         except ValueError as e:
-            # This shouldn't happen since we validated the float up above, but
-            # raise a validation error just in case
-            raise ValidationError(cmd_arg.src_pos, invalid_float_msg) from e
+            # If we got here, then Python doesn't accept an int that we do
+            # accept - so raise an internal error
+            raise InternalError(invalid_float_msg) from e

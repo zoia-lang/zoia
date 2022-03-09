@@ -33,7 +33,7 @@ from validation.varargs import Varargs, VARARGS_EITHER_OR, VARARGS_KWD, \
     VARARGS_STD
 
 from ast_nodes import CommandNode, KwdArgumentNode
-from exception import ValidationError
+from exception import ValidationError, InternalError
 from src_pos import SourcePos
 from utils import format_word_list
 
@@ -101,7 +101,7 @@ class Signature:
             # typing, so we'll have to do it manually...
             if not isinstance(self.varargs, Varargs):
                 raise SyntaxError("'varargs' kwarg must have Varargs type")
-            # std-only varargs are only allowed if we have no either-or
+            # Std-only varargs are only allowed if we have no either-or
             # validators and no kwd-only validators
             if self.varargs.va_kind is VARARGS_STD:
                 if self.either_or:
@@ -110,7 +110,7 @@ class Signature:
                 if self.kwd_only:
                     raise SyntaxError('Std-only varargs are not allowed when '
                                       'kwd-only validators are present')
-            # either-or varargs are only allowed if we have no kwd-only
+            # Either-or varargs are only allowed if we have no kwd-only
             # validators
             elif self.varargs.va_kind is VARARGS_EITHER_OR:
                 if self.kwd_only:
@@ -142,18 +142,22 @@ class Signature:
 
     def _num_std_params(self) -> int:
         """Returns the number of parameters in this signature that could accept
-        a standard argument (or -1, indicating infinity, if varargs are present
-        and could accept standard arguments)."""
+        a standard argument. Raises an internal error if varargs are present
+        and could accept standard arguments, since in that case an infinite
+        number of standard arguments could be accepted."""
         if self._varargs_accept_standards():
-            return -1 # Infinite
+            raise InternalError('_num_std_params may not be called if '
+                                'varargs accept standard arguments')
         return len(self.std_only) + len(self.either_or)
 
     def _num_kwd_params(self) -> int:
         """Returns the number of parameters in this signature that could accept
-        a keyword argument (or -1, indicating infinity, if varargs are present
-        and could accept keyword arguments)."""
+        a keyword argument. Raises an internal error if varargs are present
+        and could accept keyword arguments, since in that case an infinite
+        number of keyword arguments could be accepted"""
         if self._varargs_accept_keywords():
-            return -1 # Infinite
+            raise InternalError('_num_kwd_params may not be called if '
+                                'varargs accept keyword arguments')
         return len(self.either_or) + len(self.kwd_only)
 
     def _next_std_param(self, filled_params: dict[str]) \
@@ -169,8 +173,7 @@ class Signature:
         for eo_n, eo_v in self.either_or.items():
             if eo_n not in filled_params:
                 return eo_n, eo_v
-        if self.varargs and self.varargs.va_kind in (VARARGS_STD,
-                                                     VARARGS_EITHER_OR):
+        if self._varargs_accept_standards():
             return _VARARGS_SENTINEL, self.varargs
         # No more std args to fill
         return None, None
@@ -188,8 +191,7 @@ class Signature:
         kwd_validator = self.kwd_only.get(kwd_arg_name)
         if kwd_validator is not None:
             return kwd_arg_name, kwd_validator
-        if self.varargs and self.varargs.va_kind in (VARARGS_EITHER_OR,
-                                                     VARARGS_KWD):
+        if self._varargs_accept_keywords():
             return _VARARGS_SENTINEL, self.varargs
         # No more kwd args to fill
         return None, None
@@ -271,7 +273,8 @@ class Signature:
                 if not accepts_kwd:
                     raise ValidationError(
                         cmd_arg.src_pos,
-                        'This command does not accept keyword arguments')
+                        f'\\{cmd_node.cmd_name} does not accept keyword '
+                        f'arguments')
                 # Once we've found a keyword argument, reject all further
                 # standard arguments
                 found_kwd = True
@@ -291,7 +294,8 @@ class Signature:
                 if not accepts_std:
                     raise ValidationError(
                         cmd_arg.src_pos,
-                        'This command does not accept standard arguments')
+                        f'\\{cmd_node.cmd_name} does not accept standard '
+                        f'arguments')
                 if found_kwd:
                     raise ValidationError(
                         cmd_arg.src_pos,

@@ -102,11 +102,10 @@ class _ATestParserFail(ATestParser):
     def test_parser(self) -> None:
         """Runs the actual test, ensuring that parsing the Zoia source
         specified in this class' _test_src variable fails."""
-        try:
+        # Note that this error's message is not under our control (comes from
+        # ANTLR), so we don't want to check the message
+        with pytest.raises(ParsingError):
             self._parse_src()
-            pytest.fail('Parsing was supposed to fail, but succeeded instead')
-        except ParsingError:
-            pass
 
 class TestRejectsNoHeader(_ATestParserFail):
     """Zoia files without a header should be rejected."""

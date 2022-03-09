@@ -88,11 +88,10 @@ class ATestProjectFailing(_ATestProject):
     def test_proj_fails(self) -> None:
         """Asserts that the series located at the specified test directory does
         not parse successfully."""
-        try:
+        with pytest.raises(ProjectStructureError) as exc_info:
             self._parse_project()
-            pytest.fail('Parsing was supposed to fail, but succeeded instead')
-        except ProjectStructureError as e:
-            if isinstance(self._exp_error, tuple):
-                assert any(exp_e in str(e) for exp_e in self._exp_error)
-            else:
-                assert self._exp_error in str(e)
+        exc_str = str(exc_info.value)
+        if isinstance(self._exp_error, tuple):
+            assert any(exp_e in exc_str for exp_e in self._exp_error)
+        else:
+            assert self._exp_error in exc_str

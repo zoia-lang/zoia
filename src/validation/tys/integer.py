@@ -25,10 +25,10 @@ import re
 from validation.tys.word import WordTy
 
 from ast_nodes import LineElementsNode
-from exception import ValidationError
+from exception import ValidationError, InternalError
 
-# This defines the valid types of integers. They must be regex-matched one at a
-# time to avoid overlaps (e.g. 0b12423 producing two matches, one for
+# This defines the valid types of integers. They must be regex-fullmatched one
+# at a time to avoid overlaps (e.g. 0b12423 producing two matches, one for
 # _BIN_INT -> 0b1 and one for _DEC_INT -> 2423)
 _DEC_INT = re.compile('-?[0-9](?:_?[0-9])*')
 _HEX_INT = re.compile('-?0x(?:_?[0-9A-F])+', re.I)
@@ -47,13 +47,13 @@ class IntTy(WordTy):
                            f"valid integers, which {txt_str} is not")
         # Check that this is a valid integer and determine its base while we're
         # at it (so that Python can handle leading zeroes for decimal ints)
-        if _DEC_INT.match(txt_str):
+        if _DEC_INT.fullmatch(txt_str):
             int_base = 10
-        elif _HEX_INT.match(txt_str):
+        elif _HEX_INT.fullmatch(txt_str):
             int_base = 16
-        elif _OCT_INT.match(txt_str):
+        elif _OCT_INT.fullmatch(txt_str):
             int_base = 8
-        elif _BIN_INT.match(txt_str):
+        elif _BIN_INT.fullmatch(txt_str):
             int_base = 2
         else:
             raise ValidationError(cmd_arg.src_pos, invalid_int_msg)
@@ -61,6 +61,6 @@ class IntTy(WordTy):
         try:
             return int(txt_str, base=int_base)
         except ValueError as e:
-            # This shouldn't happen since we validated the integer up above,
-            # but raise a validation error just in case
-            raise ValidationError(cmd_arg.src_pos, invalid_int_msg) from e
+            # If we got here, then Python doesn't accept an int that we do
+            # accept - so raise an internal error
+            raise InternalError(invalid_int_msg) from e

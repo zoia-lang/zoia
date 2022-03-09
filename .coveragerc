@@ -19,12 +19,18 @@ exclude_lines =
     def __repr__
 
     # Ignore defensive exceptions that will likely never be raised during tests
-    raise (exception\.)?AbstractError
+    raise AbstractError
     raise NotImplementedError
-    raise ParseConversionError
+    # These won't even be constructed, so skip them entirely
+    InternalError
+    ParseConversionError
 
     # Same goes for defensive checks in __lt__ implementations
     return NotImplemented
+
+    # This one occurs for FloatTy and IntTy and won't ever be hit since its
+    # only purpose is to reraise to an InternalError
+    except ValueError as e:
 
 [html]
 directory = .cov_html

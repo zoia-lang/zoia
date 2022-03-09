@@ -25,7 +25,8 @@ from validation.tys.text import TextTy
 from ast_nodes import LineElementsNode
 from exception import ValidationError
 
-# TextTy that may not contain commas
+# TODO This probably needs to reject asterisks as well, see
+#  https://github.com/otwcode/otwarchive/blob/5cd77dd6d6299fcd8b578115af460cad22ea3e78/app/models/tag.rb#L469
 class TagTy(TextTy):
     """A parameter of type Tag will accept any Text that does not contain
     commas. Subtype of Text."""

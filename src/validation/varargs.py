@@ -28,6 +28,7 @@ from validation.default import Default
 from validation.tys import ATy
 
 from ast_nodes import LineElementsNode
+from exception import InternalError
 
 class _VarArgsKind(Enum):
     """The three kinds of varargs. Use the constants defined in this module
@@ -67,5 +68,5 @@ class Varargs(_ACmdValidator):
             return f'{self.ty.compact()}*'
         elif self.va_kind is VARARGS_KWD:
             return f'$ {self.ty.compact()}*'
-        raise NotImplementedError(f'compact() not implemented for unknown '
-                                  f'kind of varargs {self.va_kind}')
+        raise InternalError(f'compact() not implemented for unknown kind of '
+                            f'varargs {self.va_kind}')

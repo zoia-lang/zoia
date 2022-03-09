@@ -26,7 +26,8 @@ from pathlib import Path
 
 import log
 from ast_nodes import ZoiaFileNode
-from exception import ParseConversionError, ParsingError, ValidationError
+from exception import ParseConversionError, ParsingError, ValidationError, \
+    InternalError
 from zoia_processor import process_zoia_file
 
 @dataclass(slots=True)
@@ -64,13 +65,9 @@ class ZoiaFile:
                       f'$fWl${p.src_char + 1}$fT$: $fRl${e.orig_msg}$fT$')
             return None
         except ParseConversionError as e:
-            if raise_errors:
-                raise
-            p = e.src_pos
-            log.error(f'Failed to AST-convert $fWl${p.src_file}$fT$ at line '
-                      f'$fWl${p.src_line}$fT$, column '
-                      f'$fWl${p.src_char + 1}$fT$: $fRl${e.orig_msg}$fT$')
-            return None
+            # Reraise as an internal error, this should not happen and probably
+            # points to an ANTLR API having changed
+            raise InternalError(str(e)) from e
         except ValidationError as e:
             if raise_errors:
                 raise

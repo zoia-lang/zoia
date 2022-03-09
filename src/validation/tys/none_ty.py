@@ -23,7 +23,7 @@
 from validation.tys.any_ty import AnyTy
 
 from ast_nodes import LineElementsNode
-from exception import ValidationError
+from exception import InternalError
 
 class NoneTy(AnyTy):
     """There are no parameters of type None. It is a special type, only to be
@@ -33,9 +33,6 @@ class NoneTy(AnyTy):
     __slots__ = ()
 
     def validate_arg(self, cmd_arg: LineElementsNode):
-        # TODO Maybe add some detection to log to make it recognize internal
-        #  errors and crash everything?
-        raise ValidationError(
-            cmd_arg.src_pos,
-            f'[INTERNAL ERROR]: {self._ty_name} does not accept any kinds of '
-            f'values. It should only be specified as a return type')
+        raise InternalError(
+            f'{self._ty_name} does not accept any kinds of values. It should '
+            f'only be specified as a return type')

@@ -47,20 +47,15 @@ class _ATestRelativize(ATestProjectPassing):
                      strip_src=True) == Path('foo') / 'bar'
         # Paths that cannot be relativized are rejected by raising an error
         tmp_path = Path(gettempdir()) / 'foo'
-        try:
+        # Note that this error is not under our control (comes from Python), so
+        # we don't want to check the message
+        with pytest.raises(ValueError):
             p_rel(tmp_path)
-            pytest.fail(f'relativize should fail with paths that cannot be '
-                        f'relativized, but succeeded for {tmp_path}')
-        except ValueError:
-            pass # Not under our control, don't check the message
         # Already relative paths are rejected by raising an error
         rel_path = Path('foo') / 'bar' / 'qux'
-        try:
+        with pytest.raises(ValueError) as exc_info:
             p_rel(rel_path)
-            pytest.fail(f'relativize should fail with relative paths, but '
-                        f'succeeded for {rel_path}')
-        except ValueError as e:
-            assert str(e) == 'relativize needs an absolute path'
+        assert str(exc_info.value) == 'relativize needs an absolute path'
 
 class TestArbitraryZoiaFilesRelativize(_ATestArbitraryZoiaFiles,
                                        _ATestRelativize):

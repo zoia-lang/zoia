@@ -63,12 +63,9 @@ class _ATestSingleFile(_ACurrentFile):
         assert single_file.file_path.suffix == '.zoia'
 
     def _assert_file_fails(self):
-        try:
+        with pytest.raises(FileNotFoundError):
             single_file = getattr(self._project, self._file_attr)
             single_file.is_main_file() # Call is only here to shut linters up
-            pytest.fail(f'Retrieved {self._file_attr}, but expected to fail')
-        except FileNotFoundError:
-            pass
 
     def test_proj_passes(self) -> None:
         """Asserts that correct uses of the file pass."""

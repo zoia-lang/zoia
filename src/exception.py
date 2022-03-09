@@ -38,6 +38,14 @@ class AbstractError(Exception):
                          f"{os.path.basename(or_file)}:{or_line}) "
                          f"was called")
 
+class InternalError(Exception):
+    """Some kind of unexpected internal error occurred in the Zoia compiler."""
+    def __init__(self, msg: str):
+        super().__init__(f'{msg}\nThis is an INTERNAL ERROR in the Zoia '
+                         f'compiler. Please report it, including the '
+                         f'traceback(s) above, to '
+                         f'https://github.com/Infernio/zoia/issues')
+
 class _SrcPosError(Exception):
     """Base class for errors that carry information about where in a source
     file they occurred."""
