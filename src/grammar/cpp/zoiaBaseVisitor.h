@@ -1,5 +1,5 @@
 
-// Generated from grammar/zoia.g4 by ANTLR 4.9.3
+// Generated from grammar/zoia.g4 by ANTLR 4.10.1
 
 #pragma once
 
@@ -15,79 +15,79 @@
 class  zoiaBaseVisitor : public zoiaVisitor {
 public:
 
-  virtual antlrcpp::Any visitZoiaFile(zoiaParser::ZoiaFileContext *ctx) override {
+  virtual std::any visitZoiaFile(zoiaParser::ZoiaFileContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitHeader(zoiaParser::HeaderContext *ctx) override {
+  virtual std::any visitHeader(zoiaParser::HeaderContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitLine(zoiaParser::LineContext *ctx) override {
+  virtual std::any visitLine(zoiaParser::LineContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitLineElements(zoiaParser::LineElementsContext *ctx) override {
+  virtual std::any visitLineElements(zoiaParser::LineElementsContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitLineElementsInner(zoiaParser::LineElementsInnerContext *ctx) override {
+  virtual std::any visitLineElementsInner(zoiaParser::LineElementsInnerContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitLineElementsArg(zoiaParser::LineElementsArgContext *ctx) override {
+  virtual std::any visitLineElementsArg(zoiaParser::LineElementsArgContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitEm3LineElement(zoiaParser::Em3LineElementContext *ctx) override {
+  virtual std::any visitEm3LineElement(zoiaParser::Em3LineElementContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitEm2LineElement(zoiaParser::Em2LineElementContext *ctx) override {
+  virtual std::any visitEm2LineElement(zoiaParser::Em2LineElementContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitEm1LineElement(zoiaParser::Em1LineElementContext *ctx) override {
+  virtual std::any visitEm1LineElement(zoiaParser::Em1LineElementContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitTextFragment(zoiaParser::TextFragmentContext *ctx) override {
+  virtual std::any visitTextFragment(zoiaParser::TextFragmentContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitTextFragmentReq(zoiaParser::TextFragmentReqContext *ctx) override {
+  virtual std::any visitTextFragmentReq(zoiaParser::TextFragmentReqContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitTextFragmentWord(zoiaParser::TextFragmentWordContext *ctx) override {
+  virtual std::any visitTextFragmentWord(zoiaParser::TextFragmentWordContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitAlias(zoiaParser::AliasContext *ctx) override {
+  virtual std::any visitAlias(zoiaParser::AliasContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitCommand(zoiaParser::CommandContext *ctx) override {
+  virtual std::any visitCommand(zoiaParser::CommandContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitArguments(zoiaParser::ArgumentsContext *ctx) override {
+  virtual std::any visitArguments(zoiaParser::ArgumentsContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitArgument(zoiaParser::ArgumentContext *ctx) override {
+  virtual std::any visitArgument(zoiaParser::ArgumentContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitKwdArgument(zoiaParser::KwdArgumentContext *ctx) override {
+  virtual std::any visitKwdArgument(zoiaParser::KwdArgumentContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitStdArgument(zoiaParser::StdArgumentContext *ctx) override {
+  virtual std::any visitStdArgument(zoiaParser::StdArgumentContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitWhitespace(zoiaParser::WhitespaceContext *ctx) override {
+  virtual std::any visitWhitespace(zoiaParser::WhitespaceContext *ctx) override {
     return visitChildren(ctx);
   }
 
