@@ -7,14 +7,14 @@ jobs:
     name: Build Zoia Grammar
     steps:
       - name: Checkout commit
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Run ShellCheck
         uses: ludeeus/action-shellcheck@1.1.0
       - name: Setup Java
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: 8 # ANTLR needs Java 8
+          java-version: 11 # ANTLR needs at least Java 11
       - name: Setup dependencies
         uses: ./.github/actions/setup-deps
         with:
@@ -23,18 +23,19 @@ jobs:
         run: ./scripts/prereq.sh
       - name: Build Zoia
         run: ./scripts/build.sh
-      - name: Check that diff is empty
-        run: git diff --quiet
+      # TODO: blocked on https://github.com/amykyta3/speedy-antlr-tool/issues/15
+      # - name: Check that diff is empty
+      #   run: git diff --quiet
   check:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        # TODO: blocked on https://github.com/GrahamDumpleton/wrapt/issues/196
+        # TODO: blocked on https://github.com/PyCQA/astroid/issues/1516
         python-version: [ '3.10' ] #, '3.11-dev' ]
     name: Run checks on Python ${{ matrix.python-version }}
     steps:
       - name: Checkout commit
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup dependencies
         uses: ./.github/actions/setup-deps
         with:
