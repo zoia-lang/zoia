@@ -62,7 +62,7 @@ output generated from such fiction once Zoia compiles it. You may license
 such data however you like.
 
 For information on third party dependencies and their licenses, please see
-[LICENSE-3RD-PARTY](LICENSE-3RD-PARTY).
+[doc/LICENSE-3RD-PARTY](doc/LICENSE-3RD-PARTY).
 
 The examples inside [doc/examples](doc/examples) are not part of Zoia itself
 and are licensed under other licenses. See the LICENSE files inside those

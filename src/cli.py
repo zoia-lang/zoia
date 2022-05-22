@@ -64,8 +64,8 @@ def _log_boot_info():
     log.info('This is free software: you are free to change and redistribute '
              'it.')
     log.info('There is NO WARRANTY, to the extent permitted by law.')
-    log.info('See the LICENSE and LICENSE-3RD-PARTY files included with this '
-             'program for more information.')
+    log.info('See the LICENSE and doc/LICENSE-3RD-PARTY files included with '
+             'this program for more information.')
     log.info('')
 
 _ZOIA_VERSION = '0.1'
