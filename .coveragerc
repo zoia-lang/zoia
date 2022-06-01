@@ -7,8 +7,8 @@ omit =
     # Exclude the generated parser/lexer files
     src/grammar/*
 
-    # Exclude the vendored ANTLR files
-    src/antlr4/*
+    # Exclude the vendored files
+    src/_vendor/*
 
 [report]
 exclude_lines =
