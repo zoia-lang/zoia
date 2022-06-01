@@ -25,8 +25,6 @@ ANTLR parse tree."""
 #  - Avoid APIs dependent on getToken (e.g. Word()) - really expensive. Use
 #    children[x] directly instead
 #  - Avoid getText() outside errors - use symbol.text instead
-from io import StringIO
-
 from ast_nodes import AliasNode, CommandNode, HeaderNode, KwdArgumentNode, \
     LineNode, StdArgumentNode, TextFragmentNode, ZoiaFileNode, \
     LineElementsNode, AArgumentNode, Em1LineElementNode, Em2LineElementNode, \
@@ -52,15 +50,18 @@ class ParseConverter(zoiaVisitor):
         shared_lookup = {
             zoiaParser.AliasContext: self.visitAlias,
             zoiaParser.CommandContext: self.visitCommand,
+            zoiaParser.TextFragmentContext: self.visitTextFragment,
         }
         self._line_element_lookup = shared_lookup | {
-            zoiaParser.TextFragmentContext: self.visitTextFragment,
             zoiaParser.Em1LineElementContext: self.visitEm1LineElement,
             zoiaParser.Em2LineElementContext: self.visitEm2LineElement,
             zoiaParser.Em3LineElementContext: self.visitEm3LineElement,
         }
-        self._line_element_word_lookup = self._line_element_lookup | {
-            zoiaParser.TextFragmentWordContext: self.visitTextFragmentWord,
+        self._line_element_arg_lookup = self._line_element_lookup | {
+            zoiaParser.TextFragmentWordContext: self.visitTextFragment,
+        }
+        self._line_element_inner_lookup = shared_lookup | {
+            zoiaParser.TextFragmentWordContext: self.visitTextFragment,
         }
 
     def make_pos(self, ctx) -> SourcePos:
@@ -92,32 +93,13 @@ class ParseConverter(zoiaVisitor):
     def visitLineElementsInner(self,
                                ctx: zoiaParser.LineElementsInnerContext) \
             -> LineElementsNode:
-        # Need to use Spaces here, we really do need the same checks as done in
-        # that method
-        ctx_spaces = ctx.Spaces()
-        if ctx_spaces is not None:
-            # Special handling when leading spaces are present (rare case)
-            elements = [TextFragmentNode(ctx_spaces.symbol.text,
-                                         src_pos=self.make_pos(ctx))]
-            for le_child in ctx.children[1:]:
-                try:
-                    visit_method = self._line_element_word_lookup[
-                        le_child.__class__]
-                except KeyError as e:
-                    raise ParseConversionError(
-                        self.make_pos(le_child),
-                        f"Unknown or invalid line element "
-                        f"'{le_child.getText()}'") from e
-                elements.append(visit_method(le_child))
-            return LineElementsNode(elements, src_pos=self.make_pos(ctx))
-        # Otherwise (common case), we can fall back on the shared method
         return self._visit_line_elements_shared(
-            ctx, self._line_element_word_lookup)
+            ctx, self._line_element_inner_lookup)
 
     def visitLineElementsArg(self, ctx: zoiaParser.LineElementsArgContext) \
             -> LineElementsNode:
         return self._visit_line_elements_shared(
-            ctx, self._line_element_word_lookup)
+            ctx, self._line_element_arg_lookup)
 
     def _visit_line_elements_shared(self, ctx, visit_lookup) \
             -> LineElementsNode:
@@ -152,7 +134,8 @@ class ParseConverter(zoiaVisitor):
             self.visitLineElementsInner(ctx.lineElementsInner()),
             src_pos=self.make_pos(ctx))
 
-    def visitTextFragment(self, ctx: zoiaParser.TextFragmentContext) \
+    def visitTextFragment(self, ctx: zoiaParser.TextFragmentContext |
+                                     zoiaParser.TextFragmentWordContext) \
             -> TextFragmentNode:
         try:
             # First child is either Word or Spaces - same behavior for both
@@ -162,16 +145,6 @@ class ParseConverter(zoiaVisitor):
             raise ParseConversionError(
                 self.make_pos(ctx), f"Unknown or invalid text fragment "
                                     f"'{ctx.getText()}'") from e
-
-    def visitTextFragmentWord(self, ctx: zoiaParser.TextFragmentWordContext) \
-            -> TextFragmentNode:
-        s = StringIO()
-        tf_children = ctx.children
-        # First child is Word, second one (if present) is Spaces
-        s.write(tf_children[0].symbol.text)
-        if len(tf_children) > 1:
-            s.write(tf_children[1].symbol.text)
-        return TextFragmentNode(s.getvalue(), src_pos=self.make_pos(ctx))
 
     def visitAlias(self, ctx: zoiaParser.AliasContext) -> AliasNode:
         # First child is At, second child is Word

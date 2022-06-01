@@ -134,13 +134,13 @@ public:
   public:
     LineElementsInnerContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *Spaces();
-    std::vector<TextFragmentWordContext *> textFragmentWord();
-    TextFragmentWordContext* textFragmentWord(size_t i);
+    TextFragmentWordContext *textFragmentWord();
     std::vector<AliasContext *> alias();
     AliasContext* alias(size_t i);
     std::vector<CommandContext *> command();
     CommandContext* command(size_t i);
+    std::vector<TextFragmentContext *> textFragment();
+    TextFragmentContext* textFragment(size_t i);
 
 
     virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
@@ -238,7 +238,6 @@ public:
     TextFragmentWordContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *Word();
-    antlr4::tree::TerminalNode *Spaces();
 
 
     virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;

@@ -27,7 +27,7 @@ lineElements: (textFragment | alias | command | em1LineElement |
                em2LineElement | em3LineElement)+;
 // The lineElements that may occur inside em*LineElements
 // This prevents nested em*LineElements
-lineElementsInner: Spaces? (textFragmentWord | alias | command)+;
+lineElementsInner: (textFragmentWord | alias | command) (textFragment | alias | command)*;
 // The lineElements that may occur inside *Arguments
 // This resolves an ambiguity/context sensitivity by requiring that
 // the first text fragment not start with spaces.
@@ -45,8 +45,8 @@ em1LineElement: Asterisk lineElementsInner Asterisk;
 
 // Either a word or any number of spaces
 textFragment: Word | Spaces;
-// Version of textFragment that must begin with a word.
-textFragmentWord: Word Spaces?;
+// Version of textFragment that can only resolve to a word.
+textFragmentWord: Word;
 
 // An at sign followed by a word. May optionally be ended by a
 // vertical bar (this is necessary when an alias is followed by

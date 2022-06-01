@@ -96,6 +96,18 @@ class TestAcceptsMarkupComplex(_ATestParserPass):
     """Markup that contains aliases and commands should be accepted."""
     _test_src = 'This is *markup with @aliases and \\commands*'
 
+class TestAcceptsTrailingSpacesEm1(_ATestParserPass):
+    """Em1 markup that has trailing spaces should be accepted."""
+    _test_src = '*trailing spaces *'
+
+class TestAcceptsTrailingSpacesEm2(_ATestParserPass):
+    """Em2 markup that has trailing spaces should be accepted."""
+    _test_src = '**trailing spaces **'
+
+class TestAcceptsTrailingSpacesEm3(_ATestParserPass):
+    """Em3 markup that has trailing spaces should be accepted."""
+    _test_src = '***trailing spaces ***'
+
 # ==== Expect-Fail Tests ======================================================
 class _ATestParserFail(ATestParser):
     """Base class for parser tests that are expected to fail."""
@@ -152,6 +164,18 @@ class TestRejectsPartiallyClosedEm31(_ATestParserFail):
 class TestRejectsPartiallyClosedEm32(_ATestParserFail):
     """Em3 markup that is only closed with two asterisks should be rejected."""
     _test_src = '***this is em3 markup**'
+
+class TestRejectsLeadingSpacesEm1(_ATestParserFail):
+    """Em1 markup that has leading spaces should be rejected."""
+    _test_src = '* leading spaces*'
+
+class TestRejectsLeadingSpacesEm2(_ATestParserFail):
+    """Em2 markup that has leading spaces should be rejected."""
+    _test_src = '** leading spaces**'
+
+class TestRejectsLeadingSpacesEm3(_ATestParserFail):
+    """Em3 markup that has leading spaces should be rejected."""
+    _test_src = '*** leading spaces***'
 
 class TestRejectsKwdAlias(_ATestParserFail):
     """Aliases should be rejected when used as a keyword."""
