@@ -61,7 +61,7 @@ alias: At Word Bar?;
 // For example, '\atmyHandle' would be parsed as a single command
 // named 'atMyHandle', which doesn't exist. '\at|myHandle' would be
 // parsed as a command named 'at' and a text fragment 'myHandle'.
-command: Backslash Word arguments? Bar?;
+command: Backslash (Word | Backslash) arguments? Bar?;
 
 // One or more arguments. Multiple arguments must be separated by
 // semicolons. Trailing semicolons are allowed.
