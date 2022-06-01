@@ -59,10 +59,7 @@ class ParseConverter(zoiaVisitor):
             zoiaParser.Em2LineElementContext: self.visitEm2LineElement,
             zoiaParser.Em3LineElementContext: self.visitEm3LineElement,
         }
-        self._line_element_inner_lookup = shared_lookup | {
-            zoiaParser.TextFragmentReqContext: self.visitTextFragmentReq,
-        }
-        self._line_element_arg_lookup = self._line_element_lookup | {
+        self._line_element_word_lookup = self._line_element_lookup | {
             zoiaParser.TextFragmentWordContext: self.visitTextFragmentWord,
         }
 
@@ -90,19 +87,37 @@ class ParseConverter(zoiaVisitor):
             -> LineElementsNode | None:
         if ctx is None:
             return None # lineElements is optional in line
-        return self._visit_line_elements_shared(
-            ctx, self._line_element_lookup)
+        return self._visit_line_elements_shared(ctx, self._line_element_lookup)
 
     def visitLineElementsInner(self,
                                ctx: zoiaParser.LineElementsInnerContext) \
             -> LineElementsNode:
+        # Need to use Spaces here, we really do need the same checks as done in
+        # that method
+        ctx_spaces = ctx.Spaces()
+        if ctx_spaces is not None:
+            # Special handling when leading spaces are present (rare case)
+            elements = [TextFragmentNode(ctx_spaces.symbol.text,
+                                         src_pos=self.make_pos(ctx))]
+            for le_child in ctx.children[1:]:
+                try:
+                    visit_method = self._line_element_word_lookup[
+                        le_child.__class__]
+                except KeyError as e:
+                    raise ParseConversionError(
+                        self.make_pos(le_child),
+                        f"Unknown or invalid line element "
+                        f"'{le_child.getText()}'") from e
+                elements.append(visit_method(le_child))
+            return LineElementsNode(elements, src_pos=self.make_pos(ctx))
+        # Otherwise (common case), we can fall back on the shared method
         return self._visit_line_elements_shared(
-            ctx, self._line_element_inner_lookup)
+            ctx, self._line_element_word_lookup)
 
     def visitLineElementsArg(self, ctx: zoiaParser.LineElementsArgContext) \
             -> LineElementsNode:
         return self._visit_line_elements_shared(
-            ctx, self._line_element_arg_lookup)
+            ctx, self._line_element_word_lookup)
 
     def _visit_line_elements_shared(self, ctx, visit_lookup) \
             -> LineElementsNode:
@@ -147,19 +162,6 @@ class ParseConverter(zoiaVisitor):
             raise ParseConversionError(
                 self.make_pos(ctx), f"Unknown or invalid text fragment "
                                     f"'{ctx.getText()}'") from e
-
-    def visitTextFragmentReq(self, ctx: zoiaParser.TextFragmentReqContext) \
-            -> TextFragmentNode:
-        s = StringIO()
-        for tf_child in ctx.children:
-            try:
-                # One Word, between zero and two Spaces
-                s.write(tf_child.symbol.text)
-            except (AttributeError, KeyError, IndexError, TypeError) as e:
-                raise ParseConversionError(
-                    self.make_pos(ctx), f"Unknown or invalid required text "
-                                        f"fragment '{ctx.getText()}'") from e
-        return TextFragmentNode(s.getvalue(), src_pos=self.make_pos(ctx))
 
     def visitTextFragmentWord(self, ctx: zoiaParser.TextFragmentWordContext) \
             -> TextFragmentNode:

@@ -55,10 +55,6 @@ public:
     return visitChildren(ctx);
   }
 
-  virtual std::any visitTextFragmentReq(zoiaParser::TextFragmentReqContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
   virtual std::any visitTextFragmentWord(zoiaParser::TextFragmentWordContext *ctx) override {
     return visitChildren(ctx);
   }

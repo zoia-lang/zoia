@@ -39,8 +39,6 @@ public:
 
     virtual std::any visitTextFragment(zoiaParser::TextFragmentContext *context) = 0;
 
-    virtual std::any visitTextFragmentReq(zoiaParser::TextFragmentReqContext *context) = 0;
-
     virtual std::any visitTextFragmentWord(zoiaParser::TextFragmentWordContext *context) = 0;
 
     virtual std::any visitAlias(zoiaParser::AliasContext *context) = 0;

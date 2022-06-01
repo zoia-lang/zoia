@@ -22,7 +22,6 @@ class SA_zoiaTranslator : public zoiaBaseVisitor {
     PyObject *Em2LineElementContext_cls = NULL;
     PyObject *Em1LineElementContext_cls = NULL;
     PyObject *TextFragmentContext_cls = NULL;
-    PyObject *TextFragmentReqContext_cls = NULL;
     PyObject *TextFragmentWordContext_cls = NULL;
     PyObject *AliasContext_cls = NULL;
     PyObject *CommandContext_cls = NULL;
@@ -54,8 +53,6 @@ class SA_zoiaTranslator : public zoiaBaseVisitor {
     antlrcpp::Any visitEm1LineElement(zoiaParser::Em1LineElementContext *ctx);
 
     antlrcpp::Any visitTextFragment(zoiaParser::TextFragmentContext *ctx);
-
-    antlrcpp::Any visitTextFragmentReq(zoiaParser::TextFragmentReqContext *ctx);
 
     antlrcpp::Any visitTextFragmentWord(zoiaParser::TextFragmentWordContext *ctx);
 

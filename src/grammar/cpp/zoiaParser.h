@@ -21,9 +21,8 @@ public:
     RuleZoiaFile = 0, RuleHeader = 1, RuleLine = 2, RuleLineElements = 3,
     RuleLineElementsInner = 4, RuleLineElementsArg = 5, RuleEm3LineElement = 6,
     RuleEm2LineElement = 7, RuleEm1LineElement = 8, RuleTextFragment = 9,
-    RuleTextFragmentReq = 10, RuleTextFragmentWord = 11, RuleAlias = 12,
-    RuleCommand = 13, RuleArguments = 14, RuleArgument = 15, RuleKwdArgument = 16,
-    RuleStdArgument = 17, RuleWhitespace = 18
+    RuleTextFragmentWord = 10, RuleAlias = 11, RuleCommand = 12, RuleArguments = 13,
+    RuleArgument = 14, RuleKwdArgument = 15, RuleStdArgument = 16, RuleWhitespace = 17
   };
 
   explicit zoiaParser(antlr4::TokenStream *input);
@@ -53,7 +52,6 @@ public:
   class Em2LineElementContext;
   class Em1LineElementContext;
   class TextFragmentContext;
-  class TextFragmentReqContext;
   class TextFragmentWordContext;
   class AliasContext;
   class CommandContext;
@@ -136,8 +134,9 @@ public:
   public:
     LineElementsInnerContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    std::vector<TextFragmentReqContext *> textFragmentReq();
-    TextFragmentReqContext* textFragmentReq(size_t i);
+    antlr4::tree::TerminalNode *Spaces();
+    std::vector<TextFragmentWordContext *> textFragmentWord();
+    TextFragmentWordContext* textFragmentWord(size_t i);
     std::vector<AliasContext *> alias();
     AliasContext* alias(size_t i);
     std::vector<CommandContext *> command();
@@ -233,21 +232,6 @@ public:
   };
 
   TextFragmentContext* textFragment();
-
-  class  TextFragmentReqContext : public antlr4::ParserRuleContext {
-  public:
-    TextFragmentReqContext(antlr4::ParserRuleContext *parent, size_t invokingState);
-    virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *Word();
-    std::vector<antlr4::tree::TerminalNode *> Spaces();
-    antlr4::tree::TerminalNode* Spaces(size_t i);
-
-
-    virtual std::any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
-  };
-
-  TextFragmentReqContext* textFragmentReq();
 
   class  TextFragmentWordContext : public antlr4::ParserRuleContext {
   public:

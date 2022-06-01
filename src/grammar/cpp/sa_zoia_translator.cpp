@@ -21,7 +21,6 @@ SA_zoiaTranslator::~SA_zoiaTranslator() {
     Py_XDECREF(Em2LineElementContext_cls);
     Py_XDECREF(Em1LineElementContext_cls);
     Py_XDECREF(TextFragmentContext_cls);
-    Py_XDECREF(TextFragmentReqContext_cls);
     Py_XDECREF(TextFragmentWordContext_cls);
     Py_XDECREF(AliasContext_cls);
     Py_XDECREF(CommandContext_cls);
@@ -90,12 +89,6 @@ antlrcpp::Any SA_zoiaTranslator::visitEm1LineElement(zoiaParser::Em1LineElementC
 antlrcpp::Any SA_zoiaTranslator::visitTextFragment(zoiaParser::TextFragmentContext *ctx){
     if(!TextFragmentContext_cls) TextFragmentContext_cls = PyObject_GetAttrString(translator->parser_cls, "TextFragmentContext");
     PyObject *py_ctx = translator->convert_ctx(this, ctx, TextFragmentContext_cls);
-    return py_ctx;
-}
-
-antlrcpp::Any SA_zoiaTranslator::visitTextFragmentReq(zoiaParser::TextFragmentReqContext *ctx){
-    if(!TextFragmentReqContext_cls) TextFragmentReqContext_cls = PyObject_GetAttrString(translator->parser_cls, "TextFragmentReqContext");
-    PyObject *py_ctx = translator->convert_ctx(this, ctx, TextFragmentReqContext_cls);
     return py_ctx;
 }
 
