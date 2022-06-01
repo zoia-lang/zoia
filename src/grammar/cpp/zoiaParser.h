@@ -282,7 +282,8 @@ public:
   public:
     CommandContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *Backslash();
+    std::vector<antlr4::tree::TerminalNode *> Backslash();
+    antlr4::tree::TerminalNode* Backslash(size_t i);
     antlr4::tree::TerminalNode *Word();
     ArgumentsContext *arguments();
     antlr4::tree::TerminalNode *Bar();

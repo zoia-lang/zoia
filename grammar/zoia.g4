@@ -55,8 +55,8 @@ textFragmentWord: Word Spaces?;
 // something other than whitespace, for example a comma).
 alias: At Word Bar?;
 
-// A backslash and a word, followed optionally by an argument list.
-// May optionally be ended by a vertical bar (this is necessary when
+// A backslash and a word or backslash, followed optionally by an argument
+// list. May optionally be ended by a vertical bar (this is necessary when
 // using an argumentless command that you don't want a space after.
 // For example, '\atmyHandle' would be parsed as a single command
 // named 'atMyHandle', which doesn't exist. '\at|myHandle' would be
