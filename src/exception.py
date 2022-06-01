@@ -44,7 +44,7 @@ class InternalError(Exception):
         super().__init__(f'{msg}\nThis is an INTERNAL ERROR in the Zoia '
                          f'compiler. Please report it, including the '
                          f'traceback(s) above, to '
-                         f'https://github.com/Infernio/zoia/issues')
+                         f'https://github.com/zoia-lang/zoia/issues')
 
 class SrcPosError(Exception):
     """Base class for errors that carry information about where in a source
