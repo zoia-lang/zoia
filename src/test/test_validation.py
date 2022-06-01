@@ -608,7 +608,7 @@ class TestSigCREx3(_ATestSigCR):
     ])
 
 class TestSigCREx4(_ATestSigCR):
-    """The third example from the original GitHub issue for creating
+    """The fourth example from the original GitHub issue for creating
     signatures (#19), updated to match the final syntax. Doubles as a stress
     test since it uses every compact representation feature."""
     _signature = Signature(
@@ -624,7 +624,7 @@ class TestSigCREx4(_ATestSigCR):
         },
         kwd_only={
             'c1': Default(IntTy(), '1'),
-            'c2': Default(WordTy(), 'one two three'),
+            'c2': Default(WordTy(), 'onetwothree'),
             'c3': Default(TextTy(), 'bar qux'),
         },
         varargs=Varargs(VARARGS_KWD, TextTy()),
@@ -639,7 +639,7 @@ class TestSigCREx4(_ATestSigCR):
         '    b2: Word = foo;',
         '    b3: Text = two words;',
         '    $ c1: Int = 1;',
-        '    $ c2: Word = one two three;',
+        '    $ c2: Word = onetwothree;',
         '    $ c3: Text = bar qux;',
         '    $ Text*;',
         '] -> Text',
