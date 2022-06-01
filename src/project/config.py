@@ -200,13 +200,15 @@ class ZoiaToml:
         try:
             with toml_path.open('rb') as ins:
                 parsed_toml = tomli.load(ins)
-            log.info(log.arrow(1, f'Parsing config at $fCl${toml_rel}$R$'))
+            log.info(log.arrow(1, f'Parsing config at '
+                                  f'{log.color_file(toml_rel)}'))
         except FileNotFoundError:
             # Load the default config by behaving as if the file existed and
             # was empty
             parsed_toml = {}
-            log.info(log.arrow(1, f'No config found at $fCl${toml_rel}$R$, '
-                                  f'using default values'))
+            log.info(log.arrow(1, f'No config found at '
+                                  f'{log.color_file(toml_rel)}, using default '
+                                  f'values'))
         except tomli.TOMLDecodeError as e:
             # The config file has broken TOML syntax, wrap and re-raise error
             return ps_error(f'Invalid TOML syntax: {str(e)}', toml_rel,
@@ -228,11 +230,11 @@ class ZoiaToml:
             init_params[section_name] = section_inst
         if any_failed:
             # This is just a cascading effect of a real error
-            log.warning(f'Failed to parse $fCl${toml_rel}$R$ due to errors '
-                        f'when parsing one or more sections')
+            log.warning(f'Failed to parse {log.color_file(toml_rel)} due to '
+                        f'errors when parsing one or more sections')
             return None
         # Warn if any unknown sections are left in the config
         for unk_section in config_contents:
             log.warning(f'Unknown section $fWl${unk_section}$R$ found in '
-                        f'$fCl${toml_rel}$R$')
+                        f'{log.color_file(toml_rel)}, may be a typo')
         return cls(**init_params)

@@ -53,7 +53,7 @@ class ZoiaFile:
         """Parses a Zoia file at the specified path."""
         file_rel = file_path.relative_to(project_folder)
         log.info(log.arrow(arrow_level, f'Parsing Zoia file at '
-                                        f'$fCl${file_rel}$R$'))
+                                        f'{log.color_file(file_rel)}'))
         try:
             processed_file = process_zoia_file(file_path, project_folder)
         except ParsingError as e:

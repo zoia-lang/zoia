@@ -147,7 +147,7 @@ class Project:
                                      raise_errors=raise_errors)
         if parsed_series is None:
             log.warning(f'Failed to parse project due to errors when parsing '
-                        f'$fYl${series_rel}$R$')
+                        f'{log.color_dir(series_rel)}')
             return None
         # Parse the config file 'zoia.toml', if it exists
         zoia_toml_rel = 'zoia.toml'
@@ -156,6 +156,6 @@ class Project:
             raise_errors=raise_errors)
         if parsed_config is None:
             log.warning(f'Failed to parse project due to errors when parsing '
-                        f'$fCl${zoia_toml_rel}$R$')
+                        f'{log.color_file(zoia_toml_rel)}')
             return None
         return cls(project_folder, parsed_series, parsed_config)

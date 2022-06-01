@@ -159,6 +159,20 @@ def arrow(n: int, s: str) -> str:
     n equal signs (=) and a single greater-than sign (>)."""
     return f'$B${"=" * n}>$R$ {s}'
 
+def color_dir(d: os.PathLike | str):
+    """Colorizes the specified pathlike directory."""
+    d_head, d_tail = os.path.split(d)
+    if d_head:
+        d_head += os.path.sep
+    return f'$fDl${d_head}$fYl${d_tail}$fT$'
+
+def color_file(f: os.PathLike | str):
+    """Colorizes the specified pathlike file."""
+    f_head, f_tail = os.path.split(f)
+    if f_head:
+        f_head += os.path.sep
+    return f'$fDl${f_head}$fCl${f_tail}$fT$'
+
 class _Level(Enum):
     """An enum listing the different levels of severity supported by this
     logging system."""

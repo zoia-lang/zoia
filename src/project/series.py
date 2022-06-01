@@ -33,6 +33,7 @@ from utils import is_contiguous, ps_error, dir_case_is_valid
 class Series(_ADirBase):
     """A series is the main 'src' folder, containing one or more works in
     it."""
+    series_path: Path
     works: list[Work]
     _id_works: defaultdict[int, Work | None] = field(init=False, repr=False)
 
@@ -56,22 +57,22 @@ class Series(_ADirBase):
                      raise_errors: bool):
         """Parses a series ('src' folder) at the specified path."""
         series_rel = series_folder.relative_to(project_folder)
-        log.info(log.arrow(1, f'Found series at '
-                              f'$fYl${series_rel}$R$'))
+        log.info(log.arrow(1, f'Found series at {log.color_dir(series_rel)}'))
         if not dir_case_is_valid(series_folder, series_rel, raise_errors):
             return None
         aux_files = cls.parse_zoia_files(
             series_folder, project_folder, raise_errors=raise_errors,
             arrow_level=2,
-            warning_msg=f'Failed to parse $fYl${series_folder.name}$R$ due to '
-                        f'errors when parsing one or more Zoia files')
+            warning_msg=f'Failed to parse '
+                        f'{log.color_dir(series_folder.name)} due to errors '
+                        f'when parsing one or more Zoia files')
         if aux_files is None:
             return None # Warning already logged in parse_zoia_files
         works = [Work.parse_work(w, project_folder, raise_errors=raise_errors)
                  for w in series_folder.iterdir() if match_work(w.name)]
         if not all(works):
             # This is just a cascading effect of a real error
-            log.warning(f'Failed to parse $fYl${series_folder.name}$R$ '
+            log.warning(f'Failed to parse {log.color_dir(series_folder.name)} '
                         f'due to errors when parsing one or more works')
             return None
         if not works:
@@ -88,4 +89,4 @@ class Series(_ADirBase):
                             series_rel, raise_errors)
         # See parse_converter.py for the reasoning
         # noinspection PyArgumentList
-        return cls(works, zoia_files=aux_files)
+        return cls(series_folder, works, zoia_files=aux_files)

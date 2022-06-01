@@ -69,14 +69,14 @@ class Work(_ADirBase):
                    raise_errors: bool):
         """Parses a work folder at the specified path."""
         work_rel = work_folder.relative_to(project_folder)
-        log.info(log.arrow(2, f'Found work at $fYl${work_rel}$R$'))
+        log.info(log.arrow(2, f'Found work at {log.color_dir(work_rel)}'))
         if not dir_case_is_valid(work_folder, work_rel, raise_errors):
             return None
         aux_files = cls.parse_zoia_files(
             work_folder, project_folder, raise_errors=raise_errors,
             arrow_level=3,
-            warning_msg=f'Failed to parse $fYl${work_folder.name}$R$ due to '
-                        f'errors when parsing one or more Zoia files')
+            warning_msg=f'Failed to parse {log.color_dir(work_folder.name)} '
+                        f'due to errors when parsing one or more Zoia files')
         if aux_files is None:
             return None # Warning already logged in parse_zoia_files
         chapters = [Chapter.parse_chapter(c, project_folder,
@@ -84,8 +84,8 @@ class Work(_ADirBase):
                     for c in work_folder.iterdir() if match_chapter(c.name)]
         if not all(chapters):
             # This is just a cascading effect of a real error
-            log.warning(f'Failed to parse $fYl${work_folder.name}$R$ due to '
-                        f'errors when parsing one or more chapters')
+            log.warning(f'Failed to parse {log.color_dir(work_folder.name)} '
+                        f'due to errors when parsing one or more chapters')
             return None
         if not chapters:
             return ps_error('Work folders must contain one or more chapters',
