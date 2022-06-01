@@ -23,8 +23,8 @@
 AST."""
 from pathlib import Path
 
-from antlr4 import FileStream, InputStream, Token
-from antlr4.tree.Tree import ParseTree
+from _vendor.antlr4 import FileStream, InputStream, Token
+from _vendor.antlr4.tree.Tree import ParseTree
 
 from ast_nodes import ZoiaFileNode, LineElementsNode
 from ast_validator import ASTValidator

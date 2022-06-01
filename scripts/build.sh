@@ -66,3 +66,11 @@ find src/grammar -type f -exec sed -i 's/[ \t]*$//' {} \;
 # Trim all trailing newlines at the end of the files, ANTLR loves
 # leaving those behind as well
 find src/grammar -type f -exec sed -i -e :a -e '/^\n*$/{$d;N;};/\n$/ba' {} \;
+
+# Run various fixups on the generated code
+if [ -f scripts/fixups.py ]
+then
+    python scripts/fixups.py
+else
+    python fixups.py
+fi

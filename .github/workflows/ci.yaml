@@ -23,9 +23,8 @@ jobs:
         run: ./scripts/prereq.sh
       - name: Build Zoia
         run: ./scripts/build.sh
-      # TODO: blocked on https://github.com/amykyta3/speedy-antlr-tool/issues/15
-      # - name: Check that diff is empty
-      #   run: git diff --quiet
+      - name: Check that diff is empty
+        run: git diff --quiet
   check:
     runs-on: ubuntu-latest
     strategy:

@@ -4,10 +4,10 @@
 import sys
 import types
 
-import antlr4
-from antlr4 import InputStream, CommonTokenStream, Token
-from antlr4.tree.Tree import ParseTree
-from antlr4.error.ErrorListener import ErrorListener
+import _vendor.antlr4
+from _vendor.antlr4 import InputStream, CommonTokenStream, Token
+from _vendor.antlr4.tree.Tree import ParseTree
+from _vendor.antlr4.error.ErrorListener import ErrorListener
 
 from .zoiaParser import zoiaParser
 from .zoiaLexer import zoiaLexer
@@ -90,6 +90,11 @@ def parse(stream:InputStream, entry_rule_name:str, sa_err_listener:SA_ErrorListe
 
 try:
     from . import sa_zoia_cpp_parser
+    # Need to create entries in sys.modules for the C++ code to use
+    vendor_strip = len('_vendor.')
+    for module_name, module in list(sys.modules.items()):
+        if module_name.startswith('_vendor.antlr4'):
+            sys.modules[module_name[vendor_strip:]] = module
 except ImportError:
     USE_CPP_IMPLEMENTATION = False
 
@@ -118,9 +123,9 @@ class _FallbackErrorTranslator(ErrorListener):
         self.input_stream = input_stream
 
     def syntaxError(self, recognizer, offendingSymbol, line, column, msg, e):
-        if isinstance(recognizer, antlr4.Lexer):
+        if isinstance(recognizer, _vendor.antlr4.Lexer):
             input_stream = recognizer.inputStream
-        elif isinstance(recognizer, antlr4.Parser):
+        elif isinstance(recognizer, _vendor.antlr4.Parser):
             input_stream = recognizer.getInputStream()
         else:
             raise RuntimeError("Unknown recognizer type")
