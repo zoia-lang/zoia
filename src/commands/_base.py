@@ -55,14 +55,15 @@ class _ACommand:
         signatures have been created. Finalizes this command class."""
         cls.signature.init_default_values()
 
+    @classmethod
+    def compact(cls) -> str:
+        """Returns the compact signature representation of this command as a
+        string."""
+        return f'\\{cls.cmd_name}{cls.signature.compact()}'
+
     def eval_command(self, state: _AStateExt):
         """Evaluates this command with the specified state."""
         raise AbstractError()
-
-    def compact(self) -> str:
-        """Returns the compact signature representation of this command as a
-        string."""
-        return f'\\{self.cmd_name}{self.signature.compact()}'
 
     def __repr__(self) -> str:
         return self.compact()
