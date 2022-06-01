@@ -39,6 +39,7 @@ match_work = re.compile(r'work(\d+)').fullmatch
 @total_ordering
 class Work(_ADirBase):
     """A work folder is a folder containing one or more chapters."""
+    work_path: Path
     chapters: list[Chapter]
     work_index: int
     _id_chapters: defaultdict[int, Chapter | None] = field(init=False,
@@ -103,4 +104,4 @@ class Work(_ADirBase):
         wk_index = int(match_work(work_folder.name).group(1))
         # See parse_converter.py for the reasoning
         # noinspection PyArgumentList
-        return cls(chapters, wk_index, zoia_files=aux_files)
+        return cls(work_folder, chapters, wk_index, zoia_files=aux_files)

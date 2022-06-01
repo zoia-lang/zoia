@@ -39,6 +39,7 @@ match_chapter = re.compile(r'ch(\d+)').fullmatch
 class Chapter(_ADirBase):
     """A chapter is a folder containing a main file (main.zoia) and,
     optionally, any number of auxiliary files (*.zoia)."""
+    chapter_path: Path
     main_file: ZoiaFile
     chapter_index: int
 
@@ -84,4 +85,4 @@ class Chapter(_ADirBase):
         ch_index = int(match_chapter(chapter_folder.name).group(1))
         # See parse_converter.py for the reasoning
         # noinspection PyArgumentList
-        return cls(main_file, ch_index, zoia_files=aux_files)
+        return cls(chapter_folder, main_file, ch_index, zoia_files=aux_files)

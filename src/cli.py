@@ -113,6 +113,7 @@ class _ProjectVerb(_CommonVerb):
             case _:
                 print('Usage: zoia build [path]', file=sys.stderr)
                 sys.exit(1)
+        log.info('Beginning to parse project')
         project = Project.parse_project(final_path)
         if project is not None:
             self._run_on_project(project)
