@@ -20,7 +20,7 @@
 #
 # =============================================================================
 """This module implements the Tag type."""
-from validation.tys.text import TextTy
+from validation.tys.pure_text_ty import PureTextTy
 
 from ast_nodes import LineElementsNode
 from exception import ValidationError
@@ -28,10 +28,10 @@ from exception import ValidationError
 # If we ever make this a Content subtype, keep in mind that we'll have to
 # disallow asterisks as well (right now you can't add one since they're
 # reserved in the grammar, so you'd have to escape them (\asterisk), but that's
-# a command which is not allowed for a Text parameter)
-class TagTy(TextTy):
-    """A parameter of type Tag will accept any Text that does not contain
-    commas. Subtype of Text."""
+# a command which is not allowed for a PureText parameter)
+class TagTy(PureTextTy):
+    """A parameter of type Tag will accept any PureText that does not contain
+    commas. Subtype of PureText."""
     _ty_name = 'Tag'
     __slots__ = ()
 

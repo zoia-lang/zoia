@@ -27,8 +27,8 @@ import pytest
 from ast_nodes import CommandNode, ZoiaFileNode
 from exception import ValidationError
 from validation import Signature, Default, AnyTy, ATy, Varargs, NoneTy, \
-    VARARGS_STD, VARARGS_EITHER_OR, VARARGS_KWD, WordTy, IntTy, TextTy, \
-    ContentTy, FloatTy, HeaderKindTy, TagTy
+    VARARGS_STD, VARARGS_EITHER_OR, VARARGS_KWD, WordTy, IntTy, PureTextTy, \
+    ContentTy, FloatTy, HeaderKindTy, TagTy, TextTy
 
 # Signature syntax tests begin here
 class _ATestSigSyntax:
@@ -420,8 +420,23 @@ class TestSigValNoneInContent(_ATestSigValFail):
         }
     )
     _test_src = '\\foo[\\def_alias[A; B]]'
-    _exp_error = ('Parameters of type Content only accept document content, '
-                  'but \\def_alias returns None')
+    _exp_error = ('Parameters of type Content only accept Content, but '
+                  '\\def_alias returns None')
+
+class TestSigValContentInText(_ATestSigValFail):
+    """Parameters of type Text should only accept text fragments and commands
+    that return Text."""
+    _signature = Signature(
+        std_only={
+            'a': TextTy(),
+        }
+    )
+    _test_src = '\\foo[*bar*]'
+    _exp_error = ('Parameters of type Text only accept text fragments and '
+                  'commands with a return type of Text (or one of its '
+                  'subtypes)')
+
+# TODO Add a test that a non-Text command is not accepted by a Text argument
 
 class TestSigValInvalidFloat1(_ATestSigValFail):
     """The Python-style '1.' floats should be rejected by Float parameters."""
@@ -519,15 +534,20 @@ class TestSigValInvalidTag(_ATestSigValFail):
     _exp_error = 'Parameters of type Tag may not include commas'
 
 class TestSigValTextAlias(_ATestSigValFail):
-    """Parameters of type Text may not contain non-text fragments, e.g.
+    """Parameters of type PureText may not contain non-text fragments, e.g.
     aliases."""
     _signature = Signature(
         std_only={
-            'a': TextTy(),
+            'a': PureTextTy(),
         }
     )
     _test_src = '\\foo[This is @text]'
-    _exp_error = 'Parameters of type Text only accept text fragments'
+    _exp_error = ('Parameters of type PureText only accept text fragments '
+                  'and commands with a return type of Text (or one of its '
+                  'subtypes)')
+
+# TODO Add a test that ensures PureText does not accept commands with a
+#  Text-derived return type either
 
 class TestSigValWordOneExtra(_ATestSigValFail):
     """Parameters of type Word should reject two words."""
@@ -555,6 +575,7 @@ class _ATestSigCR:
     def test_sig_compact_repr(self):
         """Asserts that the compact representation returned by compact()
         matches the expected one."""
+        self._signature.init_default_values()
         assert self._signature.compact() == self._exp_repr
 
 class TestSigCRNoArgs(_ATestSigCR):
@@ -583,13 +604,13 @@ class TestSigCREx2(_ATestSigCR):
     signatures (#19), updated to match the final syntax."""
     _signature = Signature(
         std_only={
-            'ty': WordTy(),
+            'ty': HeaderKindTy(),
         },
         varargs=Varargs(VARARGS_EITHER_OR, AnyTy()),
     )
     _exp_repr = '\n'.join([
         '[',
-        '    ~ ty: Word;',
+        '    ~ ty: HeaderKind;',
         '    Any*;',
         '] -> None',
     ])
@@ -620,12 +641,12 @@ class TestSigCREx4(_ATestSigCR):
         either_or={
             'b1': Default(IntTy(), '0'),
             'b2': Default(WordTy(), 'foo'),
-            'b3': Default(TextTy(), 'two words'),
+            'b3': Default(PureTextTy(), 'two words'),
         },
         kwd_only={
-            'c1': Default(IntTy(), '1'),
+            'c1': Default(FloatTy(), '3.14'),
             'c2': Default(WordTy(), 'onetwothree'),
-            'c3': Default(TextTy(), 'bar qux'),
+            'c3': Default(PureTextTy(), 'bar qux'),
         },
         varargs=Varargs(VARARGS_KWD, TextTy()),
         ret_ty=TextTy(),
@@ -637,10 +658,10 @@ class TestSigCREx4(_ATestSigCR):
         '    ~ a3: Text = bla bla bla;',
         '    b1: Int = 0;',
         '    b2: Word = foo;',
-        '    b3: Text = two words;',
-        '    $ c1: Int = 1;',
+        '    b3: PureText = two words;',
+        '    $ c1: Float = 3.14;',
         '    $ c2: Word = onetwothree;',
-        '    $ c3: Text = bar qux;',
+        '    $ c3: PureText = bar qux;',
         '    $ Text*;',
         '] -> Text',
     ])

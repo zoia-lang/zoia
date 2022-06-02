@@ -19,32 +19,33 @@
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # =============================================================================
-"""This module implements the Text type."""
-from io import StringIO
+"""This module implements the Word type."""
+from validation.tys.pure_text_ty import PureTextTy
 
-from validation.tys.content import ContentTy
-
-from ast_nodes import LineElementsNode, TextFragmentNode
+from ast_nodes import LineElementsNode
 from exception import ValidationError
+from utils import format_word_list
 
-# TODO We will probably want at least one more type between Text and Content -
-#  ToText? Would accept commands that have Text or ToText as return type.
-#  Basically anything that will *become* pure text during evaluation, no
-#  backend-specific nodes?
-class TextTy(ContentTy):
-    """A parameter of type Text will accept any Content that consists purely
-    of text fragments. Subtype of Content."""
-    _ty_name = 'Text'
+# TextTy that is restricted to only one word
+class WordTy(PureTextTy):
+    """A parameter of type Word will accept any PureText that consists of only
+    one word (with whitespace trimmed). Subtype of PureText."""
+    _ty_name = 'Word'
     __slots__ = ()
 
     def validate_arg(self, cmd_arg: LineElementsNode):
-        super().validate_arg(cmd_arg)
-        s = StringIO()
-        for arg_element in cmd_arg.elements:
-            if not isinstance(arg_element, TextFragmentNode):
+        text_str = super().validate_arg(cmd_arg)
+        split_text = text_str.split()
+        if len(split_text) > 1:
+            fmt_extra = format_word_list(split_text[1:])
+            if len(split_text) == 2:
+                # Fix the grammar for a single extraneous word
                 raise ValidationError(
-                    arg_element.src_pos,
-                    f'Parameters of type {self._ty_name} only accept text '
-                    f'fragments')
-            s.write(arg_element.text_val)
-        return s.getvalue().strip()
+                    cmd_arg.src_pos,
+                    f'Parameters of type {self._ty_name} only accept single '
+                    f'words - {fmt_extra} is extraneous')
+            raise ValidationError(
+                cmd_arg.src_pos,
+                f'Parameters of type {self._ty_name} only accept single '
+                f'words - {fmt_extra} are extraneous')
+        return text_str

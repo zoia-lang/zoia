@@ -19,37 +19,28 @@
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # =============================================================================
-"""This module implements the HeaderKind type."""
-from enum import Enum
+"""This module implements the PureText type."""
+from io import StringIO
 
-from validation.tys.word import WordTy
+from validation.tys.text_ty import TextTy
 
-from ast_nodes import LineElementsNode
+from ast_nodes import LineElementsNode, TextFragmentNode
 from exception import ValidationError
-from utils import format_word_list
 
-class HeaderKind(Enum):
-    """The possible header kinds"""
-    ALIASES = 'aliases'
-    CHAPTER = 'chapter'
-    DICTIONARY = 'dictionary'
-    FRAGMENT = 'fragment'
-
-_str_to_hk = {h.value: h for h in HeaderKind.__members__.values()}
-
-class HeaderKindTy(WordTy):
-    """A parameter of type HeaderKind will accept any header kind (see
-    HeaderKind enum). Subtype of Word."""
-    _ty_name = 'HeaderKind'
+class PureTextTy(TextTy):
+    """A parameter of type PureText will accept any Content that consists
+    purely of text fragments. Subtype of Text."""
+    _ty_name = 'PureText'
     __slots__ = ()
 
     def validate_arg(self, cmd_arg: LineElementsNode):
-        txt_str = super().validate_arg(cmd_arg)
-        try:
-            return _str_to_hk[txt_str]
-        except KeyError as e:
-            fmt_header_kinds = format_word_list(list(_str_to_hk))
-            raise ValidationError(
-                cmd_arg.src_pos,
-                f'Parameters of type {self._ty_name} only accept valid header '
-                f'kinds ({fmt_header_kinds})') from e
+        super().validate_arg(cmd_arg)
+        s = StringIO()
+        for arg_element in cmd_arg.elements:
+            if not isinstance(arg_element, TextFragmentNode):
+                raise ValidationError(
+                    arg_element.src_pos,
+                    f'Parameters of type {self._ty_name} only accept text '
+                    f'fragments')
+            s.write(arg_element.text_val)
+        return s.getvalue().strip()

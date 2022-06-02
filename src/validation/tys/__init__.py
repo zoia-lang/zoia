@@ -22,12 +22,13 @@
 """This package provides definitions for all types ('tys') supported by the
 Zoia language."""
 from validation.tys.any_ty import *
-from validation.tys.content import *
-from validation.tys.floating_point import *
-from validation.tys.integer import *
-from validation.tys.header_kind import *
+from validation.tys.content_ty import *
+from validation.tys.float_ty import *
+from validation.tys.int_ty import *
+from validation.tys.header_kind_ty import *
 from validation.tys.none_ty import *
-from validation.tys.tag import *
-from validation.tys.text import *
+from validation.tys.pure_text_ty import *
+from validation.tys.tag_ty import *
+from validation.tys.text_ty import *
 from validation.tys.ty import *
-from validation.tys.word import *
+from validation.tys.word_ty import *

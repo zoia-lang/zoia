@@ -19,33 +19,37 @@
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # =============================================================================
-"""This module implements the Word type."""
-from validation.tys.text import TextTy
+"""This module implements the HeaderKind type."""
+from enum import Enum
+
+from validation.tys.word_ty import WordTy
 
 from ast_nodes import LineElementsNode
 from exception import ValidationError
 from utils import format_word_list
 
-# TextTy that is restricted to only one word
-class WordTy(TextTy):
-    """A parameter of type Word will accept any Text that consists of only one
-    word (with whitespace trimmed). Subtype of Text."""
-    _ty_name = 'Word'
+class HeaderKind(Enum):
+    """The possible header kinds"""
+    ALIASES = 'aliases'
+    CHAPTER = 'chapter'
+    DICTIONARY = 'dictionary'
+    FRAGMENT = 'fragment'
+
+_str_to_hk = {h.value: h for h in HeaderKind.__members__.values()}
+
+class HeaderKindTy(WordTy):
+    """A parameter of type HeaderKind will accept any header kind (see
+    HeaderKind enum). Subtype of Word."""
+    _ty_name = 'HeaderKind'
     __slots__ = ()
 
     def validate_arg(self, cmd_arg: LineElementsNode):
-        text_str = super().validate_arg(cmd_arg)
-        split_text = text_str.split()
-        if len(split_text) > 1:
-            fmt_extra = format_word_list(split_text[1:])
-            if len(split_text) == 2:
-                # Fix the grammar for a single extraneous word
-                raise ValidationError(
-                    cmd_arg.src_pos,
-                    f'Parameters of type {self._ty_name} only accept single '
-                    f'words - {fmt_extra} is extraneous')
+        txt_str = super().validate_arg(cmd_arg)
+        try:
+            return _str_to_hk[txt_str]
+        except KeyError as e:
+            fmt_header_kinds = format_word_list(list(_str_to_hk))
             raise ValidationError(
                 cmd_arg.src_pos,
-                f'Parameters of type {self._ty_name} only accept single '
-                f'words - {fmt_extra} are extraneous')
-        return text_str
+                f'Parameters of type {self._ty_name} only accept valid header '
+                f'kinds ({fmt_header_kinds})') from e

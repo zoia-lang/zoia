@@ -22,7 +22,7 @@
 """This module implements the Float type."""
 import re
 
-from validation.tys.word import WordTy
+from validation.tys.word_ty import WordTy
 
 from ast_nodes import LineElementsNode
 from exception import ValidationError, InternalError

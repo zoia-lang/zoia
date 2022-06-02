@@ -19,39 +19,46 @@
 #   along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 # =============================================================================
-"""This module implements the Content type."""
+"""This module implements the Text type."""
 from dataclasses import dataclass
 
-from validation.tys.any_ty import AnyTy
-from validation.tys.none_ty import NoneTy
+from validation.tys.content_ty import ContentTy
 
-from ast_nodes import LineElementsNode, CommandNode
+from ast_nodes import LineElementsNode, CommandNode, TextFragmentNode
 from ast_visitor import ACommandVisitor
 from commands import get_command_type
 from exception import ValidationError
 
 @dataclass(slots=True)
-class _ContentValidator(ACommandVisitor):
-    """Command visitor that ensures every command in the value has a non-None
-    return type."""
+class _TextValidator(ACommandVisitor):
+    """Command visitor that ensures every command in the value has a PureText
+    or Text return type."""
     parent_ty_name: str
 
     def visit_command(self, node: CommandNode):
-        if isinstance(get_command_type(node).signature.ret_ty, NoneTy):
+        cmd_ret_ty = get_command_type(node).signature.ret_ty
+        if not isinstance(cmd_ret_ty, TextTy):
             raise ValidationError(
                 node.src_pos,
                 f'Parameters of type {self.parent_ty_name} only accept '
-                f'document content, but \\{node.cmd_name} returns '
-                f'{get_command_type(node).signature.ret_ty.compact()}')
+                f'Text and its subtypes, but \\{node.cmd_name} returns '
+                f'{cmd_ret_ty.compact()}')
         super().visit_command(node)
 
-class ContentTy(AnyTy):
-    """A parameter of type Content will accept any value that will directly
-    result in something visible in the output (in at least one backend - not
-    every backend will support every kind of Content)."""
-    _ty_name = 'Content'
+class TextTy(ContentTy):
+    """A parameter of type Text will accept any value that will eventually
+    result in PureText after evaluating it (in other words, its return type
+    must be Text or a subtype of Text)."""
+    _ty_name = 'Text'
     __slots__ = ()
 
     def validate_arg(self, cmd_arg: LineElementsNode):
-        _ContentValidator(self._ty_name).visit(cmd_arg)
+        for arg_element in cmd_arg.elements:
+            if not isinstance(arg_element, (TextFragmentNode, CommandNode)):
+                raise ValidationError(
+                    arg_element.src_pos,
+                    f'Parameters of type {self._ty_name} only accept text '
+                    f'fragments and commands with a return type of Text (or '
+                    f'one of its subtypes)')
+        _TextValidator(self._ty_name).visit(cmd_arg)
         return super().validate_arg(cmd_arg)
