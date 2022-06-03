@@ -22,7 +22,7 @@
 """This module runs tests that check whether aliases_file is correctly
 implemented."""
 from test.test_project.base import _ATestArbitraryZoiaFiles, \
-    _ATestSimpleStructure, _ATestSingleFile, _ATestAuxFiles
+    _ATestSimpleStructure, _ATestSingleFile, _ATestAncFiles
 
 class _ATestAliases(_ATestSingleFile):
     """Base class for testing aliases_file."""
@@ -33,7 +33,7 @@ class _ATestAliases(_ATestSingleFile):
         return self._project.config.aliases.src_path
 
 class TestArbitraryZoiaFilesAliases(_ATestArbitraryZoiaFiles, _ATestAliases,
-                                    _ATestAuxFiles):
+                                    _ATestAncFiles):
     """arbitrary_zoia_file should implement aliases_file correctly."""
 
 class TestSimpleStructureAliases(_ATestSimpleStructure, _ATestAliases):

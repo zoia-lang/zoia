@@ -22,7 +22,7 @@
 """This module runs tests that check whether dictionary_file is correctly
 implemented."""
 from test.test_project.base import _ATestArbitraryZoiaFiles, \
-    _ATestSimpleStructure, _ATestSingleFile, _ATestAuxFiles
+    _ATestSimpleStructure, _ATestSingleFile, _ATestAncFiles
 
 class _ATestDictionary(_ATestSingleFile):
     """Base class for testing dictionary_file."""
@@ -33,7 +33,7 @@ class _ATestDictionary(_ATestSingleFile):
         return self._project.config.dictionary.src_path
 
 class TestArbitraryZoiaFilesDictionary(_ATestArbitraryZoiaFiles,
-                                       _ATestDictionary, _ATestAuxFiles):
+                                       _ATestDictionary, _ATestAncFiles):
     """arbitrary_zoia_file should implement dictionary_file correctly."""
 
 class TestSimpleStructureDictionary(_ATestSimpleStructure, _ATestDictionary):

@@ -73,12 +73,12 @@ class Work(_ADirBase):
         log.info(log.arrow(2, f'Found work at {log.color_dir(work_rel)}'))
         if not dir_case_is_valid(work_folder, work_rel, raise_errors):
             return None
-        aux_files = cls.parse_zoia_files(
+        anc_files = cls.parse_zoia_files(
             work_folder, project_folder, raise_errors=raise_errors,
             arrow_level=3,
             warning_msg=f'Failed to parse {log.color_dir(work_folder.name)} '
                         f'due to errors when parsing one or more Zoia files')
-        if aux_files is None:
+        if anc_files is None:
             return None # Warning already logged in parse_zoia_files
         chapters = [Chapter.parse_chapter(c, project_folder,
                                           raise_errors=raise_errors)
@@ -104,4 +104,4 @@ class Work(_ADirBase):
         wk_index = int(match_work(work_folder.name).group(1))
         # See parse_converter.py for the reasoning
         # noinspection PyArgumentList
-        return cls(work_folder, chapters, wk_index, zoia_files=aux_files)
+        return cls(work_folder, chapters, wk_index, zoia_files=anc_files)

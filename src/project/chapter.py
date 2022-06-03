@@ -38,7 +38,7 @@ match_chapter = re.compile(r'ch(\d+)').fullmatch
 @total_ordering
 class Chapter(_ADirBase):
     """A chapter is a folder containing a main file (main.zoia) and,
-    optionally, any number of auxiliary files (*.zoia)."""
+    optionally, any number of ancillary files (*.zoia)."""
     chapter_path: Path
     main_file: ZoiaFile
     chapter_index: int
@@ -64,25 +64,25 @@ class Chapter(_ADirBase):
                               f'{log.color_dir(chapter_rel)}'))
         if not dir_case_is_valid(chapter_folder, chapter_rel, raise_errors):
             return None
-        aux_files = cls.parse_zoia_files(
+        anc_files = cls.parse_zoia_files(
             chapter_folder, project_folder, raise_errors=raise_errors,
             arrow_level=4,
             warning_msg=f'Failed to parse '
                         f'{log.color_dir(chapter_folder.name)} due to errors '
                         f'when parsing one or more Zoia files')
-        if aux_files is None:
+        if anc_files is None:
             return None # Warning already logged in parse_zoia_files
         # There caaaan be only oooooooone
-        main_files = [f for f in aux_files if f.is_main_file()]
+        main_files = [f for f in anc_files if f.is_main_file()]
         if not main_files:
             return ps_error("Each chapter must contain a 'main.zoia' file",
                             chapter_rel, raise_errors)
         # There can't be >1 main file since we disallow non-lowercase names
         main_file = main_files[0]
-        aux_files.remove(main_file)
+        anc_files.remove(main_file)
         # Extract the chapter index from the name of the chapter (we know the
         # regex matches at this point)
         ch_index = int(match_chapter(chapter_folder.name).group(1))
         # See parse_converter.py for the reasoning
         # noinspection PyArgumentList
-        return cls(chapter_folder, main_file, ch_index, zoia_files=aux_files)
+        return cls(chapter_folder, main_file, ch_index, zoia_files=anc_files)

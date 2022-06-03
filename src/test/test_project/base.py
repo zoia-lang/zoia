@@ -140,7 +140,7 @@ class _ATestSingleFile(_ACurrentFile):
             shutil.rmtree(invalid_chapter_path)
         invalid_work_path = p_path / 'src' / 'worka'
         invalid_work_path.mkdir()
-        invalid_work_zoia_path = invalid_work_path / 'aux.zoia'
+        invalid_work_zoia_path = invalid_work_path / 'anc.zoia'
         invalid_work_zoia_path.touch()
         invalid_chapter_path = invalid_work_path / 'cha'
         invalid_chapter_path.mkdir()
@@ -156,23 +156,23 @@ class _ATestSingleFile(_ACurrentFile):
         finally:
             shutil.rmtree(invalid_work_path)
 
-class _ATestAuxFiles(_ATestSingleFile):
-    """Variant of _ATestSingleFile that also tests for aux files in various
-    places."""
-    def test_aux_file(self):
-        """Asserts that aliases_file works correctly for aux files in various
-        places too."""
+class _ATestAncFiles(_ATestSingleFile):
+    """Variant of _ATestSingleFile that also tests for ancillary files in
+    various places."""
+    def test_anc_file(self):
+        """Asserts that aliases_file works correctly for ancillary files in
+        various places too."""
         self._project = self._parse_project()
         cfg_path = self._cfg_path()
-        # An auxiliary .zoia file in the src folder
-        for f in ('aux.zoia', self._file_name):
+        # An ancillary .zoia file in the src folder
+        for f in ('anc.zoia', self._file_name):
             cfg_path.option_value = Path(f)
             self._assert_file_passes()
-        # An auxiliary .zoia file in a work
+        # An ancillary .zoia file in a work
         for w in ('work1', 'work2'):
-            cfg_path.option_value = Path(w) / 'aux.zoia'
+            cfg_path.option_value = Path(w) / 'anc.zoia'
             self._assert_file_passes()
-        # An auxiliary .zoia file in a chapter
+        # An ancillary .zoia file in a chapter
         for c in ('ch1', 'ch2'):
-            cfg_path.option_value = Path('work1') / c / 'aux.zoia'
+            cfg_path.option_value = Path('work1') / c / 'anc.zoia'
             self._assert_file_passes()
