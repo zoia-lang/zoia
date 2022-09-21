@@ -2,7 +2,7 @@
 # This script downloads all build prerequisites for wizparse.
 set -e
 
-ANTLR_VER='4.10.1'
+ANTLR_VER='4.11.1'
 
 # Download the latest ANTLR release.
 curl https://www.antlr.org/download/antlr-"$ANTLR_VER"-complete.jar --output scripts/antlr.jar

@@ -1,4 +1,4 @@
-# Generated from grammar/zoia.g4 by ANTLR 4.10.1
+# Generated from grammar/zoia.g4 by ANTLR 4.11.1
 # encoding: utf-8
 from _vendor.antlr4 import *
 from io import StringIO
@@ -133,7 +133,7 @@ class zoiaParser ( Parser ):
 
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)
-        self.checkVersion("4.10.1")
+        self.checkVersion("4.11.1")
         self._interp = ParserATNSimulator(self, self.atn, self.decisionsToDFA, self.sharedContextCache)
         self._predicates = None
 
@@ -185,7 +185,7 @@ class zoiaParser ( Parser ):
             self.state = 40
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << zoiaParser.Asterisk) | (1 << zoiaParser.At) | (1 << zoiaParser.Backslash) | (1 << zoiaParser.Newline) | (1 << zoiaParser.Spaces) | (1 << zoiaParser.Word))) != 0):
+            while ((_la) & ~0x3f) == 0 and ((1 << _la) & 13340) != 0:
                 self.state = 37
                 self.line()
                 self.state = 42
@@ -289,7 +289,7 @@ class zoiaParser ( Parser ):
             self.state = 50
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << zoiaParser.Asterisk) | (1 << zoiaParser.At) | (1 << zoiaParser.Backslash) | (1 << zoiaParser.Spaces) | (1 << zoiaParser.Word))) != 0):
+            if ((_la) & ~0x3f) == 0 and ((1 << _la) & 12316) != 0:
                 self.state = 49
                 self.lineElements()
 
@@ -414,7 +414,7 @@ class zoiaParser ( Parser ):
                 self.state = 62
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if not ((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << zoiaParser.Asterisk) | (1 << zoiaParser.At) | (1 << zoiaParser.Backslash) | (1 << zoiaParser.Spaces) | (1 << zoiaParser.Word))) != 0)):
+                if not (((_la) & ~0x3f) == 0 and ((1 << _la) & 12316) != 0):
                     break
 
         except RecognitionException as re:
@@ -480,15 +480,15 @@ class zoiaParser ( Parser ):
             self.state = 67
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [zoiaParser.Word]:
+            if token in [13]:
                 self.state = 64
                 self.textFragmentWord()
                 pass
-            elif token in [zoiaParser.At]:
+            elif token in [3]:
                 self.state = 65
                 self.alias()
                 pass
-            elif token in [zoiaParser.Backslash]:
+            elif token in [4]:
                 self.state = 66
                 self.command()
                 pass
@@ -498,19 +498,19 @@ class zoiaParser ( Parser ):
             self.state = 74
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << zoiaParser.At) | (1 << zoiaParser.Backslash) | (1 << zoiaParser.Spaces) | (1 << zoiaParser.Word))) != 0):
+            while ((_la) & ~0x3f) == 0 and ((1 << _la) & 12312) != 0:
                 self.state = 72
                 self._errHandler.sync(self)
                 token = self._input.LA(1)
-                if token in [zoiaParser.Spaces, zoiaParser.Word]:
+                if token in [12, 13]:
                     self.state = 69
                     self.textFragment()
                     pass
-                elif token in [zoiaParser.At]:
+                elif token in [3]:
                     self.state = 70
                     self.alias()
                     pass
-                elif token in [zoiaParser.Backslash]:
+                elif token in [4]:
                     self.state = 71
                     self.command()
                     pass
@@ -883,7 +883,7 @@ class zoiaParser ( Parser ):
             self.enterOuterAlt(localctx, 1)
             self.state = 114
             _la = self._input.LA(1)
-            if not(_la==zoiaParser.Spaces or _la==zoiaParser.Word):
+            if not(_la==12 or _la==13):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -978,7 +978,7 @@ class zoiaParser ( Parser ):
             self.state = 121
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if _la==zoiaParser.Bar:
+            if _la==5:
                 self.state = 120
                 self.match(zoiaParser.Bar)
 
@@ -1038,7 +1038,7 @@ class zoiaParser ( Parser ):
             self.match(zoiaParser.Backslash)
             self.state = 124
             _la = self._input.LA(1)
-            if not(_la==zoiaParser.Backslash or _la==zoiaParser.Word):
+            if not(_la==4 or _la==13):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -1046,7 +1046,7 @@ class zoiaParser ( Parser ):
             self.state = 126
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if _la==zoiaParser.BracketsOpen:
+            if _la==7:
                 self.state = 125
                 self.arguments()
 
@@ -1054,7 +1054,7 @@ class zoiaParser ( Parser ):
             self.state = 129
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if _la==zoiaParser.Bar:
+            if _la==5:
                 self.state = 128
                 self.match(zoiaParser.Bar)
 
@@ -1125,7 +1125,7 @@ class zoiaParser ( Parser ):
             self.state = 133
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if _la==zoiaParser.Newline or _la==zoiaParser.Spaces:
+            if _la==10 or _la==12:
                 self.state = 132
                 self.whitespace()
 
@@ -1142,7 +1142,7 @@ class zoiaParser ( Parser ):
                     self.state = 138
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
-                    if _la==zoiaParser.Newline or _la==zoiaParser.Spaces:
+                    if _la==10 or _la==12:
                         self.state = 137
                         self.whitespace()
 
@@ -1156,7 +1156,7 @@ class zoiaParser ( Parser ):
             self.state = 147
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if _la==zoiaParser.Semicolon:
+            if _la==11:
                 self.state = 146
                 self.match(zoiaParser.Semicolon)
 
@@ -1164,7 +1164,7 @@ class zoiaParser ( Parser ):
             self.state = 150
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if _la==zoiaParser.Newline or _la==zoiaParser.Spaces:
+            if _la==10 or _la==12:
                 self.state = 149
                 self.whitespace()
 
@@ -1284,7 +1284,7 @@ class zoiaParser ( Parser ):
             self.state = 160
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if _la==zoiaParser.Spaces:
+            if _la==12:
                 self.state = 159
                 self.match(zoiaParser.Spaces)
 
@@ -1294,7 +1294,7 @@ class zoiaParser ( Parser ):
             self.state = 164
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if _la==zoiaParser.Spaces:
+            if _la==12:
                 self.state = 163
                 self.match(zoiaParser.Spaces)
 
@@ -1394,7 +1394,7 @@ class zoiaParser ( Parser ):
             while True:
                 self.state = 170
                 _la = self._input.LA(1)
-                if not(_la==zoiaParser.Newline or _la==zoiaParser.Spaces):
+                if not(_la==10 or _la==12):
                     self._errHandler.recoverInline(self)
                 else:
                     self._errHandler.reportMatch(self)
@@ -1402,7 +1402,7 @@ class zoiaParser ( Parser ):
                 self.state = 173
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                if not (_la==zoiaParser.Newline or _la==zoiaParser.Spaces):
+                if not (_la==10 or _la==12):
                     break
 
         except RecognitionException as re:

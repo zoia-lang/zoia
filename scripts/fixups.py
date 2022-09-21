@@ -15,10 +15,7 @@ _SZ_PATCH_CODE = """    from . import sa_zoia_cpp_parser
 except ImportError:"""
 
 _CPP_REPLACEMENTS = {
-    'visitor.visit(parse_tree).as<PyObject *>();':
-        'std::any_cast<PyObject *>(visitor.visit(parse_tree));',
-    'visitor->visit(ctx->children[i]).as<PyObject *>();':
-        'std::any_cast<PyObject *>(visitor->visit(ctx->children[i]));',
+    # Add any future C++ replacements here
 }
 
 def main():
@@ -49,7 +46,7 @@ def main():
     sz_contents = sz_contents.replace(_SZ_ORIG_CODE, _SZ_PATCH_CODE)
     with sa_zoia.open('w', encoding='utf-8') as out:
         out.write(sz_contents)
-    # Patch C++ code to work around speedy-antlr-tool bug
+    # Patch C++ code (currently unused)
     def _cpp_patch(cpp_path):
         with cpp_path.open('r', encoding='utf-8') as ins:
             cpp_contents = ins.read()
@@ -57,9 +54,8 @@ def main():
             cpp_contents = cpp_contents.replace(target, sub)
         with cpp_path.open('w', encoding='utf-8') as out:
             out.write(cpp_contents)
-    print('Patching C++ files to work around ANTLR 4.10 issues')
-    _cpp_patch(src_path / 'grammar' / 'cpp' / 'speedy_antlr.cpp')
-    _cpp_patch(src_path / 'grammar' / 'cpp' / 'sa_zoia_cpp_parser.cpp')
+    # print('Patching C++ files to do X')
+    # _cpp_patch(src_path / 'grammar' / 'cpp' / 'speedy_antlr.cpp')
 
 if __name__ == '__main__':
     main()

@@ -1,5 +1,5 @@
 
-// Generated from grammar/zoia.g4 by ANTLR 4.10.1
+// Generated from grammar/zoia.g4 by ANTLR 4.11.1
 
 
 #include "zoiaVisitor.h"
@@ -36,7 +36,7 @@ struct ZoiaParserStaticData final {
   std::unique_ptr<antlr4::atn::ATN> atn;
 };
 
-std::once_flag zoiaParserOnceFlag;
+::antlr4::internal::OnceFlag zoiaParserOnceFlag;
 ZoiaParserStaticData *zoiaParserStaticData = nullptr;
 
 void zoiaParserInitialize() {
@@ -219,13 +219,8 @@ zoiaParser::ZoiaFileContext* zoiaParser::zoiaFile() {
     setState(40);
     _errHandler->sync(this);
     _la = _input->LA(1);
-    while ((((_la & ~ 0x3fULL) == 0) &&
-      ((1ULL << _la) & ((1ULL << zoiaParser::Asterisk)
-      | (1ULL << zoiaParser::At)
-      | (1ULL << zoiaParser::Backslash)
-      | (1ULL << zoiaParser::Newline)
-      | (1ULL << zoiaParser::Spaces)
-      | (1ULL << zoiaParser::Word))) != 0)) {
+    while (((_la & ~ 0x3fULL) == 0) &&
+      ((1ULL << _la) & 13340) != 0) {
       setState(37);
       line();
       setState(42);
@@ -351,12 +346,8 @@ zoiaParser::LineContext* zoiaParser::line() {
     _errHandler->sync(this);
 
     _la = _input->LA(1);
-    if ((((_la & ~ 0x3fULL) == 0) &&
-      ((1ULL << _la) & ((1ULL << zoiaParser::Asterisk)
-      | (1ULL << zoiaParser::At)
-      | (1ULL << zoiaParser::Backslash)
-      | (1ULL << zoiaParser::Spaces)
-      | (1ULL << zoiaParser::Word))) != 0)) {
+    if (((_la & ~ 0x3fULL) == 0) &&
+      ((1ULL << _la) & 12316) != 0) {
       setState(49);
       lineElements();
     }
@@ -503,12 +494,8 @@ zoiaParser::LineElementsContext* zoiaParser::lineElements() {
       setState(62);
       _errHandler->sync(this);
       _la = _input->LA(1);
-    } while ((((_la & ~ 0x3fULL) == 0) &&
-      ((1ULL << _la) & ((1ULL << zoiaParser::Asterisk)
-      | (1ULL << zoiaParser::At)
-      | (1ULL << zoiaParser::Backslash)
-      | (1ULL << zoiaParser::Spaces)
-      | (1ULL << zoiaParser::Word))) != 0));
+    } while (((_la & ~ 0x3fULL) == 0) &&
+      ((1ULL << _la) & 12316) != 0);
 
   }
   catch (RecognitionException &e) {
@@ -608,11 +595,8 @@ zoiaParser::LineElementsInnerContext* zoiaParser::lineElementsInner() {
     setState(74);
     _errHandler->sync(this);
     _la = _input->LA(1);
-    while ((((_la & ~ 0x3fULL) == 0) &&
-      ((1ULL << _la) & ((1ULL << zoiaParser::At)
-      | (1ULL << zoiaParser::Backslash)
-      | (1ULL << zoiaParser::Spaces)
-      | (1ULL << zoiaParser::Word))) != 0)) {
+    while (((_la & ~ 0x3fULL) == 0) &&
+      ((1ULL << _la) & 12312) != 0) {
       setState(72);
       _errHandler->sync(this);
       switch (_input->LA(1)) {
@@ -1733,5 +1717,5 @@ zoiaParser::WhitespaceContext* zoiaParser::whitespace() {
 }
 
 void zoiaParser::initialize() {
-  std::call_once(zoiaParserOnceFlag, zoiaParserInitialize);
+  ::antlr4::internal::call_once(zoiaParserOnceFlag, zoiaParserInitialize);
 }

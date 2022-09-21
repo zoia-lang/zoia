@@ -1,5 +1,5 @@
 
-// Generated from grammar/zoia.g4 by ANTLR 4.10.1
+// Generated from grammar/zoia.g4 by ANTLR 4.11.1
 
 
 #include "zoiaLexer.h"
@@ -41,7 +41,7 @@ struct ZoiaLexerStaticData final {
   std::unique_ptr<antlr4::atn::ATN> atn;
 };
 
-std::once_flag zoialexerLexerOnceFlag;
+::antlr4::internal::OnceFlag zoialexerLexerOnceFlag;
 ZoiaLexerStaticData *zoialexerLexerStaticData = nullptr;
 
 void zoialexerLexerInitialize() {
@@ -152,5 +152,5 @@ const atn::ATN& zoiaLexer::getATN() const {
 
 
 void zoiaLexer::initialize() {
-  std::call_once(zoialexerLexerOnceFlag, zoialexerLexerInitialize);
+  ::antlr4::internal::call_once(zoialexerLexerOnceFlag, zoialexerLexerInitialize);
 }
