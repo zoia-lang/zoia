@@ -29,7 +29,7 @@ def run_setup(with_binary):
             # Extension name shall be at the same level as the sa_mygrammar_parser.py module
             name='grammar.sa_zoia_cpp_parser',
 
-            # Add the Antlr runtime source directory to the include search path
+            # Add the Antlr runtime source folder to the include search path
             include_dirs=["src/grammar/cpp/antlr4_runtime"],
 
             # Rather than listing each C++ file (Antlr has a lot!), discover them automatically

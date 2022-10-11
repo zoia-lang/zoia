@@ -28,7 +28,7 @@ from pathlib import Path
 import log
 from project.dir_base import _ADirBase
 from project.zoia_file import ZoiaFile
-from utils import ps_error, dir_case_is_valid
+from utils import ps_error
 
 # Valid chapter folder names consist of the word 'ch' followed by one or more
 # digits
@@ -62,10 +62,11 @@ class Chapter(_ADirBase):
         chapter_rel = chapter_folder.relative_to(project_folder)
         log.info(log.arrow(3, f'Found chapter at '
                               f'{log.color_dir(chapter_rel)}'))
-        if not dir_case_is_valid(chapter_folder, chapter_rel, raise_errors):
+        cf_contents = list(chapter_folder.iterdir())
+        if not cls._file_names_valid(cf_contents, chapter_rel, raise_errors):
             return None
-        anc_files = cls.parse_zoia_files(
-            chapter_folder, project_folder, raise_errors=raise_errors,
+        anc_files = cls._parse_zoia_files(
+            cf_contents, project_folder, raise_errors=raise_errors,
             arrow_level=4,
             warning_msg=f'Failed to parse '
                         f'{log.color_dir(chapter_folder.name)} due to errors '

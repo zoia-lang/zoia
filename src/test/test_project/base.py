@@ -21,7 +21,7 @@
 # =============================================================================
 """This module houses code shared by multiple project test files."""
 from pathlib import Path
-from tempfile import mkdtemp
+from tempfile import TemporaryDirectory
 import os
 import shutil
 
@@ -54,7 +54,7 @@ class _ATestSingleFile(_ACurrentFile):
     _file_name: str
 
     def _cfg_path(self):
-        """"""
+        """Returns the config option representing the file's location."""
         raise AbstractError()
 
     def _assert_file_passes(self):
@@ -89,13 +89,10 @@ class _ATestSingleFile(_ACurrentFile):
         self._project = self._parse_project()
         cfg_path = self._cfg_path()
         p_path = self._project.project_path
-        temp_dir = Path(mkdtemp())
-        try:
+        with TemporaryDirectory() as tmp_dir:
             # Absolute path that doesn't exist
-            cfg_path.option_value = temp_dir / self._file_name
+            cfg_path.option_value = Path(tmp_dir) / self._file_name
             self._assert_file_fails()
-        finally:
-            shutil.rmtree(temp_dir)
         upper_path = p_path / 'src' / self._file_name.capitalize()
         upper_path.touch()
         try:

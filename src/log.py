@@ -160,7 +160,7 @@ def arrow(n: int, s: str) -> str:
     return f'$B${"=" * n}>$R$ {s}'
 
 def color_dir(d: os.PathLike | str):
-    """Colorizes the specified pathlike directory."""
+    """Colorizes the specified pathlike folder."""
     d_head, d_tail = os.path.split(d)
     if d_head:
         d_head += os.path.sep

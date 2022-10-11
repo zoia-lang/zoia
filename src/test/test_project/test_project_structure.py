@@ -25,8 +25,6 @@ from test.base import ATestProjectFailing
 from test.test_project.base import _ATestArbitraryZoiaFiles, \
     _ATestSimpleStructure
 
-import pytest
-
 class _ATestPSFailing(ATestProjectFailing):
     """Base class for failing project structure tests. Needed since these don't
     derive from _ACurrentFile (yet)."""
@@ -80,7 +78,7 @@ class TestNoSrc(_ATestPSFailing):
     """A project without a src folder (i.e. without a series) should be
     rejected."""
     _test_name = 'no_src'
-    _exp_error = "No 'src' folder found"
+    _exp_error = "'src' folder could not be found"
 
 class TestUpperChapter(_ATestPSFailing):
     """A project with a non-lowercased chapter folder should be rejected."""
@@ -92,12 +90,10 @@ class TestUpperFile(_ATestPSFailing):
     _test_name = 'upper_file'
     _exp_error = "'Main.zoia' is not lowercased"
 
-# FIXME test this on Windows - do we reject the non-lowercased Src?
-@pytest.mark.skipif('os.name == "nt"')
 class TestUpperSrc(_ATestPSFailing):
     """A project with a non-lowercased 'src' folder should be rejected."""
     _test_name = 'upper_src'
-    _exp_error = "No 'src' folder found"
+    _exp_error = "Found a 'src' folder at 'Src', but it is not lowercased"
 
 class TestUpperWork(_ATestPSFailing):
     """A project with a non-lowercased work folder should be rejected."""

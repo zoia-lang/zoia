@@ -29,7 +29,7 @@ from pathlib import Path
 import log
 from project.chapter import Chapter, match_chapter
 from project.dir_base import _ADirBase
-from utils import is_contiguous, ps_error, dir_case_is_valid
+from utils import is_contiguous, ps_error
 
 # Valid work folder names consist of the word 'work' followed by one or more
 # digits
@@ -71,10 +71,11 @@ class Work(_ADirBase):
         """Parses a work folder at the specified path."""
         work_rel = work_folder.relative_to(project_folder)
         log.info(log.arrow(2, f'Found work at {log.color_dir(work_rel)}'))
-        if not dir_case_is_valid(work_folder, work_rel, raise_errors):
+        wf_contents = list(work_folder.iterdir())
+        if not cls._file_names_valid(wf_contents, work_rel, raise_errors):
             return None
-        anc_files = cls.parse_zoia_files(
-            work_folder, project_folder, raise_errors=raise_errors,
+        anc_files = cls._parse_zoia_files(
+            wf_contents, project_folder, raise_errors=raise_errors,
             arrow_level=3,
             warning_msg=f'Failed to parse {log.color_dir(work_folder.name)} '
                         f'due to errors when parsing one or more Zoia files')

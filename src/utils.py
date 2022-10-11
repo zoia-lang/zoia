@@ -22,7 +22,6 @@
 """Random utility functions and classes that didn't fit anywhere else."""
 from itertools import groupby
 from os import PathLike
-from pathlib import Path
 
 import log
 from exception import ProjectStructureError
@@ -43,19 +42,6 @@ def ps_error(msg: str, relevant_path: PathLike, raise_errors: bool, *,
         log.error(f'Invalid project structure at $fWl${relevant_path}$fT$: '
                   f'$fRl${msg}$fT$')
         return None
-
-def dir_case_is_valid(dir_path: Path, rel_dir_path: Path,
-                      raise_errors: bool) -> bool:
-    """Checks that the contents of the specified directory are all entirely in
-    lowercase and return True. If not, calls ps_error (see above) with an error
-    message and returns False."""
-    case_valid = True
-    for f in dir_path.iterdir():
-        if f.name != f.name.lower():
-            ps_error(f"'{f.name}' is not lowercased", rel_dir_path,
-                     raise_errors)
-            case_valid = False
-    return case_valid
 
 def valid_src_path(src_path: str):
     """Returns True if the specified string path is valid as a src-relative

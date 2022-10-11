@@ -27,7 +27,7 @@ from pathlib import Path
 import log
 from project.dir_base import _ADirBase
 from project.work import Work, match_work
-from utils import is_contiguous, ps_error, dir_case_is_valid
+from utils import is_contiguous, ps_error
 
 @dataclass(slots=True)
 class Series(_ADirBase):
@@ -58,10 +58,11 @@ class Series(_ADirBase):
         """Parses a series ('src' folder) at the specified path."""
         series_rel = series_folder.relative_to(project_folder)
         log.info(log.arrow(1, f'Found series at {log.color_dir(series_rel)}'))
-        if not dir_case_is_valid(series_folder, series_rel, raise_errors):
+        sf_contents = list(series_folder.iterdir())
+        if not cls._file_names_valid(sf_contents, series_rel, raise_errors):
             return None
-        anc_files = cls.parse_zoia_files(
-            series_folder, project_folder, raise_errors=raise_errors,
+        anc_files = cls._parse_zoia_files(
+            sf_contents, project_folder, raise_errors=raise_errors,
             arrow_level=2,
             warning_msg=f'Failed to parse '
                         f'{log.color_dir(series_folder.name)} due to errors '
@@ -69,7 +70,7 @@ class Series(_ADirBase):
         if anc_files is None:
             return None # Warning already logged in parse_zoia_files
         works = [Work.parse_work(w, project_folder, raise_errors=raise_errors)
-                 for w in series_folder.iterdir() if match_work(w.name)]
+                 for w in sf_contents if match_work(w.name)]
         if not all(works):
             # This is just a cascading effect of a real error
             log.warning(f'Failed to parse {log.color_dir(series_folder.name)} '

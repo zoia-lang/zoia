@@ -61,7 +61,7 @@ class ATestParser:
 
 def _get_proj_path(test_name: str, py_file_path: str) -> Path:
     """Retrieves the full path to the project folder for the test with the
-    specified directory name."""
+    specified folder name."""
     return Path(py_file_path).parent.resolve(strict=True) / test_name
 
 class _ATestProject:
@@ -69,15 +69,18 @@ class _ATestProject:
     _test_name: str
     _py_file_path: str
 
+    @staticmethod
+    def _do_parse_project(test_proj_path):
+        return Project.parse_project(test_proj_path, raise_errors=True)
+
     def _parse_project(self):
-        return Project.parse_project(_get_proj_path(self._test_name,
-                                                    self._py_file_path),
-                                     raise_errors=True)
+        return self._do_parse_project(_get_proj_path(self._test_name,
+                                                     self._py_file_path))
 
 class ATestProjectPassing(_ATestProject):
     """Base class for passing tests that need to parse a project."""
     def test_proj_passes(self) -> None:
-        """Asserts that the series located at this test directory parses
+        """Asserts that the series located at this test folder parses
         successfully."""
         assert self._parse_project() is not None
 
@@ -86,12 +89,16 @@ class ATestProjectFailing(_ATestProject):
     _exp_error: str | tuple[str]
 
     def test_proj_fails(self) -> None:
-        """Asserts that the series located at the specified test directory does
+        """Asserts that the series located at the specified test folder does
         not parse successfully."""
         with pytest.raises(ProjectStructureError) as exc_info:
             self._parse_project()
         exc_str = str(exc_info.value)
         if isinstance(self._exp_error, tuple):
-            assert any(exp_e in exc_str for exp_e in self._exp_error)
+            if not any(exp_e in exc_str for exp_e in self._exp_error):
+                pytest.fail(f"Expected exception message {exc_str!r} to "
+                            f"contain one of {list(self._exp_error)!r}")
         else:
-            assert self._exp_error in exc_str
+            if self._exp_error not in exc_str:
+                pytest.fail(f"Expected exception message {exc_str!r} to "
+                            f"contain {self._exp_error!r}")

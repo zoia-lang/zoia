@@ -122,6 +122,26 @@ class Project:
         return self._find_zoia_or_raise(
             self.config.dictionary.src_path.option_value)
 
+    @staticmethod
+    def _series_folder_exists(project_folder: Path, raise_errors: bool):
+        """Checks if the specified project folder contains a valid src folder
+        and returns True. If not, calls ps_error and returns False."""
+        src_dirs_found = 0
+        valid_src_found = False
+        for f in project_folder.iterdir():
+            if f.name.lower() == 'src':
+                src_dirs_found += 1
+                if f.name != 'src':
+                    ps_error(f"Found a 'src' folder at '{f.name}', but it is "
+                             f"not lowercased", Path(''), raise_errors)
+                else:
+                    # This one has the right name and case -> valid
+                    valid_src_found = True
+        if not valid_src_found:
+            ps_error("'src' folder could not be found", Path(''),
+                     raise_errors)
+        return valid_src_found and src_dirs_found == 1
+
     @classmethod
     def parse_project(cls, project_folder: Path, /, *,
                       raise_errors: bool = False):
@@ -135,14 +155,12 @@ class Project:
                             project_folder.resolve(), raise_errors,
                             orig_error=e)
         log.info(f'Project folder is $fWl${project_folder}$R$')
-        # Parse the series folder 'src', which must exist
+        # Check if the series folder 'src' exists and raise an error if it
+        # doesn't, then parse it
+        if not cls._series_folder_exists(project_folder, raise_errors):
+            return None
         series_rel = 'src'
-        series_folder = project_folder / series_rel
-        try:
-            series_folder = series_folder.resolve(strict=True)
-        except FileNotFoundError as e:
-            return ps_error(f"No '{series_rel}' folder found", Path(''),
-                            raise_errors, orig_error=e)
+        series_folder = (project_folder / series_rel).resolve(strict=True)
         parsed_series = Series.parse_series(series_folder, project_folder,
                                      raise_errors=raise_errors)
         if parsed_series is None:
