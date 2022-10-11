@@ -47,7 +47,6 @@ class AASTMapper(AASTVisitor):
         return node
 
     # API that is intended for overriding by end users begins here
-    # pylint: disable=no-self-use
     def _map_leaf(self, leaf_val):
         """Maps a leaf value (i.e. anything other than a node) to a new
         value. Default behavior is the identity function (i.e. keeping the
