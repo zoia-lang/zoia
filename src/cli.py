@@ -3,7 +3,7 @@
 # GPL License and Copyright Notice ============================================
 #
 #   This file is part of Zoia, a language for writing fiction.
-#   Copyright (C) 2021-2022 Infernio
+#   Copyright (C) 2021-2023 Infernio
 #
 #   This program is free software: you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -58,7 +58,7 @@ def _log_boot_info():
     log.info('Zoia - a language for writing fiction.')
     _log_version()
     log.info('')
-    log.info('Copyright (C) 2021-2022 Infernio')
+    log.info('Copyright (C) 2021-2023 Infernio')
     log.info('License GPLv3+: GNU GPL version 3 or later '
              '<https://gnu.org/licenses/gpl.html>.')
     log.info('This is free software: you are free to change and redistribute '
