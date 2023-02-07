@@ -54,7 +54,7 @@ class TestEndsWithPeriod(_ATestWIFailing):
                   "Windows")
 
     def _create_files(self, tmp_path: Path):
-        tmp_src = (tmp_path / 'src')
+        tmp_src = tmp_path / 'src'
         tmp_src.mkdir()
         (tmp_src / 'test.').touch()
 
