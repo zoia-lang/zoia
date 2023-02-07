@@ -101,7 +101,7 @@ class TestMapAliasCR(_ATestASTMapper, TestAliasCR):
 
 class TestMapAliasBarCR(_ATestASTMapper, TestAliasBarCR):
     """@A -> 'A', @B| -> 'B', @C, -> 'C,', @D| -> D"""
-    _test_rep = mks('A ran into B, C, and D.')
+    _test_rep = mks('A ran into B, C, and D. Bs or Bs, C1 or C1?')
 
 class TestMapEm1ComplexCR(_ATestASTMapper, TestEm1ComplexCR):
     """@aliases -> aliases"""

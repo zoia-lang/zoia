@@ -48,17 +48,19 @@ textFragment: Word | Spaces;
 // Version of textFragment that can only resolve to a word.
 textFragmentWord: Word;
 
-// An at sign followed by a word. May optionally be ended by a
-// vertical bar (this is necessary when an alias is followed by
-// something other than whitespace, for example a comma).
-alias: At Word Bar?;
+// An alias is an at sign followed by (potentially Unicode) letters
+// and/or numbers (but no punctuation). May optionally be ended by a
+// vertical bar (this is necessary when an alias is directly followed
+// by letters, e.g. @A|s).
+alias: Alias Bar?;
 
-// A backslash and a word or backslash, followed optionally by an argument
-// list. May optionally be ended by a vertical bar (this is necessary when
-// using an argumentless command that you don't want a space after.
-// For example, '\atmyHandle' would be parsed as a single command
-// named 'atMyHandle', which doesn't exist. '\at|myHandle' would be
-// parsed as a command named 'at' and a text fragment 'myHandle'.
+// A backslash and a word or backslash, followed optionally by an
+// argument list. May optionally be ended by a vertical bar (this is
+// necessary when using an argumentless command that you don't want a
+// space after. For example, '\atmyHandle' would be parsed as a
+// single command named 'atMyHandle', which doesn't exist.
+// '\at|myHandle' would be parsed as a command named 'at' and a text
+// fragment 'myHandle'.
 command: Backslash (Word | Backslash) arguments? Bar?;
 
 // One or more arguments. Multiple arguments must be separated by
@@ -84,7 +86,6 @@ COMMENT: '#' ~[\r\n]* -> skip;
 
 // Regular tokens
 Asterisk: '*';
-At: '@';
 Backslash: '\\';
 Bar: '|';
 BracketsClose: ']';
@@ -96,5 +97,7 @@ Semicolon: ';';
 
 // See https://unicode.org/reports/tr44/#General_Category_Values
 Spaces: [\p{Z}]+;
+// Put aliases before words, so that ANTLR prefers a full alias
+Alias: '@' [\p{L}\p{N}]+;
 // Everything that isn't one of the tokens above.
 Word: ~[\r\n@\\|[\];=*#\p{Z}]+;

@@ -65,11 +65,12 @@ class TestAliasCR(ATestCanonicalRepr):
 
 class TestAliasBarCR(ATestCanonicalRepr):
     """The optional vertical bar terminator for aliases should be handled
-    and reproduced correctly - note the comma after @C becoming part of the
-    alias (since a comma is perfectly valid as part of a word and hence
-    perfectly valid as part of an alias name too)."""
-    _test_src = mks('@A ran into @B|, @C, and @D|.')
-    _test_rep = mks('@A| ran into @B|, @C,| and @D|.')
+    and reproduced correctly. Note how @C, and @D. are handled correctly, but
+    @Bs becomes @Bs| and @C1 becomes @C1| since the previous ones all used
+    punctuation, whereas these use letters and numbers."""
+    _test_src = mks('@A ran into @B|, @C, and @D. @Bs or @B|s, @C1 or @C|1?')
+    _test_rep = mks('@A| ran into @B|, @C|, and @D|. @Bs| or @B|s, @C1| or '
+                    '@C|1?')
 
 class TestCommandNoArgCR(ATestCanonicalRepr):
     """Commands without arguments should receive the vertical bar as a

@@ -147,8 +147,9 @@ class ParseConverter(zoiaVisitor):
                                     f"'{ctx.getText()}'") from e
 
     def visitAlias(self, ctx: zoiaParser.AliasContext) -> AliasNode:
-        # First child is At, second child is Word
-        return AliasNode(ctx.children[1].symbol.text,
+        # First child is Alias, the second one is Bar - strip off the leading
+        # @ symbol for the alias text
+        return AliasNode(ctx.children[0].symbol.text[1:],
                          src_pos=self.make_pos(ctx))
 
     def visitCommand(self, ctx: zoiaParser.CommandContext) -> CommandNode:

@@ -12,9 +12,9 @@
 class  zoiaParser : public antlr4::Parser {
 public:
   enum {
-    COMMENT = 1, Asterisk = 2, At = 3, Backslash = 4, Bar = 5, BracketsClose = 6,
-    BracketsOpen = 7, Equals = 8, Header = 9, Newline = 10, Semicolon = 11,
-    Spaces = 12, Word = 13
+    COMMENT = 1, Asterisk = 2, Backslash = 3, Bar = 4, BracketsClose = 5,
+    BracketsOpen = 6, Equals = 7, Header = 8, Newline = 9, Semicolon = 10,
+    Spaces = 11, Alias = 12, Word = 13
   };
 
   enum {
@@ -250,8 +250,7 @@ public:
   public:
     AliasContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *At();
-    antlr4::tree::TerminalNode *Word();
+    antlr4::tree::TerminalNode *Alias();
     antlr4::tree::TerminalNode *Bar();
 
 

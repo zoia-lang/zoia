@@ -12,9 +12,9 @@
 class  zoiaLexer : public antlr4::Lexer {
 public:
   enum {
-    COMMENT = 1, Asterisk = 2, At = 3, Backslash = 4, Bar = 5, BracketsClose = 6,
-    BracketsOpen = 7, Equals = 8, Header = 9, Newline = 10, Semicolon = 11,
-    Spaces = 12, Word = 13
+    COMMENT = 1, Asterisk = 2, Backslash = 3, Bar = 4, BracketsClose = 5,
+    BracketsOpen = 6, Equals = 7, Header = 8, Newline = 9, Semicolon = 10,
+    Spaces = 11, Alias = 12, Word = 13
   };
 
   explicit zoiaLexer(antlr4::CharStream *input);

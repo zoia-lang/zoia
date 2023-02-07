@@ -49,38 +49,37 @@ void zoiaParserInitialize() {
       "argument", "kwdArgument", "stdArgument", "whitespace"
     },
     std::vector<std::string>{
-      "", "", "'*'", "'@'", "'\\'", "'|'", "']'", "'['", "'='", "'\\header'",
-      "", "';'"
+      "", "", "'*'", "'\\'", "'|'", "']'", "'['", "'='", "'\\header'", "",
+      "';'"
     },
     std::vector<std::string>{
-      "", "COMMENT", "Asterisk", "At", "Backslash", "Bar", "BracketsClose",
-      "BracketsOpen", "Equals", "Header", "Newline", "Semicolon", "Spaces",
-      "Word"
+      "", "COMMENT", "Asterisk", "Backslash", "Bar", "BracketsClose", "BracketsOpen",
+      "Equals", "Header", "Newline", "Semicolon", "Spaces", "Alias", "Word"
     }
   );
   static const int32_t serializedATNSegment[] = {
-  	4,1,13,176,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,
+  	4,1,13,175,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,
   	7,7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,2,12,7,12,2,13,7,13,2,14,7,
   	14,2,15,7,15,2,16,7,16,2,17,7,17,1,0,1,0,5,0,39,8,0,10,0,12,0,42,9,0,
   	1,0,1,0,1,1,1,1,1,1,1,1,1,2,3,2,51,8,2,1,2,1,2,1,3,1,3,1,3,1,3,1,3,1,
   	3,4,3,61,8,3,11,3,12,3,62,1,4,1,4,1,4,3,4,68,8,4,1,4,1,4,1,4,5,4,73,8,
   	4,10,4,12,4,76,9,4,1,5,1,5,1,5,1,5,1,5,1,5,3,5,84,8,5,1,5,1,5,1,5,1,5,
   	1,5,1,5,5,5,92,8,5,10,5,12,5,95,9,5,1,6,1,6,1,6,1,6,1,6,1,6,1,6,1,6,1,
-  	7,1,7,1,7,1,7,1,7,1,7,1,8,1,8,1,8,1,8,1,9,1,9,1,10,1,10,1,11,1,11,1,11,
-  	3,11,122,8,11,1,12,1,12,1,12,3,12,127,8,12,1,12,3,12,130,8,12,1,13,1,
-  	13,3,13,134,8,13,1,13,1,13,1,13,3,13,139,8,13,1,13,5,13,142,8,13,10,13,
-  	12,13,145,9,13,1,13,3,13,148,8,13,1,13,3,13,151,8,13,1,13,1,13,1,14,1,
-  	14,3,14,157,8,14,1,15,1,15,3,15,161,8,15,1,15,1,15,3,15,165,8,15,1,15,
-  	1,15,1,16,1,16,1,17,4,17,172,8,17,11,17,12,17,173,1,17,1,143,0,18,0,2,
-  	4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,0,3,1,0,12,13,2,0,4,4,13,
-  	13,2,0,10,10,12,12,193,0,36,1,0,0,0,2,45,1,0,0,0,4,50,1,0,0,0,6,60,1,
-  	0,0,0,8,67,1,0,0,0,10,83,1,0,0,0,12,96,1,0,0,0,14,104,1,0,0,0,16,110,
-  	1,0,0,0,18,114,1,0,0,0,20,116,1,0,0,0,22,118,1,0,0,0,24,123,1,0,0,0,26,
-  	131,1,0,0,0,28,156,1,0,0,0,30,158,1,0,0,0,32,168,1,0,0,0,34,171,1,0,0,
+  	7,1,7,1,7,1,7,1,7,1,7,1,8,1,8,1,8,1,8,1,9,1,9,1,10,1,10,1,11,1,11,3,11,
+  	121,8,11,1,12,1,12,1,12,3,12,126,8,12,1,12,3,12,129,8,12,1,13,1,13,3,
+  	13,133,8,13,1,13,1,13,1,13,3,13,138,8,13,1,13,5,13,141,8,13,10,13,12,
+  	13,144,9,13,1,13,3,13,147,8,13,1,13,3,13,150,8,13,1,13,1,13,1,14,1,14,
+  	3,14,156,8,14,1,15,1,15,3,15,160,8,15,1,15,1,15,3,15,164,8,15,1,15,1,
+  	15,1,16,1,16,1,17,4,17,171,8,17,11,17,12,17,172,1,17,1,142,0,18,0,2,4,
+  	6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,0,3,2,0,11,11,13,13,2,0,3,
+  	3,13,13,2,0,9,9,11,11,192,0,36,1,0,0,0,2,45,1,0,0,0,4,50,1,0,0,0,6,60,
+  	1,0,0,0,8,67,1,0,0,0,10,83,1,0,0,0,12,96,1,0,0,0,14,104,1,0,0,0,16,110,
+  	1,0,0,0,18,114,1,0,0,0,20,116,1,0,0,0,22,118,1,0,0,0,24,122,1,0,0,0,26,
+  	130,1,0,0,0,28,155,1,0,0,0,30,157,1,0,0,0,32,167,1,0,0,0,34,170,1,0,0,
   	0,36,40,3,2,1,0,37,39,3,4,2,0,38,37,1,0,0,0,39,42,1,0,0,0,40,38,1,0,0,
   	0,40,41,1,0,0,0,41,43,1,0,0,0,42,40,1,0,0,0,43,44,5,0,0,1,44,1,1,0,0,
-  	0,45,46,5,9,0,0,46,47,3,26,13,0,47,48,5,10,0,0,48,3,1,0,0,0,49,51,3,6,
-  	3,0,50,49,1,0,0,0,50,51,1,0,0,0,51,52,1,0,0,0,52,53,5,10,0,0,53,5,1,0,
+  	0,45,46,5,8,0,0,46,47,3,26,13,0,47,48,5,9,0,0,48,3,1,0,0,0,49,51,3,6,
+  	3,0,50,49,1,0,0,0,50,51,1,0,0,0,51,52,1,0,0,0,52,53,5,9,0,0,53,5,1,0,
   	0,0,54,61,3,18,9,0,55,61,3,22,11,0,56,61,3,24,12,0,57,61,3,16,8,0,58,
   	61,3,14,7,0,59,61,3,12,6,0,60,54,1,0,0,0,60,55,1,0,0,0,60,56,1,0,0,0,
   	60,57,1,0,0,0,60,58,1,0,0,0,60,59,1,0,0,0,61,62,1,0,0,0,62,60,1,0,0,0,
@@ -99,24 +98,24 @@ void zoiaParserInitialize() {
   	13,1,0,0,0,104,105,5,2,0,0,105,106,5,2,0,0,106,107,3,8,4,0,107,108,5,
   	2,0,0,108,109,5,2,0,0,109,15,1,0,0,0,110,111,5,2,0,0,111,112,3,8,4,0,
   	112,113,5,2,0,0,113,17,1,0,0,0,114,115,7,0,0,0,115,19,1,0,0,0,116,117,
-  	5,13,0,0,117,21,1,0,0,0,118,119,5,3,0,0,119,121,5,13,0,0,120,122,5,5,
-  	0,0,121,120,1,0,0,0,121,122,1,0,0,0,122,23,1,0,0,0,123,124,5,4,0,0,124,
-  	126,7,1,0,0,125,127,3,26,13,0,126,125,1,0,0,0,126,127,1,0,0,0,127,129,
-  	1,0,0,0,128,130,5,5,0,0,129,128,1,0,0,0,129,130,1,0,0,0,130,25,1,0,0,
-  	0,131,133,5,7,0,0,132,134,3,34,17,0,133,132,1,0,0,0,133,134,1,0,0,0,134,
-  	135,1,0,0,0,135,143,3,28,14,0,136,138,5,11,0,0,137,139,3,34,17,0,138,
-  	137,1,0,0,0,138,139,1,0,0,0,139,140,1,0,0,0,140,142,3,28,14,0,141,136,
-  	1,0,0,0,142,145,1,0,0,0,143,144,1,0,0,0,143,141,1,0,0,0,144,147,1,0,0,
-  	0,145,143,1,0,0,0,146,148,5,11,0,0,147,146,1,0,0,0,147,148,1,0,0,0,148,
-  	150,1,0,0,0,149,151,3,34,17,0,150,149,1,0,0,0,150,151,1,0,0,0,151,152,
-  	1,0,0,0,152,153,5,6,0,0,153,27,1,0,0,0,154,157,3,30,15,0,155,157,3,32,
-  	16,0,156,154,1,0,0,0,156,155,1,0,0,0,157,29,1,0,0,0,158,160,5,13,0,0,
-  	159,161,5,12,0,0,160,159,1,0,0,0,160,161,1,0,0,0,161,162,1,0,0,0,162,
-  	164,5,8,0,0,163,165,5,12,0,0,164,163,1,0,0,0,164,165,1,0,0,0,165,166,
-  	1,0,0,0,166,167,3,10,5,0,167,31,1,0,0,0,168,169,3,10,5,0,169,33,1,0,0,
-  	0,170,172,7,2,0,0,171,170,1,0,0,0,172,173,1,0,0,0,173,171,1,0,0,0,173,
-  	174,1,0,0,0,174,35,1,0,0,0,22,40,50,60,62,67,72,74,83,91,93,121,126,129,
-  	133,138,143,147,150,156,160,164,173
+  	5,13,0,0,117,21,1,0,0,0,118,120,5,12,0,0,119,121,5,4,0,0,120,119,1,0,
+  	0,0,120,121,1,0,0,0,121,23,1,0,0,0,122,123,5,3,0,0,123,125,7,1,0,0,124,
+  	126,3,26,13,0,125,124,1,0,0,0,125,126,1,0,0,0,126,128,1,0,0,0,127,129,
+  	5,4,0,0,128,127,1,0,0,0,128,129,1,0,0,0,129,25,1,0,0,0,130,132,5,6,0,
+  	0,131,133,3,34,17,0,132,131,1,0,0,0,132,133,1,0,0,0,133,134,1,0,0,0,134,
+  	142,3,28,14,0,135,137,5,10,0,0,136,138,3,34,17,0,137,136,1,0,0,0,137,
+  	138,1,0,0,0,138,139,1,0,0,0,139,141,3,28,14,0,140,135,1,0,0,0,141,144,
+  	1,0,0,0,142,143,1,0,0,0,142,140,1,0,0,0,143,146,1,0,0,0,144,142,1,0,0,
+  	0,145,147,5,10,0,0,146,145,1,0,0,0,146,147,1,0,0,0,147,149,1,0,0,0,148,
+  	150,3,34,17,0,149,148,1,0,0,0,149,150,1,0,0,0,150,151,1,0,0,0,151,152,
+  	5,5,0,0,152,27,1,0,0,0,153,156,3,30,15,0,154,156,3,32,16,0,155,153,1,
+  	0,0,0,155,154,1,0,0,0,156,29,1,0,0,0,157,159,5,13,0,0,158,160,5,11,0,
+  	0,159,158,1,0,0,0,159,160,1,0,0,0,160,161,1,0,0,0,161,163,5,7,0,0,162,
+  	164,5,11,0,0,163,162,1,0,0,0,163,164,1,0,0,0,164,165,1,0,0,0,165,166,
+  	3,10,5,0,166,31,1,0,0,0,167,168,3,10,5,0,168,33,1,0,0,0,169,171,7,2,0,
+  	0,170,169,1,0,0,0,171,172,1,0,0,0,172,170,1,0,0,0,172,173,1,0,0,0,173,
+  	35,1,0,0,0,22,40,50,60,62,67,72,74,83,91,93,120,125,128,132,137,142,146,
+  	149,155,159,163,172
   };
   staticData->serializedATN = antlr4::atn::SerializedATNView(serializedATNSegment, sizeof(serializedATNSegment) / sizeof(serializedATNSegment[0]));
 
@@ -220,7 +219,7 @@ zoiaParser::ZoiaFileContext* zoiaParser::zoiaFile() {
     _errHandler->sync(this);
     _la = _input->LA(1);
     while (((_la & ~ 0x3fULL) == 0) &&
-      ((1ULL << _la) & 13340) != 0) {
+      ((1ULL << _la) & 14860) != 0) {
       setState(37);
       line();
       setState(42);
@@ -347,7 +346,7 @@ zoiaParser::LineContext* zoiaParser::line() {
 
     _la = _input->LA(1);
     if (((_la & ~ 0x3fULL) == 0) &&
-      ((1ULL << _la) & 12316) != 0) {
+      ((1ULL << _la) & 14348) != 0) {
       setState(49);
       lineElements();
     }
@@ -495,7 +494,7 @@ zoiaParser::LineElementsContext* zoiaParser::lineElements() {
       _errHandler->sync(this);
       _la = _input->LA(1);
     } while (((_la & ~ 0x3fULL) == 0) &&
-      ((1ULL << _la) & 12316) != 0);
+      ((1ULL << _la) & 14348) != 0);
 
   }
   catch (RecognitionException &e) {
@@ -577,7 +576,7 @@ zoiaParser::LineElementsInnerContext* zoiaParser::lineElementsInner() {
         break;
       }
 
-      case zoiaParser::At: {
+      case zoiaParser::Alias: {
         setState(65);
         alias();
         break;
@@ -596,7 +595,7 @@ zoiaParser::LineElementsInnerContext* zoiaParser::lineElementsInner() {
     _errHandler->sync(this);
     _la = _input->LA(1);
     while (((_la & ~ 0x3fULL) == 0) &&
-      ((1ULL << _la) & 12312) != 0) {
+      ((1ULL << _la) & 14344) != 0) {
       setState(72);
       _errHandler->sync(this);
       switch (_input->LA(1)) {
@@ -607,7 +606,7 @@ zoiaParser::LineElementsInnerContext* zoiaParser::lineElementsInner() {
           break;
         }
 
-        case zoiaParser::At: {
+        case zoiaParser::Alias: {
           setState(70);
           alias();
           break;
@@ -1140,12 +1139,8 @@ zoiaParser::AliasContext::AliasContext(ParserRuleContext *parent, size_t invokin
   : ParserRuleContext(parent, invokingState) {
 }
 
-tree::TerminalNode* zoiaParser::AliasContext::At() {
-  return getToken(zoiaParser::At, 0);
-}
-
-tree::TerminalNode* zoiaParser::AliasContext::Word() {
-  return getToken(zoiaParser::Word, 0);
+tree::TerminalNode* zoiaParser::AliasContext::Alias() {
+  return getToken(zoiaParser::Alias, 0);
 }
 
 tree::TerminalNode* zoiaParser::AliasContext::Bar() {
@@ -1180,15 +1175,13 @@ zoiaParser::AliasContext* zoiaParser::alias() {
   try {
     enterOuterAlt(_localctx, 1);
     setState(118);
-    match(zoiaParser::At);
-    setState(119);
-    match(zoiaParser::Word);
-    setState(121);
+    match(zoiaParser::Alias);
+    setState(120);
     _errHandler->sync(this);
 
     _la = _input->LA(1);
     if (_la == zoiaParser::Bar) {
-      setState(120);
+      setState(119);
       match(zoiaParser::Bar);
     }
 
@@ -1255,9 +1248,9 @@ zoiaParser::CommandContext* zoiaParser::command() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(123);
+    setState(122);
     match(zoiaParser::Backslash);
-    setState(124);
+    setState(123);
     _la = _input->LA(1);
     if (!(_la == zoiaParser::Backslash
 
@@ -1268,20 +1261,20 @@ zoiaParser::CommandContext* zoiaParser::command() {
       _errHandler->reportMatch(this);
       consume();
     }
-    setState(126);
+    setState(125);
     _errHandler->sync(this);
 
     _la = _input->LA(1);
     if (_la == zoiaParser::BracketsOpen) {
-      setState(125);
+      setState(124);
       arguments();
     }
-    setState(129);
+    setState(128);
     _errHandler->sync(this);
 
     _la = _input->LA(1);
     if (_la == zoiaParser::Bar) {
-      setState(128);
+      setState(127);
       match(zoiaParser::Bar);
     }
 
@@ -1361,63 +1354,63 @@ zoiaParser::ArgumentsContext* zoiaParser::arguments() {
   try {
     size_t alt;
     enterOuterAlt(_localctx, 1);
-    setState(131);
+    setState(130);
     match(zoiaParser::BracketsOpen);
-    setState(133);
+    setState(132);
     _errHandler->sync(this);
 
     _la = _input->LA(1);
     if (_la == zoiaParser::Newline
 
     || _la == zoiaParser::Spaces) {
-      setState(132);
+      setState(131);
       whitespace();
     }
-    setState(135);
+    setState(134);
     argument();
-    setState(143);
+    setState(142);
     _errHandler->sync(this);
     alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 15, _ctx);
     while (alt != 1 && alt != atn::ATN::INVALID_ALT_NUMBER) {
       if (alt == 1 + 1) {
-        setState(136);
+        setState(135);
         match(zoiaParser::Semicolon);
-        setState(138);
+        setState(137);
         _errHandler->sync(this);
 
         _la = _input->LA(1);
         if (_la == zoiaParser::Newline
 
         || _la == zoiaParser::Spaces) {
-          setState(137);
+          setState(136);
           whitespace();
         }
-        setState(140);
+        setState(139);
         argument();
       }
-      setState(145);
+      setState(144);
       _errHandler->sync(this);
       alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 15, _ctx);
     }
-    setState(147);
+    setState(146);
     _errHandler->sync(this);
 
     _la = _input->LA(1);
     if (_la == zoiaParser::Semicolon) {
-      setState(146);
+      setState(145);
       match(zoiaParser::Semicolon);
     }
-    setState(150);
+    setState(149);
     _errHandler->sync(this);
 
     _la = _input->LA(1);
     if (_la == zoiaParser::Newline
 
     || _la == zoiaParser::Spaces) {
-      setState(149);
+      setState(148);
       whitespace();
     }
-    setState(152);
+    setState(151);
     match(zoiaParser::BracketsClose);
 
   }
@@ -1469,19 +1462,19 @@ zoiaParser::ArgumentContext* zoiaParser::argument() {
     exitRule();
   });
   try {
-    setState(156);
+    setState(155);
     _errHandler->sync(this);
     switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 18, _ctx)) {
     case 1: {
       enterOuterAlt(_localctx, 1);
-      setState(154);
+      setState(153);
       kwdArgument();
       break;
     }
 
     case 2: {
       enterOuterAlt(_localctx, 2);
-      setState(155);
+      setState(154);
       stdArgument();
       break;
     }
@@ -1553,27 +1546,27 @@ zoiaParser::KwdArgumentContext* zoiaParser::kwdArgument() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(158);
+    setState(157);
     match(zoiaParser::Word);
-    setState(160);
+    setState(159);
     _errHandler->sync(this);
 
     _la = _input->LA(1);
     if (_la == zoiaParser::Spaces) {
-      setState(159);
+      setState(158);
       match(zoiaParser::Spaces);
     }
-    setState(162);
+    setState(161);
     match(zoiaParser::Equals);
-    setState(164);
+    setState(163);
     _errHandler->sync(this);
 
     _la = _input->LA(1);
     if (_la == zoiaParser::Spaces) {
-      setState(163);
+      setState(162);
       match(zoiaParser::Spaces);
     }
-    setState(166);
+    setState(165);
     lineElementsArg();
 
   }
@@ -1622,7 +1615,7 @@ zoiaParser::StdArgumentContext* zoiaParser::stdArgument() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(168);
+    setState(167);
     lineElementsArg();
 
   }
@@ -1684,11 +1677,11 @@ zoiaParser::WhitespaceContext* zoiaParser::whitespace() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(171);
+    setState(170);
     _errHandler->sync(this);
     _la = _input->LA(1);
     do {
-      setState(170);
+      setState(169);
       _la = _input->LA(1);
       if (!(_la == zoiaParser::Newline
 
@@ -1699,7 +1692,7 @@ zoiaParser::WhitespaceContext* zoiaParser::whitespace() {
         _errHandler->reportMatch(this);
         consume();
       }
-      setState(173);
+      setState(172);
       _errHandler->sync(this);
       _la = _input->LA(1);
     } while (_la == zoiaParser::Newline
