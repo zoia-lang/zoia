@@ -30,7 +30,8 @@ jobs:
     strategy:
       matrix:
         # TODO: blocked on https://github.com/PyCQA/astroid/issues/1516
-        python-version: [ '3.10' ] #, '3.11-dev' ]
+        # TODO: blocked on https://github.com/TheKevJames/coveralls-python/issues/373
+        python-version: [ '3.10' ] #, '3.11' ]
     name: Run checks on Python ${{ matrix.python-version }}
     steps:
       - name: Checkout commit
